@@ -1,0 +1,93 @@
+@prefix ex: <http://example.org/smartlease#> .
+@prefix ex1: <https://github.com/KOKOPELLI-sm/legal-smart-contracts-ontology.git> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ex:SmartLeaseContract ex:hasFunction ex:assignTenant,
+        ex:constructor,
+        ex:isSameString,
+        ex:payDeposit,
+        ex:proposeWrittenContract,
+        ex:signContract,
+        ex:slitherConstructorVariables ;
+    ex:hasVariable ex:TENANT_CAPACITY,
+        ex:addressToTenant,
+        ex:deposit,
+        ex:landlordAddress,
+        ex:tenantOccupancy,
+        ex:tenants .
+
+ex:SmartLeaseRegistry a ex:SmartContract ;
+    ex:hasFunction ex:createLease,
+        ex:getLeases,
+        ex:getNumLeases ;
+    ex:hasVariable ex:contracts .
+
+ex1:assigns a owl:ObjectProperty ;
+    rdfs:domain ex1:Landlord ;
+    rdfs:range ex1:Assignment .
+
+ex1:hasFunction a owl:ObjectProperty ;
+    rdfs:domain ex1:SmartContract ;
+    rdfs:range ex1:Function .
+
+ex1:hasParty a owl:ObjectProperty ;
+    rdfs:domain ex1:LegalInstrument ;
+    rdfs:range ex1:LegalEntity .
+
+ex1:hasSecurityDeposit a owl:ObjectProperty ;
+    rdfs:domain ex1:LeaseAgreement ;
+    rdfs:range ex1:SecurityDeposit .
+
+ex1:hasSignature a owl:ObjectProperty ;
+    rdfs:domain ex1:LeaseAgreement ;
+    rdfs:range ex1:Signature .
+
+ex1:hasVariable a owl:ObjectProperty ;
+    rdfs:domain ex1:SmartContract ;
+    rdfs:range ex1:Variable .
+
+ex1:hasWrittenAgreement a owl:ObjectProperty ;
+    rdfs:domain ex1:LeaseAgreement ;
+    rdfs:range ex1:IPFSDocument .
+
+ex1:isAssignedTo a owl:ObjectProperty ;
+    rdfs:domain ex1:Assignment ;
+    rdfs:range ex1:Tenant .
+
+ex1:relatesToAgreement a owl:ObjectProperty ;
+    rdfs:domain ex1:Assignment ;
+    rdfs:range ex1:LeaseAgreement .
+
+ex1:Function a owl:Class .
+
+ex1:IPFSDocument a owl:Class ;
+    rdfs:comment "Ψηφιακό έγγραφο συμβολαίου αποθηκευμένο στο IPFS. Χρησιμοποιείται ως το πλήρες κείμενο της συμφωνίας. Συνδέεται με το άρθρο 361 ΑΚ (σύμβαση) και άρθρο 159 ΑΚ (έγγραφη μορφή)." .
+
+ex1:Landlord rdfs:subClassOf ex1:LegalEntity .
+
+ex1:SecurityDeposit a owl:Class ;
+    rdfs:comment "Εγγύηση καταβαλλόμενη από τον μισθωτή, τυπικά βάσει ελεύθερης συμφωνίας, για την εξασφάλιση υποχρεώσεων. Βλ. άρθρα 361, 625 ΑΚ." .
+
+ex1:Signature a owl:Class ;
+    rdfs:comment "Η δήλωση βούλησης αποδοχής της σύμβασης από ένα μέρος. Σχετίζεται με το άρθρο 361 ΑΚ περί σύναψης της σύμβασης." .
+
+ex1:Tenant rdfs:subClassOf ex1:LegalEntity .
+
+ex1:Variable a owl:Class .
+
+ex1:LegalInstrument a owl:Class ;
+    rdfs:comment "Νομικό μέσο με δεσμευτική ισχύ, όπως ένα smart contract. Βλ. άρθρο 361 ΑΚ για τη σύμβαση ως συμφωνία." .
+
+ex1:SmartContract a owl:Class ;
+    rdfs:subClassOf ex1:LegalInstrument .
+
+ex1:Assignment a owl:Class ;
+    rdfs:label "Assignment of lease agreement to tenant" ;
+    rdfs:comment "Η ανάθεση σύμβασης μίσθωσης αποτελεί δήλωση αποδοχής από τον εκμισθωτή (άρθρο 593 ΑΚ), με την οποία συνάπτεται το μισθωτικό δικαίωμα στον επιλεγμένο μισθωτή." .
+
+ex1:LegalEntity a owl:Class .
+
+ex1:LeaseAgreement a owl:Class ;
+    rdfs:comment "Σύμβαση μίσθωσης σύμφωνα με τα άρθρα 574 επ. ΑΚ. Ορίζει τις υποχρεώσεις εκμισθωτή και μισθωτή." .
+
