@@ -1,0 +1,259 @@
+@prefix ns1: <http://example.org/> .
+
+ns1:smartcontractsSmartLeaseContract a ns1:smartcontractsSmartContract ;
+    ns1:smartcontractshasEvent ns1:smartcontractsDepositPayed,
+        ns1:smartcontractsTenantAssigned,
+        ns1:smartcontractsTenantSigned,
+        ns1:smartcontractsWrittenContractProposed ;
+    ns1:smartcontractshasFunction ns1:smartcontractsassignTenant,
+        ns1:smartcontractsconstructor,
+        ns1:smartcontractsisSameString,
+        ns1:smartcontractspayDeposit,
+        ns1:smartcontractsproposeWrittenContract,
+        ns1:smartcontractssignContract,
+        ns1:smartcontractsslitherConstructorVariables ;
+    ns1:smartcontractshasModifier ns1:smartcontractshasSigned,
+        ns1:smartcontractsisContractProposed,
+        ns1:smartcontractsnotZeroAddres,
+        ns1:smartcontractsonlyLandlord,
+        ns1:smartcontractsonlyTenant ;
+    ns1:smartcontractshasName "SmartLeaseContract" ;
+    ns1:smartcontractshasStruct ns1:smartcontractsTenant ;
+    ns1:smartcontractshasVariable ns1:smartcontractsTENANT_CAPACITY,
+        ns1:smartcontractsaddressToTenant,
+        ns1:smartcontractsdeposit,
+        ns1:smartcontractslandlordAddress,
+        ns1:smartcontractstenantOccupancy,
+        ns1:smartcontractstenants,
+        ns1:smartcontractswrittenContractIpfsHash .
+
+ns1:smartcontractsSmartLeaseRegistry a ns1:smartcontractsSmartContract ;
+    ns1:smartcontractshasEvent ns1:smartcontractsLeaseContractCreated ;
+    ns1:smartcontractshasFunction ns1:smartcontractscreateLease,
+        ns1:smartcontractsgetLeases,
+        ns1:smartcontractsgetNumLeases ;
+    ns1:smartcontractshasName "SmartLeaseRegistry" ;
+    ns1:smartcontractshasVariable ns1:smartcontractscontracts .
+
+ns1:smartcontractsDepositPayed a ns1:smartcontractsEvent ;
+    ns1:smartcontractshasName "DepositPayed" ;
+    ns1:smartcontractshasParameter ns1:smartcontractsamount,
+        ns1:smartcontractstenantAddress,
+        ns1:smartcontractstimestamp .
+
+ns1:smartcontractsLeaseContractCreated a ns1:smartcontractsEvent ;
+    ns1:smartcontractshasName "LeaseContractCreated" ;
+    ns1:smartcontractshasParameter ns1:smartcontractscapacity,
+        ns1:smartcontractslandlord,
+        ns1:smartcontractsnewLeaseContractAddress,
+        ns1:smartcontractstimestamp .
+
+ns1:smartcontractsTENANT_CAPACITY a ns1:smartcontractsStateVariable ;
+    ns1:smartcontractshasName "TENANT_CAPACITY" ;
+    ns1:smartcontractshasType "uint8" ;
+    ns1:smartcontractshasVisibility "public" .
+
+ns1:smartcontractsTenant a ns1:smartcontractsStruct ;
+    ns1:smartcontractshasMember ns1:smartcontractsdepositAmount,
+        ns1:smartcontractshasPaidDeposit,
+        ns1:smartcontractshasSigned,
+        ns1:smartcontractsinitialized,
+        ns1:smartcontractsrentAmount ;
+    ns1:smartcontractshasName "Tenant" .
+
+ns1:smartcontractsTenantAssigned a ns1:smartcontractsEvent ;
+    ns1:smartcontractshasName "TenantAssigned" ;
+    ns1:smartcontractshasParameter ns1:smartcontractsdepositAmount,
+        ns1:smartcontractsrentAmount,
+        ns1:smartcontractstenantAddress,
+        ns1:smartcontractstimestamp .
+
+ns1:smartcontractsTenantSigned a ns1:smartcontractsEvent ;
+    ns1:smartcontractshasName "TenantSigned" ;
+    ns1:smartcontractshasParameter ns1:smartcontractstenantAddress,
+        ns1:smartcontractstimestamp .
+
+ns1:smartcontractsWrittenContractProposed a ns1:smartcontractsEvent ;
+    ns1:smartcontractshasName "WrittenContractProposed" ;
+    ns1:smartcontractshasParameter ns1:smartcontractsipfsHash,
+        ns1:smartcontractstimestamp .
+
+ns1:smartcontracts_depositAmount a ns1:smartcontractsParameter ;
+    ns1:smartcontractshasName "_depositAmount" ;
+    ns1:smartcontractshasType "uint256" .
+
+ns1:smartcontracts_landlordAddress a ns1:smartcontractsParameter ;
+    ns1:smartcontractshasName "_landlordAddress" ;
+    ns1:smartcontractshasType "address" .
+
+ns1:smartcontracts_rentAmount a ns1:smartcontractsParameter ;
+    ns1:smartcontractshasName "_rentAmount" ;
+    ns1:smartcontractshasType "uint256" .
+
+ns1:smartcontracts_tenantAddress a ns1:smartcontractsParameter ;
+    ns1:smartcontractshasName "_tenantAddress" ;
+    ns1:smartcontractshasType "address" .
+
+ns1:smartcontracts_writtenContractIpfsHash a ns1:smartcontractsParameter ;
+    ns1:smartcontractshasName "_writtenContractIpfsHash" ;
+    ns1:smartcontractshasType "string" .
+
+ns1:smartcontractsaddressToTenant a ns1:smartcontractsStateVariable ;
+    ns1:smartcontractshasName "addressToTenant" ;
+    ns1:smartcontractshasType "mapping(address => SmartLeaseContract.Tenant)" ;
+    ns1:smartcontractshasVisibility "public" .
+
+ns1:smartcontractsamount a ns1:smartcontractsParameter ;
+    ns1:smartcontractshasName "amount" ;
+    ns1:smartcontractshasType "uint256" .
+
+ns1:smartcontractsassignTenant a ns1:smartcontractsFunction ;
+    ns1:smartcontractshasName "assignTenant" ;
+    ns1:smartcontractshasParameter ns1:smartcontracts_depositAmount,
+        ns1:smartcontracts_rentAmount,
+        ns1:smartcontracts_tenantAddress ;
+    ns1:smartcontractshasVisibility "external" .
+
+ns1:smartcontractscapacity a ns1:smartcontractsParameter ;
+    ns1:smartcontractshasName "capacity" ;
+    ns1:smartcontractshasType "uint8" .
+
+ns1:smartcontractsconstructor a ns1:smartcontractsFunction ;
+    ns1:smartcontractshasName "constructor" ;
+    ns1:smartcontractshasParameter ns1:smartcontracts_capacity,
+        ns1:smartcontracts_landlordAddress ;
+    ns1:smartcontractshasVisibility "public" .
+
+ns1:smartcontractscontracts a ns1:smartcontractsStateVariable ;
+    ns1:smartcontractshasName "contracts" ;
+    ns1:smartcontractshasType "address[]" ;
+    ns1:smartcontractshasVisibility "internal" .
+
+ns1:smartcontractscreateLease a ns1:smartcontractsFunction ;
+    ns1:smartcontractshasName "createLease" ;
+    ns1:smartcontractshasParameter ns1:smartcontracts_capacity ;
+    ns1:smartcontractshasVisibility "public" .
+
+ns1:smartcontractsdeposit a ns1:smartcontractsStateVariable ;
+    ns1:smartcontractshasName "deposit" ;
+    ns1:smartcontractshasType "uint256" ;
+    ns1:smartcontractshasVisibility "internal" .
+
+ns1:smartcontractsgetLeases a ns1:smartcontractsFunction ;
+    ns1:smartcontractshasName "getLeases" ;
+    ns1:smartcontractshasVisibility "external" .
+
+ns1:smartcontractsgetNumLeases a ns1:smartcontractsFunction ;
+    ns1:smartcontractshasName "getNumLeases" ;
+    ns1:smartcontractshasVisibility "external" .
+
+ns1:smartcontractshasPaidDeposit a ns1:smartcontractsMember ;
+    ns1:smartcontractshasName "hasPaidDeposit" ;
+    ns1:smartcontractshasType "bool" .
+
+ns1:smartcontractsinitialized a ns1:smartcontractsMember ;
+    ns1:smartcontractshasName "initialized" ;
+    ns1:smartcontractshasType "bool" .
+
+ns1:smartcontractsipfsHash a ns1:smartcontractsParameter ;
+    ns1:smartcontractshasName "ipfsHash" ;
+    ns1:smartcontractshasType "string" .
+
+ns1:smartcontractsisContractProposed a ns1:smartcontractsModifier ;
+    ns1:smartcontractshasName "isContractProposed" .
+
+ns1:smartcontractsisSameString a ns1:smartcontractsFunction ;
+    ns1:smartcontractshasName "isSameString" ;
+    ns1:smartcontractshasParameter ns1:smartcontractsstring1,
+        ns1:smartcontractsstring2 ;
+    ns1:smartcontractshasVisibility "private" .
+
+ns1:smartcontractslandlord a ns1:smartcontractsParameter ;
+    ns1:smartcontractshasName "landlord" ;
+    ns1:smartcontractshasType "address" .
+
+ns1:smartcontractslandlordAddress a ns1:smartcontractsStateVariable ;
+    ns1:smartcontractshasName "landlordAddress" ;
+    ns1:smartcontractshasType "address" ;
+    ns1:smartcontractshasVisibility "public" .
+
+ns1:smartcontractsnewLeaseContractAddress a ns1:smartcontractsParameter ;
+    ns1:smartcontractshasName "newLeaseContractAddress" ;
+    ns1:smartcontractshasType "address" .
+
+ns1:smartcontractsnotZeroAddres a ns1:smartcontractsModifier ;
+    ns1:smartcontractshasName "notZeroAddres" .
+
+ns1:smartcontractsonlyLandlord a ns1:smartcontractsModifier ;
+    ns1:smartcontractshasName "onlyLandlord" .
+
+ns1:smartcontractsonlyTenant a ns1:smartcontractsModifier ;
+    ns1:smartcontractshasName "onlyTenant" .
+
+ns1:smartcontractspayDeposit a ns1:smartcontractsFunction ;
+    ns1:smartcontractshasName "payDeposit" ;
+    ns1:smartcontractshasVisibility "external" .
+
+ns1:smartcontractsproposeWrittenContract a ns1:smartcontractsFunction ;
+    ns1:smartcontractshasName "proposeWrittenContract" ;
+    ns1:smartcontractshasParameter ns1:smartcontracts_writtenContractIpfsHash ;
+    ns1:smartcontractshasVisibility "external" .
+
+ns1:smartcontractssignContract a ns1:smartcontractsFunction ;
+    ns1:smartcontractshasName "signContract" ;
+    ns1:smartcontractshasVisibility "external" .
+
+ns1:smartcontractsslitherConstructorVariables a ns1:smartcontractsFunction ;
+    ns1:smartcontractshasName "slitherConstructorVariables" ;
+    ns1:smartcontractshasVisibility "internal" .
+
+ns1:smartcontractsstring1 a ns1:smartcontractsParameter ;
+    ns1:smartcontractshasName "string1" ;
+    ns1:smartcontractshasType "string" .
+
+ns1:smartcontractsstring2 a ns1:smartcontractsParameter ;
+    ns1:smartcontractshasName "string2" ;
+    ns1:smartcontractshasType "string" .
+
+ns1:smartcontractstenantOccupancy a ns1:smartcontractsStateVariable ;
+    ns1:smartcontractshasName "tenantOccupancy" ;
+    ns1:smartcontractshasType "uint8" ;
+    ns1:smartcontractshasVisibility "public" .
+
+ns1:smartcontractstenants a ns1:smartcontractsStateVariable ;
+    ns1:smartcontractshasName "tenants" ;
+    ns1:smartcontractshasType "SmartLeaseContract.Tenant[]" ;
+    ns1:smartcontractshasVisibility "public" .
+
+ns1:smartcontractswrittenContractIpfsHash a ns1:smartcontractsStateVariable ;
+    ns1:smartcontractshasName "writtenContractIpfsHash" ;
+    ns1:smartcontractshasType "string" ;
+    ns1:smartcontractshasVisibility "public" .
+
+ns1:smartcontracts_capacity a ns1:smartcontractsParameter ;
+    ns1:smartcontractshasName "_capacity" ;
+    ns1:smartcontractshasType "uint8" .
+
+ns1:smartcontractsdepositAmount a ns1:smartcontractsMember,
+        ns1:smartcontractsParameter ;
+    ns1:smartcontractshasName "depositAmount" ;
+    ns1:smartcontractshasType "uint256" .
+
+ns1:smartcontractshasSigned a ns1:smartcontractsMember,
+        ns1:smartcontractsModifier ;
+    ns1:smartcontractshasName "hasSigned" ;
+    ns1:smartcontractshasType "bool" .
+
+ns1:smartcontractsrentAmount a ns1:smartcontractsMember,
+        ns1:smartcontractsParameter ;
+    ns1:smartcontractshasName "rentAmount" ;
+    ns1:smartcontractshasType "uint256" .
+
+ns1:smartcontractstenantAddress a ns1:smartcontractsParameter ;
+    ns1:smartcontractshasName "tenantAddress" ;
+    ns1:smartcontractshasType "address" .
+
+ns1:smartcontractstimestamp a ns1:smartcontractsParameter ;
+    ns1:smartcontractshasName "timestamp" ;
+    ns1:smartcontractshasType "uint256" .
+
