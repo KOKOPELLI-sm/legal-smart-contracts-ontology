@@ -1,0 +1,22 @@
+@prefix ex: <http://example.org/smartlease#> .
+
+ex:SmartLeaseContract ex:hasFunction ex:assignTenant,
+        ex:constructor,
+        ex:isSameString,
+        ex:payDeposit,
+        ex:proposeWrittenContract,
+        ex:signContract,
+        ex:slitherConstructorVariables ;
+    ex:hasVariable ex:TENANT_CAPACITY,
+        ex:addressToTenant,
+        ex:deposit,
+        ex:landlordAddress,
+        ex:tenantOccupancy,
+        ex:tenants .
+
+ex:SmartLeaseRegistry a ex:SmartContract ;
+    ex:hasFunction ex:createLease,
+        ex:getLeases,
+        ex:getNumLeases ;
+    ex:hasVariable ex:contracts .
+
