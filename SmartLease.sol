@@ -9,7 +9,7 @@ contract SmartLeaseRegistry {
 
         address newLeaseContract = address(new SmartLeaseContract(msg.sender, _capacity));
         contracts.push(newLeaseContract);
-        
+
         emit LeaseContractCreated(block.timestamp, newLeaseContract, msg.sender, _capacity);
     }
 
@@ -78,7 +78,7 @@ contract SmartLeaseContract {
         require(addressToTenant[msg.sender].hasSigned == true, "Tenant must sign the contract before invoking this functionality");
         _;
     }
-    
+
      modifier notZeroAddres(address addr){
         require(addr != address(0), "0th address is not allowed!");
         _;
