@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+   xmlns:owl="http://www.w3.org/2002/07/owl#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+>
+  <rdf:Description rdf:about="http://example.org/smartcontracts#Struct">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/smartcontracts#lkif:Agreement">
+    <rdfs:subClassOf rdf:resource="http://example.org/smartcontracts#SmartContract"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/smartcontracts#SmartContract">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:nodeID="Nf4b406119d384b3cbd9a4256117126e8"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Nf4b406119d384b3cbd9a4256117126e8">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://example.org/smartcontracts#hasFunction"/>
+    <owl:someValuesFrom rdf:resource="http://example.org/smartcontracts#Function"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/smartcontracts#AccessControlledFunction">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://example.org/smartcontracts#Function"/>
+    <rdfs:subClassOf rdf:nodeID="N12dc2f7072934746986a041eda12fcc0"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/smartcontracts#ArrayVariable">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/smartcontracts#Event">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/smartcontracts#MonetaryFunction">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://example.org/smartcontracts#Function"/>
+    <rdfs:subClassOf rdf:nodeID="Nb6b986d545584040a48042d093677e04"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N12dc2f7072934746986a041eda12fcc0">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://example.org/smartcontracts#hasModifier"/>
+    <owl:someValuesFrom rdf:resource="http://example.org/smartcontracts#Modifier"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/smartcontracts#Member">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N06a0343886c4413ea7a321ec85a6f4ed">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:intersectionOf rdf:nodeID="N736a6956f343432697a8ebff0997567b"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Nb6b986d545584040a48042d093677e04">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://example.org/smartcontracts#hasParameter"/>
+    <owl:someValuesFrom rdf:nodeID="N06a0343886c4413ea7a321ec85a6f4ed"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/smartcontracts#PayableFunction">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://example.org/smartcontracts#Function"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/smartcontracts#Parameter">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/smartcontracts#MappingVariable">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/smartcontracts#StateVariable">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/smartcontracts#Modifier">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/smartcontracts#Function">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+</rdf:RDF>
