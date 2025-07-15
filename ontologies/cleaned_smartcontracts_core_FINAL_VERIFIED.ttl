@@ -1,0 +1,293 @@
+@prefix ns1: <http://www.w3.org/2002/07/owl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.w3.org/2002/07/owl#> .
+
+[ rdf:type owl:Ontology ;
+   owl:imports <file:/C:/Users/user/Documents/SmartContracts%20Slither%20Telst/SmartLease.ttl>
+ ] .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://example.org/ontology#assignsTenant
+<http://example.org/ontology#assignsTenant> rdf:type owl:ObjectProperty ;
+                                            rdfs:domain <http://example.org/ontology#Landlord> ;
+                                            rdfs:range <http://example.org/ontology#Tenant> .
+
+
+###  http://example.org/ontology#emitsEvent
+<http://example.org/ontology#emitsEvent> rdf:type owl:ObjectProperty .
+
+
+###  http://example.org/ontology#hasAccessControl
+<http://example.org/ontology#hasAccessControl> rdf:type owl:ObjectProperty .
+
+
+###  http://example.org/ontology#hasComponent
+<http://example.org/ontology#hasComponent> rdf:type owl:ObjectProperty ;
+                                           rdfs:domain <http://example.org/ontology#SmartContract> ;
+                                           rdfs:range <http://example.org/ontology#ContractComponent> .
+
+
+###  http://example.org/ontology#hasEvent
+<http://example.org/ontology#hasEvent> rdf:type owl:ObjectProperty .
+
+
+###  http://example.org/ontology#hasFunction
+<http://example.org/ontology#hasFunction> rdf:type owl:ObjectProperty .
+
+
+###  http://example.org/ontology#hasMember
+<http://example.org/ontology#hasMember> rdf:type owl:ObjectProperty .
+
+
+###  http://example.org/ontology#hasModifier
+<http://example.org/ontology#hasModifier> rdf:type owl:ObjectProperty .
+
+
+###  http://example.org/ontology#hasParameter
+<http://example.org/ontology#hasParameter> rdf:type owl:ObjectProperty .
+
+
+###  http://example.org/ontology#hasStruct
+<http://example.org/ontology#hasStruct> rdf:type owl:ObjectProperty .
+
+
+###  http://example.org/ontology#hasVariable
+<http://example.org/ontology#hasVariable> rdf:type owl:ObjectProperty .
+
+
+###  http://example.org/ontology#readsVariable
+<http://example.org/ontology#readsVariable> rdf:type owl:ObjectProperty .
+
+
+###  http://example.org/ontology#writesVariable
+<http://example.org/ontology#writesVariable> rdf:type owl:ObjectProperty .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://example.org/ontology#hasDepositAmount
+<http://example.org/ontology#hasDepositAmount> rdf:type owl:DatatypeProperty .
+
+
+###  http://example.org/ontology#hasName
+<http://example.org/ontology#hasName> rdf:type owl:DatatypeProperty .
+
+
+###  http://example.org/ontology#hasPaidDeposit
+<http://example.org/ontology#hasPaidDeposit> rdf:type owl:DatatypeProperty .
+
+
+###  http://example.org/ontology#hasRentAmount
+<http://example.org/ontology#hasRentAmount> rdf:type owl:DatatypeProperty .
+
+
+###  http://example.org/ontology#hasSigned
+<http://example.org/ontology#hasSigned> rdf:type owl:DatatypeProperty .
+
+
+###  http://example.org/ontology#hasType
+<http://example.org/ontology#hasType> rdf:type owl:DatatypeProperty .
+
+
+###  http://example.org/ontology#hasVisibility
+<http://example.org/ontology#hasVisibility> rdf:type owl:DatatypeProperty .
+
+
+###  http://example.org/ontology#isInitialized
+<http://example.org/ontology#isInitialized> rdf:type owl:DatatypeProperty .
+
+
+###  http://example.org/ontology#isMonetaryValue
+<http://example.org/ontology#isMonetaryValue> rdf:type owl:DatatypeProperty .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://example.org/ontology#AccessControlledFunction
+<http://example.org/ontology#AccessControlledFunction> rdf:type owl:Class ;
+                                                       rdfs:subClassOf <http://example.org/ontology#Function> ,
+                                                                       <http://www.estrellaproject.org/lkif-core/Responsibility> .
+
+
+###  http://example.org/ontology#ArrayVariable
+<http://example.org/ontology#ArrayVariable> rdf:type owl:Class ;
+                                            rdfs:subClassOf <http://example.org/ontology#StateVariable> .
+
+
+###  http://example.org/ontology#Component
+<http://example.org/ontology#Component> rdf:type owl:Class .
+
+
+###  http://example.org/ontology#ContractComponent
+<http://example.org/ontology#ContractComponent> rdf:type owl:Class .
+
+
+###  http://example.org/ontology#Event
+<http://example.org/ontology#Event> rdf:type owl:Class ;
+                                    rdfs:subClassOf <http://example.org/ontology#ContractComponent> .
+
+
+###  http://example.org/ontology#Function
+<http://example.org/ontology#Function> rdf:type owl:Class ;
+                                       rdfs:subClassOf <http://example.org/ontology#ContractComponent> ,
+                                                       <http://www.estrellaproject.org/lkif-core/Action> .
+
+
+###  http://example.org/ontology#Landlord
+<http://example.org/ontology#Landlord> rdf:type owl:Class ;
+                                       rdfs:subClassOf <http://example.org/ontology#Role> .
+
+
+###  http://example.org/ontology#MappingVariable
+<http://example.org/ontology#MappingVariable> rdf:type owl:Class ;
+                                              rdfs:subClassOf <http://example.org/ontology#StateVariable> .
+
+
+###  http://example.org/ontology#Member
+<http://example.org/ontology#Member> rdf:type owl:Class ;
+                                     rdfs:subClassOf <http://example.org/ontology#Component> ,
+                                                     <http://example.org/ontology#ContractComponent> ,
+                                                     [ rdf:type owl:Restriction ;
+                                                       owl:onProperty <http://example.org/ontology#hasName> ;
+                                                       owl:someValuesFrom owl:Thing
+                                                     ] ,
+                                                     [ rdf:type owl:Restriction ;
+                                                       owl:onProperty <http://example.org/ontology#hasType> ;
+                                                       owl:someValuesFrom owl:Thing
+                                                     ] ,
+                                                     [ rdf:type owl:Restriction ;
+                                                       owl:onProperty <http://example.org/ontology#hasName> ;
+                                                       owl:someValuesFrom xsd:string
+                                                     ] ,
+                                                     [ rdf:type owl:Restriction ;
+                                                       owl:onProperty <http://example.org/ontology#hasType> ;
+                                                       owl:someValuesFrom xsd:string
+                                                     ] .
+
+
+###  http://example.org/ontology#Modifier
+<http://example.org/ontology#Modifier> rdf:type owl:Class ;
+                                       rdfs:subClassOf <http://example.org/ontology#ContractComponent> .
+
+
+###  http://example.org/ontology#MonetaryFunction
+<http://example.org/ontology#MonetaryFunction> rdf:type owl:Class ;
+                                               rdfs:subClassOf <http://example.org/ontology#Function> .
+
+
+###  http://example.org/ontology#Parameter
+<http://example.org/ontology#Parameter> rdf:type owl:Class ;
+                                        rdfs:subClassOf <http://example.org/ontology#Component> ,
+                                                        <http://example.org/ontology#ContractComponent> ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <http://example.org/ontology#hasName> ;
+                                                          owl:someValuesFrom owl:Thing
+                                                        ] ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <http://example.org/ontology#hasType> ;
+                                                          owl:someValuesFrom owl:Thing
+                                                        ] ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <http://example.org/ontology#hasName> ;
+                                                          owl:someValuesFrom xsd:string
+                                                        ] ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <http://example.org/ontology#hasType> ;
+                                                          owl:someValuesFrom xsd:string
+                                                        ] .
+
+
+###  http://example.org/ontology#PayableFunction
+<http://example.org/ontology#PayableFunction> rdf:type owl:Class ;
+                                              rdfs:subClassOf <http://example.org/ontology#MonetaryFunction> ,
+                                                              <http://www.estrellaproject.org/lkif-core/PaymentObligation> .
+
+
+###  http://example.org/ontology#Role
+<http://example.org/ontology#Role> rdf:type owl:Class .
+
+
+###  http://example.org/ontology#SmartContract
+<http://example.org/ontology#SmartContract> rdf:type owl:Class ;
+                                            rdfs:subClassOf <http://www.estrellaproject.org/lkif-core/Agreement> ,
+                                                            [ rdf:type owl:Class ;
+                                                              owl:unionOf ( [ rdf:type owl:Restriction ;
+                                                                              owl:onProperty <http://example.org/ontology#hasEvent> ;
+                                                                              owl:someValuesFrom owl:Thing
+                                                                            ]
+                                                                            [ rdf:type owl:Restriction ;
+                                                                              owl:onProperty <http://example.org/ontology#hasFunction> ;
+                                                                              owl:someValuesFrom owl:Thing
+                                                                            ]
+                                                                            [ rdf:type owl:Restriction ;
+                                                                              owl:onProperty <http://example.org/ontology#hasModifier> ;
+                                                                              owl:someValuesFrom owl:Thing
+                                                                            ]
+                                                                            [ rdf:type owl:Restriction ;
+                                                                              owl:onProperty <http://example.org/ontology#hasName> ;
+                                                                              owl:someValuesFrom owl:Thing
+                                                                            ]
+                                                                            [ rdf:type owl:Restriction ;
+                                                                              owl:onProperty <http://example.org/ontology#hasStruct> ;
+                                                                              owl:someValuesFrom owl:Thing
+                                                                            ]
+                                                                            [ rdf:type owl:Restriction ;
+                                                                              owl:onProperty <http://example.org/ontology#hasVariable> ;
+                                                                              owl:someValuesFrom owl:Thing
+                                                                            ]
+                                                                          )
+                                                            ] ,
+                                                            [ rdf:type owl:Restriction ;
+                                                              owl:onProperty <http://example.org/ontology#hasComponent> ;
+                                                              owl:someValuesFrom <http://example.org/ontology#ContractComponent>
+                                                            ] .
+
+
+###  http://example.org/ontology#StateVariable
+<http://example.org/ontology#StateVariable> rdf:type owl:Class ;
+                                            rdfs:subClassOf <http://example.org/ontology#ContractComponent> ,
+                                                            <http://www.estrellaproject.org/lkif-core/AbstractResource> .
+
+
+###  http://example.org/ontology#Struct
+<http://example.org/ontology#Struct> rdf:type owl:Class ;
+                                     rdfs:subClassOf <http://example.org/ontology#ContractComponent> .
+
+
+###  http://example.org/ontology#Tenant
+<http://example.org/ontology#Tenant> rdf:type owl:Class ;
+                                     rdfs:subClassOf <http://example.org/ontology#Role> .
+
+
+###  http://www.estrellaproject.org/lkif-core/AbstractResource
+<http://www.estrellaproject.org/lkif-core/AbstractResource> rdf:type owl:Class .
+
+
+###  http://www.estrellaproject.org/lkif-core/Action
+<http://www.estrellaproject.org/lkif-core/Action> rdf:type owl:Class .
+
+
+###  http://www.estrellaproject.org/lkif-core/Agreement
+<http://www.estrellaproject.org/lkif-core/Agreement> rdf:type owl:Class .
+
+
+###  http://www.estrellaproject.org/lkif-core/PaymentObligation
+<http://www.estrellaproject.org/lkif-core/PaymentObligation> rdf:type owl:Class .
+
+
+###  http://www.estrellaproject.org/lkif-core/Responsibility
+<http://www.estrellaproject.org/lkif-core/Responsibility> rdf:type owl:Class .
+
+
+###  Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi

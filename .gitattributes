@@ -1,0 +1,3 @@
+# Preserve line endings for .ttl and .sol files as-is (no normalization)
+*.ttl -text
+*.sol -text

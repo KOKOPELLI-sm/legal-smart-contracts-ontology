@@ -149,11 +149,13 @@ ex:SmartLeaseContract_isSameString_string_string_param_string2 a ex:Parameter ;
     ex:hasName "string2" ;
     ex:hasType "string" .
 
-ex:SmartLeaseContract_payDeposit_ a ex:Function ;
+ex:SmartLeaseContract_payDeposit_ a ex:Function,
+        ex:MonetaryFunction ;
     ex:hasModifier ex:SmartLeaseContract_mod_hasSigned,
         ex:SmartLeaseContract_mod_onlyTenant ;
     ex:hasName "payDeposit" ;
     ex:hasVisibility "external" ;
+    ex:isPayable true ;
     ex:readsVariable ex:SmartLeaseContract_addressToTenant,
         ex:SmartLeaseContract_deposit ;
     ex:writesVariable ex:SmartLeaseContract_addressToTenant,
@@ -290,7 +292,8 @@ ex:SmartLeaseContract_TENANT_CAPACITY a ex:StateVariable ;
 ex:SmartLeaseContract_deposit a ex:StateVariable ;
     ex:hasName "deposit" ;
     ex:hasType "uint256" ;
-    ex:hasVisibility "internal" .
+    ex:hasVisibility "internal" ;
+    ex:isMonetaryValue true .
 
 ex:SmartLeaseContract_landlordAddress a ex:StateVariable ;
     ex:hasName "landlordAddress" ;
