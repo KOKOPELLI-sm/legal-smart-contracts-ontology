@@ -1,4 +1,6 @@
 @prefix ex: <http://example.org/smartcontracts#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 ex:SmartLeaseContract a ex:SmartContract ;
@@ -35,6 +37,83 @@ ex:SmartLeaseRegistry a ex:SmartContract ;
         ex:SmartLeaseRegistry_getNumLeases_ ;
     ex:hasName "SmartLeaseRegistry" ;
     ex:hasVariable ex:SmartLeaseRegistry_contracts .
+
+ex:emitsEvent a owl:ObjectProperty ;
+    rdfs:domain ex:Function ;
+    rdfs:range ex:Event .
+
+ex:hasEvent a owl:ObjectProperty ;
+    rdfs:domain ex:SmartContract ;
+    rdfs:range ex:Event .
+
+ex:hasFunction a owl:ObjectProperty ;
+    rdfs:domain ex:SmartContract ;
+    rdfs:range ex:Function .
+
+ex:hasMember a owl:ObjectProperty ;
+    rdfs:domain ex:Struct ;
+    rdfs:range ex:Member .
+
+ex:hasModifier a owl:ObjectProperty ;
+    rdfs:domain ex:Function ;
+    rdfs:range ex:Modifier .
+
+ex:hasName a owl:DatatypeProperty ;
+    rdfs:domain ex:Event,
+        ex:Function,
+        ex:Member,
+        ex:Modifier,
+        ex:Parameter,
+        ex:SmartContract,
+        ex:StateVariable,
+        ex:Struct ;
+    rdfs:range xsd:string .
+
+ex:hasParameter a owl:ObjectProperty ;
+    rdfs:domain ex:Event,
+        ex:Function ;
+    rdfs:range ex:Parameter .
+
+ex:hasStruct a owl:ObjectProperty ;
+    rdfs:domain ex:SmartContract ;
+    rdfs:range ex:Struct .
+
+ex:hasType a owl:DatatypeProperty ;
+    rdfs:domain ex:Function,
+        ex:Member,
+        ex:Parameter,
+        ex:StateVariable ;
+    rdfs:range xsd:string .
+
+ex:hasVariable a owl:ObjectProperty ;
+    rdfs:domain ex:SmartContract ;
+    rdfs:range ex:StateVariable .
+
+ex:hasVisibility a owl:DatatypeProperty ;
+    rdfs:domain ex:Function,
+        ex:StateVariable ;
+    rdfs:range xsd:string .
+
+ex:inheritsFrom a owl:ObjectProperty ;
+    rdfs:domain ex:SmartContract ;
+    rdfs:range ex:SmartContract .
+
+ex:isMonetaryValue a owl:DatatypeProperty ;
+    rdfs:domain ex:Parameter,
+        ex:StateVariable ;
+    rdfs:range xsd:boolean .
+
+ex:isPayable a owl:DatatypeProperty ;
+    rdfs:domain ex:Function ;
+    rdfs:range xsd:boolean .
+
+ex:readsVariable a owl:ObjectProperty ;
+    rdfs:domain ex:Function ;
+    rdfs:range ex:StateVariable .
+
+ex:writesVariable a owl:ObjectProperty ;
+    rdfs:domain ex:Function ;
+    rdfs:range ex:StateVariable .
 
 ex:DepositPayed_param_amount a ex:Parameter ;
     ex:hasName "amount" ;
@@ -320,15 +399,31 @@ ex:SmartLeaseContract_tenantOccupancy a ex:StateVariable ;
     ex:hasType "uint8" ;
     ex:hasVisibility "public" .
 
+ex:Struct a owl:Class .
+
 ex:SmartLeaseRegistry_contracts a ex:ArrayVariable,
         ex:StateVariable ;
     ex:hasName "contracts" ;
     ex:hasType "address[]" ;
     ex:hasVisibility "internal" .
 
+ex:Modifier a owl:Class .
+
 ex:SmartLeaseContract_addressToTenant a ex:MappingVariable,
         ex:StateVariable ;
     ex:hasName "addressToTenant" ;
     ex:hasType "mapping(address => SmartLeaseContract.Tenant)" ;
     ex:hasVisibility "public" .
+
+ex:Member a owl:Class .
+
+ex:Event a owl:Class .
+
+ex:SmartContract a owl:Class .
+
+ex:StateVariable a owl:Class .
+
+ex:Function a owl:Class .
+
+ex:Parameter a owl:Class .
 

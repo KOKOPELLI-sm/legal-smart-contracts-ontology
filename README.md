@@ -29,8 +29,8 @@ solc-select install 0.5.0
 solc-select use 0.5.0
 ```
 
-Run the `extract_entities.py` script and verify that it works:
+Run the `main.py` script and verify that it works:
 
 ```
-python extract_entities.py
+python scripts/main.py /path/to/contract.sol
 ```
