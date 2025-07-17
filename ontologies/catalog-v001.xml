@@ -1,21 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="urn:oasis:names:tc:entity:xmlns:xml:catalog
-         http://www.oasis-open.org/committees/entity/release/1.0/catalog.xsd"
-         prefer="public">
-
-  <uri name="http://www.estrellaproject.org/lkif-core/lkif-core.owl"
-       uri="ontologies-bridging/lkif-core.owl"/>
-  <uri name="http://www.estrellaproject.org/lkif-core/lkif-top.owl"
-       uri="ontologies-bridging/lkif-top.owl"/>
-  <uri name="http://www.estrellaproject.org/lkif-core/norm.owl"
-       uri="ontologies-bridging/norm.owl"/>
-  <uri name="http://www.estrellaproject.org/lkif-core/action.owl"
-       uri="ontologies-bridging/action.owl"/>
-  <uri name="http://www.estrellaproject.org/lkif-core/expression.owl"
-       uri="ontologies-bridging/expression.owl"/>
-  <uri name="http://www.estrellaproject.org/lkif-core/legal-role.owl"
-       uri="ontologies-bridging/legal-role.owl"/>
-
+<catalog prefer="public" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+    <uri id="User Entered Import Resolution" name="file:/C:/Users/user/Documents/SmartContracts%20Slither%20Telst/SmartLease.ttl" uri="SmartLease.ttl"/>
+    <uri name="http://www.estrellaproject.org/lkif-core/lkif-core.owl" uri="ontologies-bridging/lkif-core.owl"/>
+    <uri name="http://www.estrellaproject.org/lkif-core/lkif-top.owl" uri="ontologies-bridging/lkif-top.owl"/>
+    <uri name="http://www.estrellaproject.org/lkif-core/norm.owl" uri="ontologies-bridging/norm.owl"/>
+    <uri name="http://www.estrellaproject.org/lkif-core/action.owl" uri="ontologies-bridging/action.owl"/>
+    <uri name="http://www.estrellaproject.org/lkif-core/expression.owl" uri="ontologies-bridging/expression.owl"/>
+    <uri name="http://www.estrellaproject.org/lkif-core/legal-role.owl" uri="ontologies-bridging/legal-role.owl"/>
 </catalog>

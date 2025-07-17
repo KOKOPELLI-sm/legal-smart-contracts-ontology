@@ -195,14 +195,16 @@ def contract_to_triples(slith):
                 triples.add((struct_uri, EX.hasMember, member_uri))
                 triples.add((member_uri, RDF.type, EX.Member))
                 triples.add((member_uri, EX.hasName, Literal(name)))
-                triples.add((member_uri, EX.hasType, Literal(elem.type.name)))
+                if hasattr(elem.type, "name"):
+                    triples.add((member_uri, EX.hasType, Literal(elem.type.name)))
 
     return triples
 
 
 @click.command()
 @click.argument("filename")
-def main(filename):
+@click.option("--verbose", "-v", count=True)
+def main(filename, verbose=False):
     """
     Convert a Solidity file to RDF triples.
     """
@@ -214,6 +216,8 @@ def main(filename):
         triples.serialize(destination=out, format="turtle")
         print(f"✅ Turtle file created: {out}")
     except Exception as e:
+        if verbose:
+            raise
         print(f"❌ Error processing {filename}: {e}")
 
 

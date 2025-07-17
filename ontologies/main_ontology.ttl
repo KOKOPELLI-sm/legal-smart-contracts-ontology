@@ -6,9 +6,6 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @base <http://www.w3.org/2002/07/owl#> .
 
-[ rdf:type owl:Ontology ;
-   owl:imports <file:/C:/Users/user/Documents/SmartContracts%20Slither%20Telst/SmartLease.ttl>
- ] .
 
 #################################################################
 #    Object Properties
