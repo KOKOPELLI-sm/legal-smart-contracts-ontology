@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog prefer="public" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+    <uri name="http://www.estrellaproject.org/lkif-core/lkif-core.owl" uri="ontologies-bridging/lkif-core.owl"/>
+    <uri name="http://www.estrellaproject.org/lkif-core/lkif-top.owl" uri="ontologies-bridging/lkif-top.owl"/>
+    <uri name="http://www.estrellaproject.org/lkif-core/norm.owl" uri="ontologies-bridging/norm.owl"/>
+    <uri name="http://www.estrellaproject.org/lkif-core/action.owl" uri="ontologies-bridging/action.owl"/>
+    <uri name="http://www.estrellaproject.org/lkif-core/expression.owl" uri="ontologies-bridging/expression.owl"/>
+    <uri name="http://www.estrellaproject.org/lkif-core/legal-role.owl" uri="ontologies-bridging/legal-role.owl"/>
+</catalog>

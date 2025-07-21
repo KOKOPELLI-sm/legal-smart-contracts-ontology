@@ -1,0 +1,550 @@
+@prefix : <http://example.org/smartcontracts#> .
+@prefix ex: <http://example.org/smartcontracts#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix top: <http://www.estrellaproject.org/lkif-core/lkif-top.owl#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix lkif: <http://www.estrellaproject.org/lkif-core/lkif-core.owl#> .
+@prefix norm: <http://www.estrellaproject.org/lkif-core/norm.owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix role: <http://www.estrellaproject.org/lkif-core/role.owl#> .
+@prefix time: <http://www.estrellaproject.org/lkif-core/time.owl#> .
+@prefix action: <http://www.estrellaproject.org/lkif-core/action.owl#> .
+@prefix process: <http://www.estrellaproject.org/lkif-core/process.owl#> .
+@prefix mereology: <http://www.estrellaproject.org/lkif-core/mereology.owl#> .
+@prefix expression: <http://www.estrellaproject.org/lkif-core/expression.owl#> .
+@prefix legal-role: <http://www.estrellaproject.org/lkif-core/legal-role.owl#> .
+@prefix legal-action: <http://www.estrellaproject.org/lkif-core/legal-action.owl#> .
+@base <http://example.org/smartcontracts#> .
+
+<http://example.org/smartcontracts> rdf:type owl:Ontology ;
+                                     owl:imports <file:/C:/Users/user/Documents/SmartContracts%20Slither%20Telst/ontologies/SmartLease.ttl> ,
+                                                 <http://www.estrellaproject.org/lkif-core/action.owl> ,
+                                                 <http://www.estrellaproject.org/lkif-core/expression.owl> ,
+                                                 <http://www.estrellaproject.org/lkif-core/legal-action.owl> ,
+                                                 <http://www.estrellaproject.org/lkif-core/legal-role.owl> ,
+                                                 <http://www.estrellaproject.org/lkif-core/lkif-core.owl> ,
+                                                 <http://www.estrellaproject.org/lkif-core/lkif-top.owl> ,
+                                                 <http://www.estrellaproject.org/lkif-core/mereology.owl> ,
+                                                 <http://www.estrellaproject.org/lkif-core/norm.owl> ,
+                                                 <http://www.estrellaproject.org/lkif-core/process.owl> ,
+                                                 <http://www.estrellaproject.org/lkif-core/role.owl> ,
+                                                 <http://www.estrellaproject.org/lkif-core/time.owl> ;
+                                     rdfs:comment "Comprehensive ontology integrating smart contracts with LKIF legal framework"@en ;
+                                     rdfs:label "Smart Contracts Legal Ontology"@en ;
+                                     owl:versionInfo "1.0" .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://example.org/smartcontracts#changesState
+ex:changesState rdf:type owl:ObjectProperty ;
+                rdfs:domain ex:Function ;
+                rdfs:range ex:State ;
+                rdfs:label "changes state"@en .
+
+
+###  http://example.org/smartcontracts#createsObligation
+ex:createsObligation rdf:type owl:ObjectProperty ;
+                     rdfs:subPropertyOf lkif:createsObligation ;
+                     rdfs:domain ex:Function ;
+                     rdfs:range norm:Obligation ;
+                     rdfs:label "creates obligation"@en .
+
+
+###  http://example.org/smartcontracts#emitsEvent
+ex:emitsEvent rdf:type owl:ObjectProperty ;
+              rdfs:domain ex:Function ;
+              rdfs:range ex:Event ;
+              rdfs:label "emits event"@en .
+
+
+###  http://example.org/smartcontracts#establishesAgreement
+ex:establishesAgreement rdf:type owl:ObjectProperty ;
+                        rdfs:subPropertyOf legal-action:establishesAgreement ;
+                        rdfs:domain ex:Function ;
+                        rdfs:range lkif:Agreement ;
+                        rdfs:label "establishes agreement"@en .
+
+
+###  http://example.org/smartcontracts#grantsRight
+ex:grantsRight rdf:type owl:ObjectProperty ;
+               rdfs:subPropertyOf lkif:grantsRight ;
+               rdfs:domain ex:Function ;
+               rdfs:range norm:Right ;
+               rdfs:label "grants right"@en .
+
+
+###  http://example.org/smartcontracts#grantsRole
+ex:grantsRole rdf:type owl:ObjectProperty ;
+              rdfs:domain ex:Function ;
+              rdfs:range ex:Role ;
+              rdfs:label "grants role"@en .
+
+
+###  http://example.org/smartcontracts#hasAccessControl
+ex:hasAccessControl rdf:type owl:ObjectProperty ;
+                    rdfs:domain ex:Function ;
+                    rdfs:range ex:Modifier ;
+                    rdfs:label "has access control"@en .
+
+
+###  http://example.org/smartcontracts#hasEvent
+ex:hasEvent rdf:type owl:ObjectProperty ;
+            rdfs:domain ex:SmartContract ;
+            rdfs:range ex:Event ;
+            rdfs:label "has event"@en .
+
+
+###  http://example.org/smartcontracts#hasFunction
+ex:hasFunction rdf:type owl:ObjectProperty ;
+               rdfs:domain ex:SmartContract ;
+               rdfs:range ex:Function ;
+               rdfs:label "has function"@en .
+
+
+###  http://example.org/smartcontracts#hasLegalActor
+ex:hasLegalActor rdf:type owl:ObjectProperty ;
+                 rdfs:domain ex:Function ;
+                 rdfs:range action:Agent ;
+                 rdfs:label "has legal actor"@en .
+
+
+###  http://example.org/smartcontracts#hasLegalEffect
+ex:hasLegalEffect rdf:type owl:ObjectProperty ;
+                  rdfs:subPropertyOf lkif:hasLegalEffect ;
+                  rdfs:domain ex:Function ;
+                  rdfs:range legal-action:Legal_Action ;
+                  rdfs:comment "Links a smart contract function to its legal consequences"@en ;
+                  rdfs:label "has legal effect"@en .
+
+
+###  http://example.org/smartcontracts#hasMember
+ex:hasMember rdf:type owl:ObjectProperty ;
+             rdfs:subPropertyOf mereology:hasPart ;
+             rdfs:domain ex:Struct ;
+             rdfs:range ex:Member .
+
+
+###  http://example.org/smartcontracts#hasModifier
+ex:hasModifier rdf:type owl:ObjectProperty ;
+               rdfs:domain ex:SmartContract ;
+               rdfs:range ex:Modifier ;
+               rdfs:label "has modifier"@en .
+
+
+###  http://example.org/smartcontracts#hasParameter
+ex:hasParameter rdf:type owl:ObjectProperty ;
+                rdfs:domain ex:Function ;
+                rdfs:range ex:Parameter ;
+                rdfs:label "has parameter"@en .
+
+
+###  http://example.org/smartcontracts#hasRole
+ex:hasRole rdf:type owl:ObjectProperty ;
+           rdfs:domain ex:SmartContract ;
+           rdfs:range ex:Role .
+
+
+###  http://example.org/smartcontracts#hasStruct
+ex:hasStruct rdf:type owl:ObjectProperty ;
+             rdfs:domain ex:SmartContract ;
+             rdfs:range ex:Struct ;
+             rdfs:label "has struct"@en .
+
+
+###  http://example.org/smartcontracts#hasType
+ex:hasType rdf:type owl:ObjectProperty .
+
+
+###  http://example.org/smartcontracts#hasVariable
+ex:hasVariable rdf:type owl:ObjectProperty ;
+               rdfs:domain ex:SmartContract ;
+               rdfs:range ex:StateVariable ,
+                          ex:Variable ;
+               rdfs:label "has variable"@en .
+
+
+###  http://example.org/smartcontracts#implementsNorm
+ex:implementsNorm rdf:type owl:ObjectProperty ;
+                  rdfs:subPropertyOf norm:implementsNorm ;
+                  rdfs:domain ex:SmartContract ;
+                  rdfs:range norm:Norm ;
+                  rdfs:label "implements norm"@en .
+
+
+###  http://example.org/smartcontracts#involvesLegalRole
+ex:involvesLegalRole rdf:type owl:ObjectProperty ;
+                     rdfs:subPropertyOf legal-role:involvesLegalRole ;
+                     rdfs:domain ex:SmartContract ;
+                     rdfs:range legal-role:Legal_Role ;
+                     rdfs:label "involves legal role"@en .
+
+
+###  http://example.org/smartcontracts#processesPayment
+ex:processesPayment rdf:type owl:ObjectProperty ;
+                    rdfs:domain ex:Function ;
+                    rdfs:range legal-action:Payment ;
+                    rdfs:label "processes payment"@en .
+
+
+###  http://example.org/smartcontracts#requiresDeposit
+ex:requiresDeposit rdf:type owl:ObjectProperty ;
+                   rdfs:subPropertyOf lkif:requiresDeposit ;
+                   rdfs:label "requires deposit"@en .
+
+
+###  http://example.org/smartcontracts#requiresPayment
+ex:requiresPayment rdf:type owl:ObjectProperty ;
+                   rdfs:domain ex:Function ;
+                   rdfs:range legal-action:Payment ;
+                   rdfs:label "requires payment"@en .
+
+
+###  http://example.org/smartcontracts#requiresRole
+ex:requiresRole rdf:type owl:ObjectProperty ;
+                rdfs:domain ex:Function ;
+                rdfs:range ex:Role ;
+                rdfs:label "requires role"@en .
+
+
+###  http://example.org/smartcontracts#revokesRole
+ex:revokesRole rdf:type owl:ObjectProperty ;
+               rdfs:domain ex:Function ;
+               rdfs:range ex:Role ;
+               rdfs:label "revokes role"@en .
+
+
+###  http://example.org/smartcontracts#setsPrice
+ex:setsPrice rdf:type owl:ObjectProperty ;
+             rdfs:domain ex:Function ;
+             rdfs:range ex:MonetaryValue ;
+             rdfs:label "sets price"@en .
+
+
+###  http://example.org/smartcontracts#transfersOwnership
+ex:transfersOwnership rdf:type owl:ObjectProperty ;
+                      rdfs:subPropertyOf lkif:transfersOwnership ;
+                      rdfs:domain ex:Function ;
+                      rdfs:range legal-action:Ownership_Transfer ;
+                      rdfs:label "transfers ownership"@en .
+
+
+###  http://example.org/smartcontracts#triggersEvent
+ex:triggersEvent rdf:type owl:ObjectProperty ;
+                 rdfs:domain ex:Function ;
+                 rdfs:range ex:Event ;
+                 rdfs:label "triggers event"@en .
+
+
+###  http://www.estrellaproject.org/lkif-core/legal-action.owl#establishesAgreement
+legal-action:establishesAgreement rdf:type owl:ObjectProperty .
+
+
+###  http://www.estrellaproject.org/lkif-core/legal-role.owl#involvesLegalRole
+legal-role:involvesLegalRole rdf:type owl:ObjectProperty .
+
+
+###  http://www.estrellaproject.org/lkif-core/lkif-core.owl#createsObligation
+lkif:createsObligation rdf:type owl:ObjectProperty .
+
+
+###  http://www.estrellaproject.org/lkif-core/lkif-core.owl#grantsRight
+lkif:grantsRight rdf:type owl:ObjectProperty .
+
+
+###  http://www.estrellaproject.org/lkif-core/lkif-core.owl#hasLegalEffect
+lkif:hasLegalEffect rdf:type owl:ObjectProperty .
+
+
+###  http://www.estrellaproject.org/lkif-core/lkif-core.owl#requiresDeposit
+lkif:requiresDeposit rdf:type owl:ObjectProperty .
+
+
+###  http://www.estrellaproject.org/lkif-core/lkif-core.owl#transfersOwnership
+lkif:transfersOwnership rdf:type owl:ObjectProperty .
+
+
+###  http://www.estrellaproject.org/lkif-core/mereology.owl#hasPart
+mereology:hasPart rdf:type owl:ObjectProperty .
+
+
+###  http://www.estrellaproject.org/lkif-core/norm.owl#implementsNorm
+norm:implementsNorm rdf:type owl:ObjectProperty .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://example.org/smartcontracts#hasAddress
+ex:hasAddress rdf:type owl:DatatypeProperty ;
+              rdfs:range xsd:string ;
+              rdfs:label "has address"@en .
+
+
+###  http://example.org/smartcontracts#hasDescription
+ex:hasDescription rdf:type owl:DatatypeProperty ;
+                  rdfs:range xsd:string ;
+                  rdfs:label "has description"@en .
+
+
+###  http://example.org/smartcontracts#hasLocation
+ex:hasLocation rdf:type owl:DatatypeProperty ;
+               rdfs:range xsd:string ;
+               rdfs:label "has location"@en .
+
+
+###  http://example.org/smartcontracts#hasName
+ex:hasName rdf:type owl:DatatypeProperty ;
+           rdfs:range xsd:string ;
+           rdfs:label "has name"@en .
+
+
+###  http://example.org/smartcontracts#hasOwner
+ex:hasOwner rdf:type owl:DatatypeProperty ;
+            rdfs:range xsd:string ;
+            rdfs:label "has owner"@en .
+
+
+###  http://example.org/smartcontracts#hasPrice
+ex:hasPrice rdf:type owl:DatatypeProperty ;
+            rdfs:range xsd:decimal ;
+            rdfs:label "has price"@en .
+
+
+###  http://example.org/smartcontracts#hasQuantity
+ex:hasQuantity rdf:type owl:DatatypeProperty ;
+               rdfs:range xsd:integer ;
+               rdfs:label "has quantity"@en .
+
+
+###  http://example.org/smartcontracts#hasTimestamp
+ex:hasTimestamp rdf:type owl:DatatypeProperty ;
+                rdfs:range xsd:dateTime ;
+                rdfs:label "has timestamp"@en .
+
+
+###  http://example.org/smartcontracts#hasType
+ex:hasType rdf:type owl:DatatypeProperty ;
+           rdfs:range xsd:string .
+
+
+###  http://example.org/smartcontracts#hasValue
+ex:hasValue rdf:type owl:DatatypeProperty ;
+            rdfs:label "has value"@en .
+
+
+###  http://example.org/smartcontracts#hasVisibility
+ex:hasVisibility rdf:type owl:DatatypeProperty ;
+                 rdfs:range xsd:string ;
+                 rdfs:label "has visibility"@en .
+
+
+###  http://example.org/smartcontracts#isMonetaryValue
+ex:isMonetaryValue rdf:type owl:DatatypeProperty ;
+                   rdfs:range xsd:boolean ;
+                   rdfs:label "is monetary value"@en .
+
+
+###  http://example.org/smartcontracts#isPayable
+ex:isPayable rdf:type owl:DatatypeProperty ;
+             rdfs:domain ex:Function ;
+             rdfs:range xsd:boolean ;
+             rdfs:label "is payable"@en .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://example.org/smartcontracts#AccessControlledFunction
+ex:AccessControlledFunction rdf:type owl:Class ;
+                            rdfs:subClassOf ex:Function ;
+                            rdfs:label "Access Controlled Function"@en .
+
+
+###  http://example.org/smartcontracts#ArrayVariable
+ex:ArrayVariable rdf:type owl:Class ;
+                 rdfs:subClassOf ex:Variable ;
+                 rdfs:label "Array Variable"@en .
+
+
+###  http://example.org/smartcontracts#ConstructorFunction
+ex:ConstructorFunction rdf:type owl:Class ;
+                       rdfs:subClassOf ex:Function ,
+                                       action:Creation ;
+                       rdfs:label "Constructor Function"@en .
+
+
+###  http://example.org/smartcontracts#Consumer
+ex:Consumer rdf:type owl:Class ;
+            rdfs:subClassOf action:Agent ,
+                            legal-role:Legal_Role ;
+            rdfs:comment "Legal role of end consumer in supply chain"@en ;
+            rdfs:label "Consumer"@en .
+
+
+###  http://example.org/smartcontracts#ContractComponent
+ex:ContractComponent rdf:type owl:Class ;
+                     rdfs:subClassOf top:Abstract_Entity ;
+                     rdfs:label "Contract Component"@en .
+
+
+###  http://example.org/smartcontracts#Event
+ex:Event rdf:type owl:Class ;
+         owl:equivalentClass process:Process ;
+         rdfs:subClassOf ex:ContractComponent ,
+                         ex:SmartContract ,
+                         process:Change ,
+                         process:Process ;
+         rdfs:comment "A smart contract event that signals state changes"@en ,
+                      "An event in a smart contract, legally equivalent to a process in LKIF."@en ;
+         rdfs:label "Event"@en .
+
+
+###  http://example.org/smartcontracts#Function
+ex:Function rdf:type owl:Class ;
+            owl:equivalentClass legal-action:Legal_Action ;
+            rdfs:subClassOf ex:ContractComponent ,
+                            ex:SmartContract ,
+                            action:Action ,
+                            legal-action:Action ,
+                            legal-action:Legal_Action ;
+            rdfs:comment "A function in a smart contract, legally equivalent to a legal action in LKIF."@en ,
+                         "A smart contract function that can perform legal actions"@en ;
+            rdfs:label "Function"@en .
+
+
+###  http://example.org/smartcontracts#Member
+ex:Member rdf:type owl:Class ;
+          rdfs:subClassOf ex:ContractComponent ,
+                          ex:SmartContract ;
+          rdfs:comment "A member of a struct in smart contracts"@en ,
+                       "A member variable in a smart contract."@en ;
+          rdfs:label "Member"@en ,
+                     "Struct Member"@en .
+
+
+###  http://example.org/smartcontracts#Modifier
+ex:Modifier rdf:type owl:Class ;
+            rdfs:subClassOf ex:ContractComponent ,
+                            ex:SmartContract ,
+                            norm:Conditional_Norm ;
+            rdfs:comment "A modifier in a smart contract, legally equivalent to a conditional norm in LKIF."@en ,
+                         "A modifier in a smart contract."@en ,
+                         "Access control mechanism in smart contracts"@en ;
+            rdfs:label "Modifier"@en .
+
+
+###  http://example.org/smartcontracts#MonetaryValue
+ex:MonetaryValue rdf:type owl:Class ;
+                 rdfs:subClassOf ex:Variable ;
+                 rdfs:comment "A variable representing monetary value or price"@en ;
+                 rdfs:label "Monetary Value"@en .
+
+
+###  http://example.org/smartcontracts#Parameter
+ex:Parameter rdf:type owl:Class ;
+             rdfs:subClassOf ex:SmartContract ,
+                             ex:Variable ;
+             rdfs:comment "A function parameter in a smart contract."@en ;
+             rdfs:label "Parameter"@en .
+
+
+###  http://example.org/smartcontracts#PayableFunction
+ex:PayableFunction rdf:type owl:Class ;
+                   rdfs:subClassOf ex:Function ,
+                                   legal-action:Payment ;
+                   rdfs:comment "A function in a smart contract that handles payments; bridges to LKIF Payment."@en ;
+                   rdfs:label "Payable Function"@en .
+
+
+###  http://example.org/smartcontracts#Role
+ex:Role rdf:type owl:Class ;
+        owl:equivalentClass legal-role:Legal_Role ;
+        rdfs:subClassOf ex:SmartContract ,
+                        legal-role:Legal_Role ,
+                        role:Agent ;
+        rdfs:comment "A role in a smart contract, legally equivalent to a legal role in LKIF."@en ,
+                     "Generic role in role-based access control"@en ;
+        rdfs:label "Role"@en .
+
+
+###  http://example.org/smartcontracts#SmartContract
+ex:SmartContract rdf:type owl:Class ;
+                 owl:equivalentClass lkif:Agreement ;
+                 rdfs:subClassOf expression:Expression ,
+                                 legal-action:Contract ,
+                                 norm:Norm ;
+                 rdfs:comment "A self-executing contract with terms directly written into code; legally equivalent to a legal agreement in LKIF."@en ;
+                 rdfs:label "Smart Contract"@en .
+
+
+###  http://example.org/smartcontracts#State
+ex:State rdf:type owl:Class ;
+         rdfs:subClassOf top:Abstract_Entity ;
+         rdfs:comment "A state in smart contract state machine"@en ;
+         rdfs:label "State"@en .
+
+
+###  http://example.org/smartcontracts#StateVariable
+ex:StateVariable rdf:type owl:Class ;
+                 rdfs:subClassOf ex:SmartContract ,
+                                 ex:Variable ;
+                 rdfs:comment "A state variable in a smart contract."@en ;
+                 rdfs:label "State Variable"@en .
+
+
+###  http://example.org/smartcontracts#Struct
+ex:Struct rdf:type owl:Class ;
+          rdfs:subClassOf ex:ContractComponent ,
+                          ex:SmartContract ;
+          rdfs:comment "A struct in a smart contract."@en ;
+          rdfs:label "Struct"@en .
+
+
+###  http://example.org/smartcontracts#Variable
+ex:Variable rdf:type owl:Class ;
+            rdfs:subClassOf ex:ContractComponent ;
+            rdfs:label "Variable"@en .
+
+
+###  http://www.estrellaproject.org/lkif-core/legal-action.owl#Action
+legal-action:Action rdf:type owl:Class .
+
+
+###  http://www.estrellaproject.org/lkif-core/legal-action.owl#Legal_Action
+legal-action:Legal_Action rdf:type owl:Class .
+
+
+###  http://www.estrellaproject.org/lkif-core/legal-action.owl#Ownership_Transfer
+legal-action:Ownership_Transfer rdf:type owl:Class .
+
+
+###  http://www.estrellaproject.org/lkif-core/legal-action.owl#Payment
+legal-action:Payment rdf:type owl:Class .
+
+
+###  http://www.estrellaproject.org/lkif-core/lkif-core.owl#Agreement
+lkif:Agreement rdf:type owl:Class .
+
+
+###  http://www.estrellaproject.org/lkif-core/norm.owl#Conditional_Norm
+norm:Conditional_Norm rdf:type owl:Class .
+
+
+###  http://www.estrellaproject.org/lkif-core/role.owl#Agent
+role:Agent rdf:type owl:Class .
+
+
+#################################################################
+#    Annotations
+#################################################################
+
+ex:hasType rdfs:label "has type"@en .
+
+
+###  Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi

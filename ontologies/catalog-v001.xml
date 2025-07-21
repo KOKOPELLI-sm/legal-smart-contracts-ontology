@@ -1,10 +1,49 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<catalog prefer="public" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-    <uri id="User Entered Import Resolution" name="file:/C:/Users/user/Documents/SmartContracts%20Slither%20Telst/SmartLease.ttl" uri="SmartLease.ttl"/>
-    <uri name="http://www.estrellaproject.org/lkif-core/lkif-core.owl" uri="ontologies-bridging/lkif-core.owl"/>
-    <uri name="http://www.estrellaproject.org/lkif-core/lkif-top.owl" uri="ontologies-bridging/lkif-top.owl"/>
-    <uri name="http://www.estrellaproject.org/lkif-core/norm.owl" uri="ontologies-bridging/norm.owl"/>
-    <uri name="http://www.estrellaproject.org/lkif-core/action.owl" uri="ontologies-bridging/action.owl"/>
-    <uri name="http://www.estrellaproject.org/lkif-core/expression.owl" uri="ontologies-bridging/expression.owl"/>
-    <uri name="http://www.estrellaproject.org/lkif-core/legal-role.owl" uri="ontologies-bridging/legal-role.owl"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+    <!-- Master Smart Contracts Ontology -->
+    <uri id="master-ontology" name="http://example.org/smartcontracts" uri="master_ontology.ttl"/>
+    
+    <!-- LKIF Ontologies: Map local imports to ontologies-bridging folder -->
+    <uri id="lkif-core-local" name="lkif-core.owl" uri="ontologies-bridging/lkif-core.owl"/>
+    <uri id="lkif-top-local" name="lkif-top.owl" uri="ontologies-bridging/lkif-top.owl"/>
+    <uri id="action-local" name="action.owl" uri="ontologies-bridging/action.owl"/>
+    <uri id="legal-action-local" name="legal-action.owl" uri="ontologies-bridging/legal-action.owl"/>
+    <uri id="legal-role-local" name="legal-role.owl" uri="ontologies-bridging/legal-role.owl"/>
+    <uri id="norm-local" name="norm.owl" uri="ontologies-bridging/norm.owl"/>
+    <uri id="role-local" name="role.owl" uri="ontologies-bridging/role.owl"/>
+    <uri id="process-local" name="process.owl" uri="ontologies-bridging/process.owl"/>
+    <uri id="expression-local" name="expression.owl" uri="ontologies-bridging/expression.owl"/>
+    <uri id="mereology-local" name="mereology.owl" uri="ontologies-bridging/mereology.owl"/>
+    <uri id="time-local" name="time.owl" uri="ontologies-bridging/time.owl"/>
+    <uri id="time-modification-local" name="time-modification.owl" uri="ontologies-bridging/time-modification.owl"/>
+    <uri id="lkif-rules-local" name="lkif-rules.owl" uri="ontologies-bridging/lkif-rules.owl"/>
+    <uri id="lkif-extended-local" name="lkif-extended.owl" uri="ontologies-bridging/lkif-extended.owl"/>
+    
+    <!-- LKIF IRI mappings for namespace resolution -->
+    <uri id="lkif-core-iri" name="http://www.estrellaproject.org/lkif-core/lkif-core.owl" uri="ontologies-bridging/lkif-core.owl"/>
+    <uri id="lkif-top-iri" name="http://www.estrellaproject.org/lkif-core/lkif-top.owl" uri="ontologies-bridging/lkif-top.owl"/>
+    <uri id="action-iri" name="http://www.estrellaproject.org/lkif-core/action.owl" uri="ontologies-bridging/action.owl"/>
+    <uri id="legal-action-iri" name="http://www.estrellaproject.org/lkif-core/legal-action.owl" uri="ontologies-bridging/legal-action.owl"/>
+    <uri id="legal-role-iri" name="http://www.estrellaproject.org/lkif-core/legal-role.owl" uri="ontologies-bridging/legal-role.owl"/>
+    <uri id="norm-iri" name="http://www.estrellaproject.org/lkif-core/norm.owl" uri="ontologies-bridging/norm.owl"/>
+    <uri id="role-iri" name="http://www.estrellaproject.org/lkif-core/role.owl" uri="ontologies-bridging/role.owl"/>
+    <uri id="process-iri" name="http://www.estrellaproject.org/lkif-core/process.owl" uri="ontologies-bridging/process.owl"/>
+    <uri id="expression-iri" name="http://www.estrellaproject.org/lkif-core/expression.owl" uri="ontologies-bridging/expression.owl"/>
+    <uri id="mereology-iri" name="http://www.estrellaproject.org/lkif-core/mereology.owl" uri="ontologies-bridging/mereology.owl"/>
+    <uri id="time-iri" name="http://www.estrellaproject.org/lkif-core/time.owl" uri="ontologies-bridging/time.owl"/>
+    <uri id="time-modification-iri" name="http://www.estrellaproject.org/lkif-core/time-modification.owl" uri="ontologies-bridging/time-modification.owl"/>
+    <uri id="lkif-rules-iri" name="http://www.estrellaproject.org/lkif-core/lkif-rules.owl" uri="ontologies-bridging/lkif-rules.owl"/>
+    <uri id="lkif-extended-iri" name="http://www.estrellaproject.org/lkif-core/lkif-extended.owl" uri="ontologies-bridging/lkif-extended.owl"/>
+    
+    <!-- Alternative short URIs for compatibility -->
+    <uri id="lkif-core-short" name="http://www.estrellaproject.org/lkif-core.owl" uri="ontologies-bridging/lkif-core.owl"/>
+    <uri id="action-short" name="http://www.estrellaproject.org/action.owl" uri="ontologies-bridging/action.owl"/>
+    <uri id="legal-action-short" name="http://www.estrellaproject.org/legal-action.owl" uri="ontologies-bridging/legal-action.owl"/>
+    <uri id="legal-role-short" name="http://www.estrellaproject.org/legal-role.owl" uri="ontologies-bridging/legal-role.owl"/>
+    <uri id="norm-short" name="http://www.estrellaproject.org/norm.owl" uri="ontologies-bridging/norm.owl"/>
+    <uri id="role-short" name="http://www.estrellaproject.org/role.owl" uri="ontologies-bridging/role.owl"/>
+    <uri id="process-short" name="http://www.estrellaproject.org/process.owl" uri="ontologies-bridging/process.owl"/>
+    <uri id="expression-short" name="http://www.estrellaproject.org/expression.owl" uri="ontologies-bridging/expression.owl"/>
+    <uri id="mereology-short" name="http://www.estrellaproject.org/mereology.owl" uri="ontologies-bridging/mereology.owl"/>
+    <uri id="time-short" name="http://www.estrellaproject.org/time.owl" uri="ontologies-bridging/time.owl"/>
 </catalog>

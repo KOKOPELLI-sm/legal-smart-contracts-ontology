@@ -3,6 +3,10 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
+ex:Landlord a owl:Class ;
+    rdfs:label "Landlord" ;
+    rdfs:subClassOf ex:Role .
+
 ex:SmartLeaseContract a ex:SmartContract ;
     ex:hasEvent ex:SmartLeaseContract_event_DepositPayed,
         ex:SmartLeaseContract_event_TenantAssigned,
@@ -30,6 +34,10 @@ ex:SmartLeaseContract a ex:SmartContract ;
         ex:SmartLeaseContract_tenants,
         ex:SmartLeaseContract_writtenContractIpfsHash .
 
+ex:SmartLeaseContract_payDeposit__PayableFunction a owl:Class ;
+    rdfs:label "Payable Function for SmartLeaseContract_payDeposit_" ;
+    owl:equivalentClass <_:PayableFunctionRestriction_SmartLeaseContract_payDeposit_> .
+
 ex:SmartLeaseRegistry a ex:SmartContract ;
     ex:hasEvent ex:SmartLeaseRegistry_event_LeaseContractCreated ;
     ex:hasFunction ex:SmartLeaseRegistry_createLease_uint8,
@@ -38,7 +46,12 @@ ex:SmartLeaseRegistry a ex:SmartContract ;
     ex:hasName "SmartLeaseRegistry" ;
     ex:hasVariable ex:SmartLeaseRegistry_contracts .
 
-ex:emitsEvent a owl:ObjectProperty ;
+ex:Tenant a owl:Class ;
+    rdfs:label "Tenant" ;
+    rdfs:subClassOf ex:Role .
+
+ex:emitsEvent a owl:DatatypeProperty,
+        owl:ObjectProperty ;
     rdfs:domain ex:Function ;
     rdfs:range ex:Event .
 
@@ -55,19 +68,18 @@ ex:hasMember a owl:ObjectProperty ;
     rdfs:range ex:Member .
 
 ex:hasModifier a owl:ObjectProperty ;
-    rdfs:domain ex:Function ;
+    rdfs:domain ex:Function,
+        ex:SmartContract ;
     rdfs:range ex:Modifier .
 
-ex:hasName a owl:DatatypeProperty ;
-    rdfs:domain ex:Event,
+ex:hasName rdfs:domain ex:Event,
         ex:Function,
         ex:Member,
         ex:Modifier,
         ex:Parameter,
         ex:SmartContract,
         ex:StateVariable,
-        ex:Struct ;
-    rdfs:range xsd:string .
+        ex:Struct .
 
 ex:hasParameter a owl:ObjectProperty ;
     rdfs:domain ex:Event,
@@ -78,34 +90,23 @@ ex:hasStruct a owl:ObjectProperty ;
     rdfs:domain ex:SmartContract ;
     rdfs:range ex:Struct .
 
-ex:hasType a owl:DatatypeProperty ;
-    rdfs:domain ex:Function,
-        ex:Member,
+ex:hasType rdfs:domain ex:Member,
         ex:Parameter,
-        ex:StateVariable ;
-    rdfs:range xsd:string .
+        ex:StateVariable .
 
 ex:hasVariable a owl:ObjectProperty ;
     rdfs:domain ex:SmartContract ;
     rdfs:range ex:StateVariable .
 
-ex:hasVisibility a owl:DatatypeProperty ;
-    rdfs:domain ex:Function,
-        ex:StateVariable ;
-    rdfs:range xsd:string .
+ex:hasVisibility rdfs:domain ex:Function,
+        ex:StateVariable .
 
 ex:inheritsFrom a owl:ObjectProperty ;
     rdfs:domain ex:SmartContract ;
     rdfs:range ex:SmartContract .
 
-ex:isMonetaryValue a owl:DatatypeProperty ;
-    rdfs:domain ex:Parameter,
-        ex:StateVariable ;
-    rdfs:range xsd:boolean .
-
-ex:isPayable a owl:DatatypeProperty ;
-    rdfs:domain ex:Function ;
-    rdfs:range xsd:boolean .
+ex:isMonetaryValue rdfs:domain ex:Parameter,
+        ex:StateVariable .
 
 ex:readsVariable a owl:ObjectProperty ;
     rdfs:domain ex:Function ;
@@ -115,35 +116,54 @@ ex:writesVariable a owl:ObjectProperty ;
     rdfs:domain ex:Function ;
     rdfs:range ex:StateVariable .
 
+<_:PayableFunctionRestriction_SmartLeaseContract_payDeposit_> a owl:Restriction ;
+    owl:hasValue true ;
+    owl:onProperty ex:isPayable .
+
 ex:DepositPayed_param_amount a ex:Parameter ;
+    rdfs:label "amount" ;
     ex:hasName "amount" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SmartLeaseContract_event_DepositPayed" .
 
 ex:DepositPayed_param_tenantAddress a ex:Parameter ;
+    rdfs:label "tenantAddress" ;
     ex:hasName "tenantAddress" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of SmartLeaseContract_event_DepositPayed" .
 
 ex:DepositPayed_param_timestamp a ex:Parameter ;
+    rdfs:label "timestamp" ;
     ex:hasName "timestamp" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SmartLeaseContract_event_DepositPayed" .
 
 ex:LeaseContractCreated_param_capacity a ex:Parameter ;
+    rdfs:label "capacity" ;
     ex:hasName "capacity" ;
-    ex:hasType "uint8" .
+    ex:hasType "uint8" ;
+    rdfs:comment "Property of SmartLeaseRegistry_event_LeaseContractCreated" .
 
 ex:LeaseContractCreated_param_landlord a ex:Parameter ;
+    rdfs:label "landlord" ;
     ex:hasName "landlord" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of SmartLeaseRegistry_event_LeaseContractCreated" .
 
 ex:LeaseContractCreated_param_newLeaseContractAddress a ex:Parameter ;
+    rdfs:label "newLeaseContractAddress" ;
     ex:hasName "newLeaseContractAddress" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of SmartLeaseRegistry_event_LeaseContractCreated" .
 
 ex:LeaseContractCreated_param_timestamp a ex:Parameter ;
+    rdfs:label "timestamp" ;
     ex:hasName "timestamp" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SmartLeaseRegistry_event_LeaseContractCreated" .
 
 ex:SmartLeaseContract_assignTenant_address_uint256_uint256 a ex:Function ;
+    rdfs:label "assignTenant" ;
     ex:hasModifier ex:SmartLeaseContract_mod_isContractProposed,
         ex:SmartLeaseContract_mod_notZeroAddres,
         ex:SmartLeaseContract_mod_onlyLandlord ;
@@ -159,37 +179,50 @@ ex:SmartLeaseContract_assignTenant_address_uint256_uint256 a ex:Function ;
         ex:SmartLeaseContract_tenants ;
     ex:writesVariable ex:SmartLeaseContract_addressToTenant,
         ex:SmartLeaseContract_tenantOccupancy,
-        ex:SmartLeaseContract_tenants .
+        ex:SmartLeaseContract_tenants ;
+    rdfs:comment "Function of contract SmartLeaseContract" .
 
 ex:SmartLeaseContract_assignTenant_address_uint256_uint256_param__depositAmount a ex:Parameter ;
+    rdfs:label "_depositAmount" ;
     ex:hasName "_depositAmount" ;
     ex:hasType "uint256" ;
-    ex:isMonetaryValue true .
+    ex:isMonetaryValue true ;
+    rdfs:comment "Property of SmartLeaseContract_assignTenant_address_uint256_uint256" .
 
 ex:SmartLeaseContract_assignTenant_address_uint256_uint256_param__rentAmount a ex:Parameter ;
+    rdfs:label "_rentAmount" ;
     ex:hasName "_rentAmount" ;
     ex:hasType "uint256" ;
-    ex:isMonetaryValue true .
+    ex:isMonetaryValue true ;
+    rdfs:comment "Property of SmartLeaseContract_assignTenant_address_uint256_uint256" .
 
 ex:SmartLeaseContract_assignTenant_address_uint256_uint256_param__tenantAddress a ex:Parameter ;
+    rdfs:label "_tenantAddress" ;
     ex:hasName "_tenantAddress" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of SmartLeaseContract_assignTenant_address_uint256_uint256" .
 
 ex:SmartLeaseContract_constructor_address_uint8 a ex:Function ;
+    rdfs:label "constructor" ;
     ex:hasName "constructor" ;
     ex:hasParameter ex:SmartLeaseContract_constructor_address_uint8_param__capacity,
         ex:SmartLeaseContract_constructor_address_uint8_param__landlordAddress ;
     ex:hasVisibility "public" ;
     ex:writesVariable ex:SmartLeaseContract_TENANT_CAPACITY,
-        ex:SmartLeaseContract_landlordAddress .
+        ex:SmartLeaseContract_landlordAddress ;
+    rdfs:comment "Function of contract SmartLeaseContract" .
 
 ex:SmartLeaseContract_constructor_address_uint8_param__capacity a ex:Parameter ;
+    rdfs:label "_capacity" ;
     ex:hasName "_capacity" ;
-    ex:hasType "uint8" .
+    ex:hasType "uint8" ;
+    rdfs:comment "Property of SmartLeaseContract_constructor_address_uint8" .
 
 ex:SmartLeaseContract_constructor_address_uint8_param__landlordAddress a ex:Parameter ;
+    rdfs:label "_landlordAddress" ;
     ex:hasName "_landlordAddress" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of SmartLeaseContract_constructor_address_uint8" .
 
 ex:SmartLeaseContract_event_DepositPayed a ex:Event ;
     ex:hasName "DepositPayed" ;
@@ -215,21 +248,28 @@ ex:SmartLeaseContract_event_WrittenContractProposed a ex:Event ;
         ex:WrittenContractProposed_param_timestamp .
 
 ex:SmartLeaseContract_isSameString_string_string a ex:Function ;
+    rdfs:label "isSameString" ;
     ex:hasName "isSameString" ;
     ex:hasParameter ex:SmartLeaseContract_isSameString_string_string_param_string1,
         ex:SmartLeaseContract_isSameString_string_string_param_string2 ;
-    ex:hasVisibility "private" .
+    ex:hasVisibility "private" ;
+    rdfs:comment "Function of contract SmartLeaseContract" .
 
 ex:SmartLeaseContract_isSameString_string_string_param_string1 a ex:Parameter ;
+    rdfs:label "string1" ;
     ex:hasName "string1" ;
-    ex:hasType "string" .
+    ex:hasType "string" ;
+    rdfs:comment "Property of SmartLeaseContract_isSameString_string_string" .
 
 ex:SmartLeaseContract_isSameString_string_string_param_string2 a ex:Parameter ;
+    rdfs:label "string2" ;
     ex:hasName "string2" ;
-    ex:hasType "string" .
+    ex:hasType "string" ;
+    rdfs:comment "Property of SmartLeaseContract_isSameString_string_string" .
 
 ex:SmartLeaseContract_payDeposit_ a ex:Function,
         ex:MonetaryFunction ;
+    rdfs:label "payDeposit" ;
     ex:hasModifier ex:SmartLeaseContract_mod_hasSigned,
         ex:SmartLeaseContract_mod_onlyTenant ;
     ex:hasName "payDeposit" ;
@@ -238,31 +278,40 @@ ex:SmartLeaseContract_payDeposit_ a ex:Function,
     ex:readsVariable ex:SmartLeaseContract_addressToTenant,
         ex:SmartLeaseContract_deposit ;
     ex:writesVariable ex:SmartLeaseContract_addressToTenant,
-        ex:SmartLeaseContract_deposit .
+        ex:SmartLeaseContract_deposit ;
+    rdfs:comment "Function of contract SmartLeaseContract" .
 
 ex:SmartLeaseContract_proposeWrittenContract_string a ex:Function ;
+    rdfs:label "proposeWrittenContract" ;
     ex:hasModifier ex:SmartLeaseContract_mod_onlyLandlord ;
     ex:hasName "proposeWrittenContract" ;
     ex:hasParameter ex:SmartLeaseContract_proposeWrittenContract_string_param__writtenContractIpfsHash ;
     ex:hasVisibility "external" ;
-    ex:writesVariable ex:SmartLeaseContract_writtenContractIpfsHash .
+    ex:writesVariable ex:SmartLeaseContract_writtenContractIpfsHash ;
+    rdfs:comment "Function of contract SmartLeaseContract" .
 
 ex:SmartLeaseContract_proposeWrittenContract_string_param__writtenContractIpfsHash a ex:Parameter ;
+    rdfs:label "_writtenContractIpfsHash" ;
     ex:hasName "_writtenContractIpfsHash" ;
-    ex:hasType "string" .
+    ex:hasType "string" ;
+    rdfs:comment "Property of SmartLeaseContract_proposeWrittenContract_string" .
 
 ex:SmartLeaseContract_signContract_ a ex:Function ;
+    rdfs:label "signContract" ;
     ex:hasModifier ex:SmartLeaseContract_mod_isContractProposed,
         ex:SmartLeaseContract_mod_onlyTenant ;
     ex:hasName "signContract" ;
     ex:hasVisibility "external" ;
     ex:readsVariable ex:SmartLeaseContract_addressToTenant ;
-    ex:writesVariable ex:SmartLeaseContract_addressToTenant .
+    ex:writesVariable ex:SmartLeaseContract_addressToTenant ;
+    rdfs:comment "Function of contract SmartLeaseContract" .
 
 ex:SmartLeaseContract_slitherConstructorVariables_ a ex:Function ;
+    rdfs:label "slitherConstructorVariables" ;
     ex:hasName "slitherConstructorVariables" ;
     ex:hasVisibility "internal" ;
-    ex:writesVariable ex:SmartLeaseContract_tenantOccupancy .
+    ex:writesVariable ex:SmartLeaseContract_tenantOccupancy ;
+    rdfs:comment "Function of contract SmartLeaseContract" .
 
 ex:SmartLeaseContract_struct_Tenant a ex:Struct ;
     ex:hasMember ex:Tenant_member_depositAmount,
@@ -273,15 +322,19 @@ ex:SmartLeaseContract_struct_Tenant a ex:Struct ;
     ex:hasName "Tenant" .
 
 ex:SmartLeaseRegistry_createLease_uint8 a ex:Function ;
+    rdfs:label "createLease" ;
     ex:hasName "createLease" ;
     ex:hasParameter ex:SmartLeaseRegistry_createLease_uint8_param__capacity ;
     ex:hasVisibility "public" ;
     ex:readsVariable ex:SmartLeaseRegistry_contracts ;
-    ex:writesVariable ex:SmartLeaseRegistry_contracts .
+    ex:writesVariable ex:SmartLeaseRegistry_contracts ;
+    rdfs:comment "Function of contract SmartLeaseRegistry" .
 
 ex:SmartLeaseRegistry_createLease_uint8_param__capacity a ex:Parameter ;
+    rdfs:label "_capacity" ;
     ex:hasName "_capacity" ;
-    ex:hasType "uint8" .
+    ex:hasType "uint8" ;
+    rdfs:comment "Property of SmartLeaseRegistry_createLease_uint8" .
 
 ex:SmartLeaseRegistry_event_LeaseContractCreated a ex:Event ;
     ex:hasName "LeaseContractCreated" ;
@@ -291,66 +344,101 @@ ex:SmartLeaseRegistry_event_LeaseContractCreated a ex:Event ;
         ex:LeaseContractCreated_param_timestamp .
 
 ex:SmartLeaseRegistry_getLeases_ a ex:Function ;
+    rdfs:label "getLeases" ;
     ex:hasName "getLeases" ;
     ex:hasVisibility "external" ;
-    ex:readsVariable ex:SmartLeaseRegistry_contracts .
+    ex:readsVariable ex:SmartLeaseRegistry_contracts ;
+    rdfs:comment "Function of contract SmartLeaseRegistry" .
 
 ex:SmartLeaseRegistry_getNumLeases_ a ex:Function ;
+    rdfs:label "getNumLeases" ;
     ex:hasName "getNumLeases" ;
     ex:hasVisibility "external" ;
-    ex:readsVariable ex:SmartLeaseRegistry_contracts .
+    ex:readsVariable ex:SmartLeaseRegistry_contracts ;
+    rdfs:comment "Function of contract SmartLeaseRegistry" .
 
 ex:TenantAssigned_param_depositAmount a ex:Parameter ;
+    rdfs:label "depositAmount" ;
     ex:hasName "depositAmount" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SmartLeaseContract_event_TenantAssigned" .
 
 ex:TenantAssigned_param_rentAmount a ex:Parameter ;
+    rdfs:label "rentAmount" ;
     ex:hasName "rentAmount" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SmartLeaseContract_event_TenantAssigned" .
 
 ex:TenantAssigned_param_tenantAddress a ex:Parameter ;
+    rdfs:label "tenantAddress" ;
     ex:hasName "tenantAddress" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of SmartLeaseContract_event_TenantAssigned" .
 
 ex:TenantAssigned_param_timestamp a ex:Parameter ;
+    rdfs:label "timestamp" ;
     ex:hasName "timestamp" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SmartLeaseContract_event_TenantAssigned" .
 
 ex:TenantSigned_param_tenantAddress a ex:Parameter ;
+    rdfs:label "tenantAddress" ;
     ex:hasName "tenantAddress" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of SmartLeaseContract_event_TenantSigned" .
 
 ex:TenantSigned_param_timestamp a ex:Parameter ;
+    rdfs:label "timestamp" ;
     ex:hasName "timestamp" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SmartLeaseContract_event_TenantSigned" .
 
 ex:Tenant_member_depositAmount a ex:Member ;
+    rdfs:label "depositAmount" ;
     ex:hasName "depositAmount" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SmartLeaseContract_struct_Tenant" .
 
 ex:Tenant_member_hasPaidDeposit a ex:Member ;
+    rdfs:label "hasPaidDeposit" ;
     ex:hasName "hasPaidDeposit" ;
-    ex:hasType "bool" .
+    ex:hasType "bool" ;
+    rdfs:comment "Property of SmartLeaseContract_struct_Tenant" .
 
 ex:Tenant_member_hasSigned a ex:Member ;
+    rdfs:label "hasSigned" ;
     ex:hasName "hasSigned" ;
-    ex:hasType "bool" .
+    ex:hasType "bool" ;
+    rdfs:comment "Property of SmartLeaseContract_struct_Tenant" .
 
 ex:Tenant_member_initialized a ex:Member ;
+    rdfs:label "initialized" ;
     ex:hasName "initialized" ;
-    ex:hasType "bool" .
+    ex:hasType "bool" ;
+    rdfs:comment "Property of SmartLeaseContract_struct_Tenant" .
 
 ex:Tenant_member_rentAmount a ex:Member ;
+    rdfs:label "rentAmount" ;
     ex:hasName "rentAmount" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SmartLeaseContract_struct_Tenant" .
 
 ex:WrittenContractProposed_param_ipfsHash a ex:Parameter ;
+    rdfs:label "ipfsHash" ;
     ex:hasName "ipfsHash" ;
-    ex:hasType "string" .
+    ex:hasType "string" ;
+    rdfs:comment "Property of SmartLeaseContract_event_WrittenContractProposed" .
 
 ex:WrittenContractProposed_param_timestamp a ex:Parameter ;
+    rdfs:label "timestamp" ;
     ex:hasName "timestamp" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SmartLeaseContract_event_WrittenContractProposed" .
+
+ex:isPayable rdfs:domain ex:Function .
+
+ex:Role a owl:Class ;
+    rdfs:label "Role" .
 
 ex:SmartLeaseContract_mod_hasSigned a ex:Modifier ;
     ex:hasName "hasSigned" .
@@ -359,25 +447,33 @@ ex:SmartLeaseContract_mod_notZeroAddres a ex:Modifier ;
     ex:hasName "notZeroAddres" .
 
 ex:SmartLeaseContract_writtenContractIpfsHash a ex:StateVariable ;
+    rdfs:label "writtenContractIpfsHash" ;
     ex:hasName "writtenContractIpfsHash" ;
     ex:hasType "string" ;
-    ex:hasVisibility "public" .
+    ex:hasVisibility "public" ;
+    rdfs:comment "Property of SmartLeaseContract" .
 
 ex:SmartLeaseContract_TENANT_CAPACITY a ex:StateVariable ;
+    rdfs:label "TENANT_CAPACITY" ;
     ex:hasName "TENANT_CAPACITY" ;
     ex:hasType "uint8" ;
-    ex:hasVisibility "public" .
+    ex:hasVisibility "public" ;
+    rdfs:comment "Property of SmartLeaseContract" .
 
 ex:SmartLeaseContract_deposit a ex:StateVariable ;
+    rdfs:label "deposit" ;
     ex:hasName "deposit" ;
     ex:hasType "uint256" ;
     ex:hasVisibility "internal" ;
-    ex:isMonetaryValue true .
+    ex:isMonetaryValue true ;
+    rdfs:comment "Property of SmartLeaseContract" .
 
 ex:SmartLeaseContract_landlordAddress a ex:StateVariable ;
+    rdfs:label "landlordAddress" ;
     ex:hasName "landlordAddress" ;
     ex:hasType "address" ;
-    ex:hasVisibility "public" .
+    ex:hasVisibility "public" ;
+    rdfs:comment "Property of SmartLeaseContract" .
 
 ex:SmartLeaseContract_mod_isContractProposed a ex:Modifier ;
     ex:hasName "isContractProposed" .
@@ -390,40 +486,57 @@ ex:SmartLeaseContract_mod_onlyTenant a ex:Modifier ;
 
 ex:SmartLeaseContract_tenants a ex:ArrayVariable,
         ex:StateVariable ;
+    rdfs:label "tenants" ;
     ex:hasName "tenants" ;
     ex:hasType "SmartLeaseContract.Tenant[]" ;
-    ex:hasVisibility "public" .
+    ex:hasVisibility "public" ;
+    rdfs:comment "Property of SmartLeaseContract" .
 
 ex:SmartLeaseContract_tenantOccupancy a ex:StateVariable ;
+    rdfs:label "tenantOccupancy" ;
     ex:hasName "tenantOccupancy" ;
     ex:hasType "uint8" ;
-    ex:hasVisibility "public" .
+    ex:hasVisibility "public" ;
+    rdfs:comment "Property of SmartLeaseContract" .
 
-ex:Struct a owl:Class .
+ex:Struct a owl:Class ;
+    rdfs:label "Struct" .
 
 ex:SmartLeaseRegistry_contracts a ex:ArrayVariable,
         ex:StateVariable ;
+    rdfs:label "contracts" ;
     ex:hasName "contracts" ;
     ex:hasType "address[]" ;
-    ex:hasVisibility "internal" .
+    ex:hasVisibility "internal" ;
+    rdfs:comment "Property of SmartLeaseRegistry" .
 
-ex:Modifier a owl:Class .
+ex:Modifier a owl:Class ;
+    rdfs:label "Modifier" .
 
 ex:SmartLeaseContract_addressToTenant a ex:MappingVariable,
         ex:StateVariable ;
+    rdfs:label "addressToTenant" ;
     ex:hasName "addressToTenant" ;
     ex:hasType "mapping(address => SmartLeaseContract.Tenant)" ;
-    ex:hasVisibility "public" .
+    ex:hasVisibility "public" ;
+    rdfs:comment "Property of SmartLeaseContract" .
 
-ex:Member a owl:Class .
+ex:Member a owl:Class ;
+    rdfs:label "Member" .
 
-ex:Event a owl:Class .
+ex:Event a owl:Class ;
+    rdfs:label "Event" .
 
-ex:SmartContract a owl:Class .
+ex:SmartContract a owl:Class ;
+    rdfs:label "SmartContract" ;
+    rdfs:subClassOf <http://www.estrellaproject.org/lkif-core/legal-action.owl#Contract> .
 
-ex:StateVariable a owl:Class .
+ex:StateVariable a owl:Class ;
+    rdfs:label "StateVariable" .
 
-ex:Function a owl:Class .
+ex:Function a owl:Class ;
+    rdfs:label "Function" .
 
-ex:Parameter a owl:Class .
+ex:Parameter a owl:Class ;
+    rdfs:label "Parameter" .
 

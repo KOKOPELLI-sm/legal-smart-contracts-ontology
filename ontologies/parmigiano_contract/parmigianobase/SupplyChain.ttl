@@ -3,6 +3,18 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
+ex:Item a owl:Class ;
+    rdfs:label "Item" ;
+    rdfs:subClassOf ex:Role .
+
+ex:OrigOwner a owl:Class ;
+    rdfs:label "OrigOwner" ;
+    rdfs:subClassOf ex:Role .
+
+ex:Owner a owl:Class ;
+    rdfs:label "Owner" ;
+    rdfs:subClassOf ex:Role .
+
 ex:Roles a ex:SmartContract ;
     ex:hasFunction ex:Roles_add_Roles.Role_address,
         ex:Roles_has_Roles.Role_address,
@@ -89,7 +101,32 @@ ex:SupplyChain a ex:SmartContract ;
         ex:Ownable,
         ex:RetailerRole .
 
-ex:emitsEvent a owl:ObjectProperty ;
+ex:SupplyChain_constructor__PayableFunction a owl:Class ;
+    rdfs:label "Payable Function for SupplyChain_constructor_" ;
+    owl:equivalentClass <_:PayableFunctionRestriction_SupplyChain_constructor_> .
+
+ex:SupplyChain_purchaseItemByConsumer_uint256_PayableFunction a owl:Class ;
+    rdfs:label "Payable Function for SupplyChain_purchaseItemByConsumer_uint256" ;
+    owl:equivalentClass <_:PayableFunctionRestriction_SupplyChain_purchaseItemByConsumer_uint256> .
+
+ex:SupplyChain_purchaseItemByDistributor_uint256_PayableFunction a owl:Class ;
+    rdfs:label "Payable Function for SupplyChain_purchaseItemByDistributor_uint256" ;
+    owl:equivalentClass <_:PayableFunctionRestriction_SupplyChain_purchaseItemByDistributor_uint256> .
+
+ex:SupplyChain_purchaseItemByRetailer_uint256_PayableFunction a owl:Class ;
+    rdfs:label "Payable Function for SupplyChain_purchaseItemByRetailer_uint256" ;
+    owl:equivalentClass <_:PayableFunctionRestriction_SupplyChain_purchaseItemByRetailer_uint256> .
+
+ex:SupplyChain_shippedItemByFarmer_uint256_PayableFunction a owl:Class ;
+    rdfs:label "Payable Function for SupplyChain_shippedItemByFarmer_uint256" ;
+    owl:equivalentClass <_:PayableFunctionRestriction_SupplyChain_shippedItemByFarmer_uint256> .
+
+ex:Txblocks a owl:Class ;
+    rdfs:label "Txblocks" ;
+    rdfs:subClassOf ex:Role .
+
+ex:emitsEvent a owl:DatatypeProperty,
+        owl:ObjectProperty ;
     rdfs:domain ex:Function ;
     rdfs:range ex:Event .
 
@@ -106,19 +143,18 @@ ex:hasMember a owl:ObjectProperty ;
     rdfs:range ex:Member .
 
 ex:hasModifier a owl:ObjectProperty ;
-    rdfs:domain ex:Function ;
+    rdfs:domain ex:Function,
+        ex:SmartContract ;
     rdfs:range ex:Modifier .
 
-ex:hasName a owl:DatatypeProperty ;
-    rdfs:domain ex:Event,
+ex:hasName rdfs:domain ex:Event,
         ex:Function,
         ex:Member,
         ex:Modifier,
         ex:Parameter,
         ex:SmartContract,
         ex:StateVariable,
-        ex:Struct ;
-    rdfs:range xsd:string .
+        ex:Struct .
 
 ex:hasParameter a owl:ObjectProperty ;
     rdfs:domain ex:Event,
@@ -129,34 +165,22 @@ ex:hasStruct a owl:ObjectProperty ;
     rdfs:domain ex:SmartContract ;
     rdfs:range ex:Struct .
 
-ex:hasType a owl:DatatypeProperty ;
-    rdfs:domain ex:Function,
-        ex:Member,
+ex:hasType rdfs:domain ex:Member,
         ex:Parameter,
-        ex:StateVariable ;
-    rdfs:range xsd:string .
+        ex:StateVariable .
 
 ex:hasVariable a owl:ObjectProperty ;
     rdfs:domain ex:SmartContract ;
     rdfs:range ex:StateVariable .
 
-ex:hasVisibility a owl:DatatypeProperty ;
-    rdfs:domain ex:Function,
-        ex:StateVariable ;
-    rdfs:range xsd:string .
+ex:hasVisibility rdfs:domain ex:Function,
+        ex:StateVariable .
 
 ex:inheritsFrom a owl:ObjectProperty ;
     rdfs:domain ex:SmartContract ;
     rdfs:range ex:SmartContract .
 
-ex:isMonetaryValue a owl:DatatypeProperty ;
-    rdfs:domain ex:Parameter,
-        ex:StateVariable ;
-    rdfs:range xsd:boolean .
-
-ex:isPayable a owl:DatatypeProperty ;
-    rdfs:domain ex:Function ;
-    rdfs:range xsd:boolean .
+ex:isMonetaryValue rdfs:domain ex:Parameter .
 
 ex:readsVariable a owl:ObjectProperty ;
     rdfs:domain ex:Function ;
@@ -165,6 +189,26 @@ ex:readsVariable a owl:ObjectProperty ;
 ex:writesVariable a owl:ObjectProperty ;
     rdfs:domain ex:Function ;
     rdfs:range ex:StateVariable .
+
+<_:PayableFunctionRestriction_SupplyChain_constructor_> a owl:Restriction ;
+    owl:hasValue true ;
+    owl:onProperty ex:isPayable .
+
+<_:PayableFunctionRestriction_SupplyChain_purchaseItemByConsumer_uint256> a owl:Restriction ;
+    owl:hasValue true ;
+    owl:onProperty ex:isPayable .
+
+<_:PayableFunctionRestriction_SupplyChain_purchaseItemByDistributor_uint256> a owl:Restriction ;
+    owl:hasValue true ;
+    owl:onProperty ex:isPayable .
+
+<_:PayableFunctionRestriction_SupplyChain_purchaseItemByRetailer_uint256> a owl:Restriction ;
+    owl:hasValue true ;
+    owl:onProperty ex:isPayable .
+
+<_:PayableFunctionRestriction_SupplyChain_shippedItemByFarmer_uint256> a owl:Restriction ;
+    owl:hasValue true ;
+    owl:onProperty ex:isPayable .
 
 ex:ConsumerRole a ex:SmartContract ;
     ex:hasEvent ex:ConsumerRole_event_ConsumerAdded,
@@ -180,38 +224,52 @@ ex:ConsumerRole a ex:SmartContract ;
     ex:hasVariable ex:ConsumerRole_consumers .
 
 ex:ConsumerRole__addConsumer_address a ex:Function ;
+    rdfs:label "_addConsumer" ;
     ex:hasName "_addConsumer" ;
     ex:hasParameter ex:ConsumerRole__addConsumer_address_param_account ;
     ex:hasVisibility "internal" ;
-    ex:readsVariable ex:ConsumerRole_consumers .
+    ex:readsVariable ex:ConsumerRole_consumers ;
+    rdfs:comment "Function of contract ConsumerRole" .
 
 ex:ConsumerRole__addConsumer_address_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of ConsumerRole__addConsumer_address" .
 
 ex:ConsumerRole__removeConsumer_address a ex:Function ;
+    rdfs:label "_removeConsumer" ;
     ex:hasName "_removeConsumer" ;
     ex:hasParameter ex:ConsumerRole__removeConsumer_address_param_account ;
     ex:hasVisibility "internal" ;
-    ex:readsVariable ex:ConsumerRole_consumers .
+    ex:readsVariable ex:ConsumerRole_consumers ;
+    rdfs:comment "Function of contract ConsumerRole" .
 
 ex:ConsumerRole__removeConsumer_address_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of ConsumerRole__removeConsumer_address" .
 
 ex:ConsumerRole_addConsumer_address a ex:Function ;
+    rdfs:label "addConsumer" ;
     ex:hasModifier ex:ConsumerRole_mod_onlyConsumer ;
     ex:hasName "addConsumer" ;
     ex:hasParameter ex:ConsumerRole_addConsumer_address_param_account ;
-    ex:hasVisibility "public" .
+    ex:hasVisibility "public" ;
+    rdfs:comment "Function of contract ConsumerRole" .
 
 ex:ConsumerRole_addConsumer_address_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of ConsumerRole_addConsumer_address" .
 
 ex:ConsumerRole_constructor_ a ex:Function ;
+    rdfs:label "constructor" ;
     ex:hasName "constructor" ;
-    ex:hasVisibility "public" .
+    ex:hasVisibility "public" ;
+    rdfs:comment "Function of contract ConsumerRole" .
 
 ex:ConsumerRole_event_ConsumerAdded a ex:Event ;
     ex:hasName "ConsumerAdded" ;
@@ -222,23 +280,31 @@ ex:ConsumerRole_event_ConsumerRemoved a ex:Event ;
     ex:hasParameter ex:ConsumerRemoved_param_account .
 
 ex:ConsumerRole_isConsumer_address a ex:Function ;
+    rdfs:label "isConsumer" ;
     ex:hasName "isConsumer" ;
     ex:hasParameter ex:ConsumerRole_isConsumer_address_param_account ;
     ex:hasVisibility "public" ;
-    ex:readsVariable ex:ConsumerRole_consumers .
+    ex:readsVariable ex:ConsumerRole_consumers ;
+    rdfs:comment "Function of contract ConsumerRole" .
 
 ex:ConsumerRole_isConsumer_address_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of ConsumerRole_isConsumer_address" .
 
 ex:ConsumerRole_renounceConsumer_address a ex:Function ;
+    rdfs:label "renounceConsumer" ;
     ex:hasName "renounceConsumer" ;
     ex:hasParameter ex:ConsumerRole_renounceConsumer_address_param_account ;
-    ex:hasVisibility "public" .
+    ex:hasVisibility "public" ;
+    rdfs:comment "Function of contract ConsumerRole" .
 
 ex:ConsumerRole_renounceConsumer_address_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of ConsumerRole_renounceConsumer_address" .
 
 ex:DistributorRole a ex:SmartContract ;
     ex:hasEvent ex:DistributorRole_event_DistributorAdded,
@@ -254,38 +320,52 @@ ex:DistributorRole a ex:SmartContract ;
     ex:hasVariable ex:DistributorRole_distributors .
 
 ex:DistributorRole__addDistributor_address a ex:Function ;
+    rdfs:label "_addDistributor" ;
     ex:hasName "_addDistributor" ;
     ex:hasParameter ex:DistributorRole__addDistributor_address_param_account ;
     ex:hasVisibility "internal" ;
-    ex:readsVariable ex:DistributorRole_distributors .
+    ex:readsVariable ex:DistributorRole_distributors ;
+    rdfs:comment "Function of contract DistributorRole" .
 
 ex:DistributorRole__addDistributor_address_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of DistributorRole__addDistributor_address" .
 
 ex:DistributorRole__removeDistributor_address a ex:Function ;
+    rdfs:label "_removeDistributor" ;
     ex:hasName "_removeDistributor" ;
     ex:hasParameter ex:DistributorRole__removeDistributor_address_param_account ;
     ex:hasVisibility "internal" ;
-    ex:readsVariable ex:DistributorRole_distributors .
+    ex:readsVariable ex:DistributorRole_distributors ;
+    rdfs:comment "Function of contract DistributorRole" .
 
 ex:DistributorRole__removeDistributor_address_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of DistributorRole__removeDistributor_address" .
 
 ex:DistributorRole_addDistributor_address a ex:Function ;
+    rdfs:label "addDistributor" ;
     ex:hasModifier ex:DistributorRole_mod_onlyDistributor ;
     ex:hasName "addDistributor" ;
     ex:hasParameter ex:DistributorRole_addDistributor_address_param_account ;
-    ex:hasVisibility "public" .
+    ex:hasVisibility "public" ;
+    rdfs:comment "Function of contract DistributorRole" .
 
 ex:DistributorRole_addDistributor_address_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of DistributorRole_addDistributor_address" .
 
 ex:DistributorRole_constructor_ a ex:Function ;
+    rdfs:label "constructor" ;
     ex:hasName "constructor" ;
-    ex:hasVisibility "public" .
+    ex:hasVisibility "public" ;
+    rdfs:comment "Function of contract DistributorRole" .
 
 ex:DistributorRole_event_DistributorAdded a ex:Event ;
     ex:hasName "DistributorAdded" ;
@@ -296,18 +376,24 @@ ex:DistributorRole_event_DistributorRemoved a ex:Event ;
     ex:hasParameter ex:DistributorRemoved_param_account .
 
 ex:DistributorRole_isDistributor_address a ex:Function ;
+    rdfs:label "isDistributor" ;
     ex:hasName "isDistributor" ;
     ex:hasParameter ex:DistributorRole_isDistributor_address_param_account ;
     ex:hasVisibility "public" ;
-    ex:readsVariable ex:DistributorRole_distributors .
+    ex:readsVariable ex:DistributorRole_distributors ;
+    rdfs:comment "Function of contract DistributorRole" .
 
 ex:DistributorRole_isDistributor_address_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of DistributorRole_isDistributor_address" .
 
 ex:DistributorRole_renounceDistributor_ a ex:Function ;
+    rdfs:label "renounceDistributor" ;
     ex:hasName "renounceDistributor" ;
-    ex:hasVisibility "public" .
+    ex:hasVisibility "public" ;
+    rdfs:comment "Function of contract DistributorRole" .
 
 ex:FarmerRole a ex:SmartContract ;
     ex:hasEvent ex:FarmerRole_event_FarmerAdded,
@@ -323,38 +409,52 @@ ex:FarmerRole a ex:SmartContract ;
     ex:hasVariable ex:FarmerRole_farmers .
 
 ex:FarmerRole__addFarmer_address a ex:Function ;
+    rdfs:label "_addFarmer" ;
     ex:hasName "_addFarmer" ;
     ex:hasParameter ex:FarmerRole__addFarmer_address_param_account ;
     ex:hasVisibility "internal" ;
-    ex:readsVariable ex:FarmerRole_farmers .
+    ex:readsVariable ex:FarmerRole_farmers ;
+    rdfs:comment "Function of contract FarmerRole" .
 
 ex:FarmerRole__addFarmer_address_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of FarmerRole__addFarmer_address" .
 
 ex:FarmerRole__removeFarmer_address a ex:Function ;
+    rdfs:label "_removeFarmer" ;
     ex:hasName "_removeFarmer" ;
     ex:hasParameter ex:FarmerRole__removeFarmer_address_param_account ;
     ex:hasVisibility "internal" ;
-    ex:readsVariable ex:FarmerRole_farmers .
+    ex:readsVariable ex:FarmerRole_farmers ;
+    rdfs:comment "Function of contract FarmerRole" .
 
 ex:FarmerRole__removeFarmer_address_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of FarmerRole__removeFarmer_address" .
 
 ex:FarmerRole_addFarmer_address a ex:Function ;
+    rdfs:label "addFarmer" ;
     ex:hasModifier ex:FarmerRole_mod_onlyFarmer ;
     ex:hasName "addFarmer" ;
     ex:hasParameter ex:FarmerRole_addFarmer_address_param_account ;
-    ex:hasVisibility "public" .
+    ex:hasVisibility "public" ;
+    rdfs:comment "Function of contract FarmerRole" .
 
 ex:FarmerRole_addFarmer_address_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of FarmerRole_addFarmer_address" .
 
 ex:FarmerRole_constructor_ a ex:Function ;
+    rdfs:label "constructor" ;
     ex:hasName "constructor" ;
-    ex:hasVisibility "public" .
+    ex:hasVisibility "public" ;
+    rdfs:comment "Function of contract FarmerRole" .
 
 ex:FarmerRole_event_FarmerAdded a ex:Event ;
     ex:hasName "FarmerAdded" ;
@@ -365,97 +465,143 @@ ex:FarmerRole_event_FarmerRemoved a ex:Event ;
     ex:hasParameter ex:FarmerRemoved_param_account .
 
 ex:FarmerRole_isFarmer_address a ex:Function ;
+    rdfs:label "isFarmer" ;
     ex:hasName "isFarmer" ;
     ex:hasParameter ex:FarmerRole_isFarmer_address_param_account ;
     ex:hasVisibility "public" ;
-    ex:readsVariable ex:FarmerRole_farmers .
+    ex:readsVariable ex:FarmerRole_farmers ;
+    rdfs:comment "Function of contract FarmerRole" .
 
 ex:FarmerRole_isFarmer_address_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of FarmerRole_isFarmer_address" .
 
 ex:FarmerRole_renounceFarmer_ a ex:Function ;
+    rdfs:label "renounceFarmer" ;
     ex:hasName "renounceFarmer" ;
-    ex:hasVisibility "public" .
+    ex:hasVisibility "public" ;
+    rdfs:comment "Function of contract FarmerRole" .
 
 ex:ForSaleByDistributor_param_upc a ex:Parameter ;
+    rdfs:label "upc" ;
     ex:hasName "upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_event_ForSaleByDistributor" .
 
 ex:ForSaleByFarmer_param_upc a ex:Parameter ;
+    rdfs:label "upc" ;
     ex:hasName "upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_event_ForSaleByFarmer" .
 
 ex:ForSaleByRetailer_param_upc a ex:Parameter ;
+    rdfs:label "upc" ;
     ex:hasName "upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_event_ForSaleByRetailer" .
 
 ex:Item_member_consumerID a ex:Member ;
+    rdfs:label "consumerID" ;
     ex:hasName "consumerID" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of SupplyChain_struct_Item" .
 
 ex:Item_member_distributorID a ex:Member ;
+    rdfs:label "distributorID" ;
     ex:hasName "distributorID" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of SupplyChain_struct_Item" .
 
 ex:Item_member_itemState a ex:Member ;
-    ex:hasName "itemState" .
+    rdfs:label "itemState" ;
+    ex:hasName "itemState" ;
+    rdfs:comment "Property of SupplyChain_struct_Item" .
 
 ex:Item_member_originFarmInformation a ex:Member ;
+    rdfs:label "originFarmInformation" ;
     ex:hasName "originFarmInformation" ;
-    ex:hasType "string" .
+    ex:hasType "string" ;
+    rdfs:comment "Property of SupplyChain_struct_Item" .
 
 ex:Item_member_originFarmLatitude a ex:Member ;
+    rdfs:label "originFarmLatitude" ;
     ex:hasName "originFarmLatitude" ;
-    ex:hasType "string" .
+    ex:hasType "string" ;
+    rdfs:comment "Property of SupplyChain_struct_Item" .
 
 ex:Item_member_originFarmLongitude a ex:Member ;
+    rdfs:label "originFarmLongitude" ;
     ex:hasName "originFarmLongitude" ;
-    ex:hasType "string" .
+    ex:hasType "string" ;
+    rdfs:comment "Property of SupplyChain_struct_Item" .
 
 ex:Item_member_originFarmName a ex:Member ;
+    rdfs:label "originFarmName" ;
     ex:hasName "originFarmName" ;
-    ex:hasType "string" .
+    ex:hasType "string" ;
+    rdfs:comment "Property of SupplyChain_struct_Item" .
 
 ex:Item_member_originFarmerID a ex:Member ;
+    rdfs:label "originFarmerID" ;
     ex:hasName "originFarmerID" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of SupplyChain_struct_Item" .
 
 ex:Item_member_ownerID a ex:Member ;
+    rdfs:label "ownerID" ;
     ex:hasName "ownerID" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of SupplyChain_struct_Item" .
 
 ex:Item_member_productDate a ex:Member ;
+    rdfs:label "productDate" ;
     ex:hasName "productDate" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_struct_Item" .
 
 ex:Item_member_productID a ex:Member ;
+    rdfs:label "productID" ;
     ex:hasName "productID" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_struct_Item" .
 
 ex:Item_member_productNotes a ex:Member ;
+    rdfs:label "productNotes" ;
     ex:hasName "productNotes" ;
-    ex:hasType "string" .
+    ex:hasType "string" ;
+    rdfs:comment "Property of SupplyChain_struct_Item" .
 
 ex:Item_member_productPrice a ex:Member ;
+    rdfs:label "productPrice" ;
     ex:hasName "productPrice" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_struct_Item" .
 
 ex:Item_member_productSliced a ex:Member ;
+    rdfs:label "productSliced" ;
     ex:hasName "productSliced" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_struct_Item" .
 
 ex:Item_member_retailerID a ex:Member ;
+    rdfs:label "retailerID" ;
     ex:hasName "retailerID" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of SupplyChain_struct_Item" .
 
 ex:Item_member_sku a ex:Member ;
+    rdfs:label "sku" ;
     ex:hasName "sku" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_struct_Item" .
 
 ex:Item_member_upc a ex:Member ;
+    rdfs:label "upc" ;
     ex:hasName "upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_struct_Item" .
 
 ex:Ownable a ex:SmartContract ;
     ex:hasEvent ex:Ownable_event_TransferOwnership ;
@@ -470,21 +616,27 @@ ex:Ownable a ex:SmartContract ;
     ex:hasVariable ex:Ownable_origOwner .
 
 ex:Ownable__transferOwnership_address a ex:Function ;
+    rdfs:label "_transferOwnership" ;
     ex:hasName "_transferOwnership" ;
     ex:hasParameter ex:Ownable__transferOwnership_address_param_newOwner ;
     ex:hasVisibility "internal" ;
     ex:readsVariable ex:Ownable_origOwner ;
-    ex:writesVariable ex:Ownable_origOwner .
+    ex:writesVariable ex:Ownable_origOwner ;
+    rdfs:comment "Function of contract Ownable" .
 
 ex:Ownable__transferOwnership_address_param_newOwner a ex:Parameter ;
+    rdfs:label "newOwner" ;
     ex:hasName "newOwner" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of Ownable__transferOwnership_address" .
 
 ex:Ownable_constructor_ a ex:Function ;
+    rdfs:label "constructor" ;
     ex:hasName "constructor" ;
     ex:hasVisibility "internal" ;
     ex:readsVariable ex:Ownable_origOwner ;
-    ex:writesVariable ex:Ownable_origOwner .
+    ex:writesVariable ex:Ownable_origOwner ;
+    rdfs:comment "Function of contract Ownable" .
 
 ex:Ownable_event_TransferOwnership a ex:Event ;
     ex:hasName "TransferOwnership" ;
@@ -492,63 +644,89 @@ ex:Ownable_event_TransferOwnership a ex:Event ;
         ex:TransferOwnership_param_oldOwner .
 
 ex:Ownable_isOwner_ a ex:Function ;
+    rdfs:label "isOwner" ;
     ex:hasName "isOwner" ;
     ex:hasVisibility "public" ;
-    ex:readsVariable ex:Ownable_origOwner .
+    ex:readsVariable ex:Ownable_origOwner ;
+    rdfs:comment "Function of contract Ownable" .
 
 ex:Ownable_ownerLookup_ a ex:Function ;
+    rdfs:label "ownerLookup" ;
     ex:hasName "ownerLookup" ;
     ex:hasVisibility "public" ;
-    ex:readsVariable ex:Ownable_origOwner .
+    ex:readsVariable ex:Ownable_origOwner ;
+    rdfs:comment "Function of contract Ownable" .
 
 ex:Ownable_renounceOwnership_ a ex:Function ;
+    rdfs:label "renounceOwnership" ;
     ex:hasModifier ex:Ownable_mod_onlyOwner ;
     ex:hasName "renounceOwnership" ;
     ex:hasVisibility "public" ;
     ex:readsVariable ex:Ownable_origOwner ;
-    ex:writesVariable ex:Ownable_origOwner .
+    ex:writesVariable ex:Ownable_origOwner ;
+    rdfs:comment "Function of contract Ownable" .
 
 ex:Ownable_transferOwnership_address a ex:Function ;
+    rdfs:label "transferOwnership" ;
     ex:hasModifier ex:Ownable_mod_onlyOwner ;
     ex:hasName "transferOwnership" ;
     ex:hasParameter ex:Ownable_transferOwnership_address_param_newOwner ;
-    ex:hasVisibility "public" .
+    ex:hasVisibility "public" ;
+    rdfs:comment "Function of contract Ownable" .
 
 ex:Ownable_transferOwnership_address_param_newOwner a ex:Parameter ;
+    rdfs:label "newOwner" ;
     ex:hasName "newOwner" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of Ownable_transferOwnership_address" .
 
 ex:PackagedByDistributor_param_upc a ex:Parameter ;
+    rdfs:label "upc" ;
     ex:hasName "upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_event_PackagedByDistributor" .
 
 ex:ProcessedByDistributor_param_upc a ex:Parameter ;
+    rdfs:label "upc" ;
     ex:hasName "upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_event_ProcessedByDistributor" .
 
 ex:ProduceByFarmer_param_upc a ex:Parameter ;
+    rdfs:label "upc" ;
     ex:hasName "upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_event_ProduceByFarmer" .
 
 ex:PurchasedByConsumer_param_upc a ex:Parameter ;
+    rdfs:label "upc" ;
     ex:hasName "upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_event_PurchasedByConsumer" .
 
 ex:PurchasedByDistributor_param_upc a ex:Parameter ;
+    rdfs:label "upc" ;
     ex:hasName "upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_event_PurchasedByDistributor" .
 
 ex:PurchasedByRetailer_param_upc a ex:Parameter ;
+    rdfs:label "upc" ;
     ex:hasName "upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_event_PurchasedByRetailer" .
 
 ex:ReceivedByDistributor_param_upc a ex:Parameter ;
+    rdfs:label "upc" ;
     ex:hasName "upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_event_ReceivedByDistributor" .
 
 ex:ReceivedByRetailer_param_upc a ex:Parameter ;
+    rdfs:label "upc" ;
     ex:hasName "upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_event_ReceivedByRetailer" .
 
 ex:RetailerRole a ex:SmartContract ;
     ex:hasEvent ex:RetailerRole_event_RetailerAdded,
@@ -564,38 +742,52 @@ ex:RetailerRole a ex:SmartContract ;
     ex:hasVariable ex:RetailerRole_retailers .
 
 ex:RetailerRole__addRetailer_address a ex:Function ;
+    rdfs:label "_addRetailer" ;
     ex:hasName "_addRetailer" ;
     ex:hasParameter ex:RetailerRole__addRetailer_address_param_account ;
     ex:hasVisibility "internal" ;
-    ex:readsVariable ex:RetailerRole_retailers .
+    ex:readsVariable ex:RetailerRole_retailers ;
+    rdfs:comment "Function of contract RetailerRole" .
 
 ex:RetailerRole__addRetailer_address_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of RetailerRole__addRetailer_address" .
 
 ex:RetailerRole__removeRetailer_address a ex:Function ;
+    rdfs:label "_removeRetailer" ;
     ex:hasName "_removeRetailer" ;
     ex:hasParameter ex:RetailerRole__removeRetailer_address_param_account ;
     ex:hasVisibility "internal" ;
-    ex:readsVariable ex:RetailerRole_retailers .
+    ex:readsVariable ex:RetailerRole_retailers ;
+    rdfs:comment "Function of contract RetailerRole" .
 
 ex:RetailerRole__removeRetailer_address_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of RetailerRole__removeRetailer_address" .
 
 ex:RetailerRole_addRetailer_address a ex:Function ;
+    rdfs:label "addRetailer" ;
     ex:hasModifier ex:RetailerRole_mod_onlyRetailer ;
     ex:hasName "addRetailer" ;
     ex:hasParameter ex:RetailerRole_addRetailer_address_param_account ;
-    ex:hasVisibility "public" .
+    ex:hasVisibility "public" ;
+    rdfs:comment "Function of contract RetailerRole" .
 
 ex:RetailerRole_addRetailer_address_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of RetailerRole_addRetailer_address" .
 
 ex:RetailerRole_constructor_ a ex:Function ;
+    rdfs:label "constructor" ;
     ex:hasName "constructor" ;
-    ex:hasVisibility "public" .
+    ex:hasVisibility "public" ;
+    rdfs:comment "Function of contract RetailerRole" .
 
 ex:RetailerRole_event_RetailerAdded a ex:Event ;
     ex:hasName "RetailerAdded" ;
@@ -606,93 +798,129 @@ ex:RetailerRole_event_RetailerRemoved a ex:Event ;
     ex:hasParameter ex:RetailerRemoved_param_account .
 
 ex:RetailerRole_isRetailer_address a ex:Function ;
+    rdfs:label "isRetailer" ;
     ex:hasName "isRetailer" ;
     ex:hasParameter ex:RetailerRole_isRetailer_address_param_account ;
     ex:hasVisibility "public" ;
-    ex:readsVariable ex:RetailerRole_retailers .
+    ex:readsVariable ex:RetailerRole_retailers ;
+    rdfs:comment "Function of contract RetailerRole" .
 
 ex:RetailerRole_isRetailer_address_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of RetailerRole_isRetailer_address" .
 
 ex:RetailerRole_renounceRetailer_ a ex:Function ;
+    rdfs:label "renounceRetailer" ;
     ex:hasName "renounceRetailer" ;
-    ex:hasVisibility "public" .
+    ex:hasVisibility "public" ;
+    rdfs:comment "Function of contract RetailerRole" .
 
 ex:Role_member_bearer a ex:Member ;
-    ex:hasName "bearer" .
+    rdfs:label "bearer" ;
+    ex:hasName "bearer" ;
+    rdfs:comment "Property of Roles_struct_Role" .
 
 ex:Roles_add_Roles.Role_address a ex:Function ;
+    rdfs:label "add" ;
     ex:hasName "add" ;
     ex:hasParameter ex:Roles_add_Roles.Role_address_param_account,
         ex:Roles_add_Roles.Role_address_param_role ;
-    ex:hasVisibility "internal" .
+    ex:hasVisibility "internal" ;
+    rdfs:comment "Function of contract Roles" .
 
 ex:Roles_add_Roles.Role_address_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of Roles_add_Roles.Role_address" .
 
 ex:Roles_add_Roles.Role_address_param_role a ex:Parameter ;
+    rdfs:label "role" ;
     ex:hasName "role" ;
-    ex:hasType "Roles.Role" .
+    ex:hasType "Roles.Role" ;
+    rdfs:comment "Property of Roles_add_Roles.Role_address" .
 
 ex:Roles_has_Roles.Role_address a ex:Function ;
+    rdfs:label "has" ;
     ex:hasName "has" ;
     ex:hasParameter ex:Roles_has_Roles.Role_address_param_account,
         ex:Roles_has_Roles.Role_address_param_role ;
-    ex:hasVisibility "internal" .
+    ex:hasVisibility "internal" ;
+    rdfs:comment "Function of contract Roles" .
 
 ex:Roles_has_Roles.Role_address_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of Roles_has_Roles.Role_address" .
 
 ex:Roles_has_Roles.Role_address_param_role a ex:Parameter ;
+    rdfs:label "role" ;
     ex:hasName "role" ;
-    ex:hasType "Roles.Role" .
+    ex:hasType "Roles.Role" ;
+    rdfs:comment "Property of Roles_has_Roles.Role_address" .
 
 ex:Roles_remove_Roles.Role_address a ex:Function ;
+    rdfs:label "remove" ;
     ex:hasName "remove" ;
     ex:hasParameter ex:Roles_remove_Roles.Role_address_param_account,
         ex:Roles_remove_Roles.Role_address_param_role ;
-    ex:hasVisibility "internal" .
+    ex:hasVisibility "internal" ;
+    rdfs:comment "Function of contract Roles" .
 
 ex:Roles_remove_Roles.Role_address_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of Roles_remove_Roles.Role_address" .
 
 ex:Roles_remove_Roles.Role_address_param_role a ex:Parameter ;
+    rdfs:label "role" ;
     ex:hasName "role" ;
-    ex:hasType "Roles.Role" .
+    ex:hasType "Roles.Role" ;
+    rdfs:comment "Property of Roles_remove_Roles.Role_address" .
 
 ex:Roles_struct_Role a ex:Struct ;
     ex:hasMember ex:Role_member_bearer ;
     ex:hasName "Role" .
 
 ex:ShippedByDistributor_param_upc a ex:Parameter ;
+    rdfs:label "upc" ;
     ex:hasName "upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_event_ShippedByDistributor" .
 
 ex:ShippedByFarmer_param_upc a ex:Parameter ;
+    rdfs:label "upc" ;
     ex:hasName "upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_event_ShippedByFarmer" .
 
 ex:SupplyChain__make_payable_address a ex:Function,
         ex:MonetaryFunction ;
+    rdfs:label "_make_payable" ;
     ex:hasName "_make_payable" ;
     ex:hasParameter ex:SupplyChain__make_payable_address_param_x ;
-    ex:hasVisibility "internal" .
+    ex:hasVisibility "internal" ;
+    rdfs:comment "Function of contract SupplyChain" .
 
 ex:SupplyChain__make_payable_address_param_x a ex:Parameter ;
+    rdfs:label "x" ;
     ex:hasName "x" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of SupplyChain__make_payable_address" .
 
 ex:SupplyChain_constructor_ a ex:Function ;
+    rdfs:label "constructor" ;
     ex:hasName "constructor" ;
     ex:hasVisibility "public" ;
     ex:isPayable true ;
     ex:writesVariable ex:SupplyChain_owner,
         ex:SupplyChain_sku,
-        ex:SupplyChain_upc .
+        ex:SupplyChain_upc ;
+    rdfs:comment "Function of contract SupplyChain" .
 
 ex:SupplyChain_event_ConsumerAdded a ex:Event ;
     ex:hasName "ConsumerAdded" ;
@@ -784,39 +1012,53 @@ ex:SupplyChain_event_TransferOwnership a ex:Event ;
         ex:TransferOwnership_param_oldOwner .
 
 ex:SupplyChain_fetchItemBufferOne_uint256 a ex:Function ;
+    rdfs:label "fetchItemBufferOne" ;
     ex:hasName "fetchItemBufferOne" ;
     ex:hasParameter ex:SupplyChain_fetchItemBufferOne_uint256_param__upc ;
     ex:hasVisibility "public" ;
-    ex:readsVariable ex:SupplyChain_items .
+    ex:readsVariable ex:SupplyChain_items ;
+    rdfs:comment "Function of contract SupplyChain" .
 
 ex:SupplyChain_fetchItemBufferOne_uint256_param__upc a ex:Parameter ;
+    rdfs:label "_upc" ;
     ex:hasName "_upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_fetchItemBufferOne_uint256" .
 
 ex:SupplyChain_fetchItemBufferTwo_uint256 a ex:Function ;
+    rdfs:label "fetchItemBufferTwo" ;
     ex:hasName "fetchItemBufferTwo" ;
     ex:hasParameter ex:SupplyChain_fetchItemBufferTwo_uint256_param__upc ;
     ex:hasVisibility "public" ;
-    ex:readsVariable ex:SupplyChain_items .
+    ex:readsVariable ex:SupplyChain_items ;
+    rdfs:comment "Function of contract SupplyChain" .
 
 ex:SupplyChain_fetchItemBufferTwo_uint256_param__upc a ex:Parameter ;
+    rdfs:label "_upc" ;
     ex:hasName "_upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_fetchItemBufferTwo_uint256" .
 
 ex:SupplyChain_fetchitemHistory_uint256 a ex:Function ;
+    rdfs:label "fetchitemHistory" ;
     ex:hasName "fetchitemHistory" ;
     ex:hasParameter ex:SupplyChain_fetchitemHistory_uint256_param__upc ;
     ex:hasVisibility "public" ;
-    ex:readsVariable ex:SupplyChain_itemsHistory .
+    ex:readsVariable ex:SupplyChain_itemsHistory ;
+    rdfs:comment "Function of contract SupplyChain" .
 
 ex:SupplyChain_fetchitemHistory_uint256_param__upc a ex:Parameter ;
+    rdfs:label "_upc" ;
     ex:hasName "_upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_fetchitemHistory_uint256" .
 
 ex:SupplyChain_kill_ a ex:Function ;
+    rdfs:label "kill" ;
     ex:hasName "kill" ;
     ex:hasVisibility "public" ;
-    ex:readsVariable ex:SupplyChain_owner .
+    ex:readsVariable ex:SupplyChain_owner ;
+    rdfs:comment "Function of contract SupplyChain" .
 
 ex:SupplyChain_mod_onlyOwner a ex:Modifier ;
     ex:hasName "onlyOwner" .
@@ -825,6 +1067,7 @@ ex:SupplyChain_mod_purchasedByConsumer a ex:Modifier ;
     ex:hasName "purchasedByConsumer" .
 
 ex:SupplyChain_packageItemByDistributor_uint256 a ex:Function ;
+    rdfs:label "packageItemByDistributor" ;
     ex:hasModifier ex:SupplyChain_mod_onlyDistributor,
         ex:SupplyChain_mod_processByDistributor,
         ex:SupplyChain_mod_verifyCaller ;
@@ -832,13 +1075,17 @@ ex:SupplyChain_packageItemByDistributor_uint256 a ex:Function ;
     ex:hasParameter ex:SupplyChain_packageItemByDistributor_uint256_param__upc ;
     ex:hasVisibility "public" ;
     ex:readsVariable ex:SupplyChain_items ;
-    ex:writesVariable ex:SupplyChain_items .
+    ex:writesVariable ex:SupplyChain_items ;
+    rdfs:comment "Function of contract SupplyChain" .
 
 ex:SupplyChain_packageItemByDistributor_uint256_param__upc a ex:Parameter ;
+    rdfs:label "_upc" ;
     ex:hasName "_upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_packageItemByDistributor_uint256" .
 
 ex:SupplyChain_processedItemByDistributor_uint256_uint256 a ex:Function ;
+    rdfs:label "processedItemByDistributor" ;
     ex:hasModifier ex:SupplyChain_mod_onlyDistributor,
         ex:SupplyChain_mod_receivedByDistributor,
         ex:SupplyChain_mod_verifyCaller ;
@@ -847,17 +1094,23 @@ ex:SupplyChain_processedItemByDistributor_uint256_uint256 a ex:Function ;
         ex:SupplyChain_processedItemByDistributor_uint256_uint256_param_slices ;
     ex:hasVisibility "public" ;
     ex:readsVariable ex:SupplyChain_items ;
-    ex:writesVariable ex:SupplyChain_items .
+    ex:writesVariable ex:SupplyChain_items ;
+    rdfs:comment "Function of contract SupplyChain" .
 
 ex:SupplyChain_processedItemByDistributor_uint256_uint256_param__upc a ex:Parameter ;
+    rdfs:label "_upc" ;
     ex:hasName "_upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_processedItemByDistributor_uint256_uint256" .
 
 ex:SupplyChain_processedItemByDistributor_uint256_uint256_param_slices a ex:Parameter ;
+    rdfs:label "slices" ;
     ex:hasName "slices" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_processedItemByDistributor_uint256_uint256" .
 
 ex:SupplyChain_produceItemByFarmer_uint256_string_string_string_string_string_uint256 a ex:Function ;
+    rdfs:label "produceItemByFarmer" ;
     ex:hasModifier ex:SupplyChain_mod_onlyFarmer ;
     ex:hasName "produceItemByFarmer" ;
     ex:hasParameter ex:SupplyChain_produceItemByFarmer_uint256_string_string_string_string_string_uint256_param__originFarmInformation,
@@ -872,38 +1125,54 @@ ex:SupplyChain_produceItemByFarmer_uint256_string_string_string_string_string_ui
         ex:SupplyChain_sku ;
     ex:writesVariable ex:SupplyChain_items,
         ex:SupplyChain_itemsHistory,
-        ex:SupplyChain_sku .
+        ex:SupplyChain_sku ;
+    rdfs:comment "Function of contract SupplyChain" .
 
 ex:SupplyChain_produceItemByFarmer_uint256_string_string_string_string_string_uint256_param__originFarmInformation a ex:Parameter ;
+    rdfs:label "_originFarmInformation" ;
     ex:hasName "_originFarmInformation" ;
-    ex:hasType "string" .
+    ex:hasType "string" ;
+    rdfs:comment "Property of SupplyChain_produceItemByFarmer_uint256_string_string_string_string_string_uint256" .
 
 ex:SupplyChain_produceItemByFarmer_uint256_string_string_string_string_string_uint256_param__originFarmLatitude a ex:Parameter ;
+    rdfs:label "_originFarmLatitude" ;
     ex:hasName "_originFarmLatitude" ;
-    ex:hasType "string" .
+    ex:hasType "string" ;
+    rdfs:comment "Property of SupplyChain_produceItemByFarmer_uint256_string_string_string_string_string_uint256" .
 
 ex:SupplyChain_produceItemByFarmer_uint256_string_string_string_string_string_uint256_param__originFarmLongitude a ex:Parameter ;
+    rdfs:label "_originFarmLongitude" ;
     ex:hasName "_originFarmLongitude" ;
-    ex:hasType "string" .
+    ex:hasType "string" ;
+    rdfs:comment "Property of SupplyChain_produceItemByFarmer_uint256_string_string_string_string_string_uint256" .
 
 ex:SupplyChain_produceItemByFarmer_uint256_string_string_string_string_string_uint256_param__originFarmName a ex:Parameter ;
+    rdfs:label "_originFarmName" ;
     ex:hasName "_originFarmName" ;
-    ex:hasType "string" .
+    ex:hasType "string" ;
+    rdfs:comment "Property of SupplyChain_produceItemByFarmer_uint256_string_string_string_string_string_uint256" .
 
 ex:SupplyChain_produceItemByFarmer_uint256_string_string_string_string_string_uint256_param__price a ex:Parameter ;
+    rdfs:label "_price" ;
     ex:hasName "_price" ;
     ex:hasType "uint256" ;
-    ex:isMonetaryValue true .
+    ex:isMonetaryValue true ;
+    rdfs:comment "Property of SupplyChain_produceItemByFarmer_uint256_string_string_string_string_string_uint256" .
 
 ex:SupplyChain_produceItemByFarmer_uint256_string_string_string_string_string_uint256_param__productNotes a ex:Parameter ;
+    rdfs:label "_productNotes" ;
     ex:hasName "_productNotes" ;
-    ex:hasType "string" .
+    ex:hasType "string" ;
+    rdfs:comment "Property of SupplyChain_produceItemByFarmer_uint256_string_string_string_string_string_uint256" .
 
 ex:SupplyChain_produceItemByFarmer_uint256_string_string_string_string_string_uint256_param__upc a ex:Parameter ;
+    rdfs:label "_upc" ;
     ex:hasName "_upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_produceItemByFarmer_uint256_string_string_string_string_string_uint256" .
 
 ex:SupplyChain_purchaseItemByConsumer_uint256 a ex:Function ;
+    rdfs:label "purchaseItemByConsumer" ;
     ex:hasModifier ex:SupplyChain_mod_checkValue,
         ex:SupplyChain_mod_forSaleByRetailer,
         ex:SupplyChain_mod_onlyConsumer,
@@ -915,13 +1184,17 @@ ex:SupplyChain_purchaseItemByConsumer_uint256 a ex:Function ;
     ex:readsVariable ex:SupplyChain_items,
         ex:SupplyChain_itemsHistory ;
     ex:writesVariable ex:SupplyChain_items,
-        ex:SupplyChain_itemsHistory .
+        ex:SupplyChain_itemsHistory ;
+    rdfs:comment "Function of contract SupplyChain" .
 
 ex:SupplyChain_purchaseItemByConsumer_uint256_param__upc a ex:Parameter ;
+    rdfs:label "_upc" ;
     ex:hasName "_upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_purchaseItemByConsumer_uint256" .
 
 ex:SupplyChain_purchaseItemByDistributor_uint256 a ex:Function ;
+    rdfs:label "purchaseItemByDistributor" ;
     ex:hasModifier ex:SupplyChain_mod_checkValue,
         ex:SupplyChain_mod_forSaleByFarmer,
         ex:SupplyChain_mod_onlyDistributor,
@@ -933,13 +1206,17 @@ ex:SupplyChain_purchaseItemByDistributor_uint256 a ex:Function ;
     ex:readsVariable ex:SupplyChain_items,
         ex:SupplyChain_itemsHistory ;
     ex:writesVariable ex:SupplyChain_items,
-        ex:SupplyChain_itemsHistory .
+        ex:SupplyChain_itemsHistory ;
+    rdfs:comment "Function of contract SupplyChain" .
 
 ex:SupplyChain_purchaseItemByDistributor_uint256_param__upc a ex:Parameter ;
+    rdfs:label "_upc" ;
     ex:hasName "_upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_purchaseItemByDistributor_uint256" .
 
 ex:SupplyChain_purchaseItemByRetailer_uint256 a ex:Function ;
+    rdfs:label "purchaseItemByRetailer" ;
     ex:hasModifier ex:SupplyChain_mod_checkValue,
         ex:SupplyChain_mod_forSaleByDistributor,
         ex:SupplyChain_mod_onlyRetailer,
@@ -951,13 +1228,17 @@ ex:SupplyChain_purchaseItemByRetailer_uint256 a ex:Function ;
     ex:readsVariable ex:SupplyChain_items,
         ex:SupplyChain_itemsHistory ;
     ex:writesVariable ex:SupplyChain_items,
-        ex:SupplyChain_itemsHistory .
+        ex:SupplyChain_itemsHistory ;
+    rdfs:comment "Function of contract SupplyChain" .
 
 ex:SupplyChain_purchaseItemByRetailer_uint256_param__upc a ex:Parameter ;
+    rdfs:label "_upc" ;
     ex:hasName "_upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_purchaseItemByRetailer_uint256" .
 
 ex:SupplyChain_receivedItemByDistributor_uint256 a ex:Function ;
+    rdfs:label "receivedItemByDistributor" ;
     ex:hasModifier ex:SupplyChain_mod_onlyDistributor,
         ex:SupplyChain_mod_shippedByFarmer,
         ex:SupplyChain_mod_verifyCaller ;
@@ -965,13 +1246,17 @@ ex:SupplyChain_receivedItemByDistributor_uint256 a ex:Function ;
     ex:hasParameter ex:SupplyChain_receivedItemByDistributor_uint256_param__upc ;
     ex:hasVisibility "public" ;
     ex:readsVariable ex:SupplyChain_items ;
-    ex:writesVariable ex:SupplyChain_items .
+    ex:writesVariable ex:SupplyChain_items ;
+    rdfs:comment "Function of contract SupplyChain" .
 
 ex:SupplyChain_receivedItemByDistributor_uint256_param__upc a ex:Parameter ;
+    rdfs:label "_upc" ;
     ex:hasName "_upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_receivedItemByDistributor_uint256" .
 
 ex:SupplyChain_receivedItemByRetailer_uint256 a ex:Function ;
+    rdfs:label "receivedItemByRetailer" ;
     ex:hasModifier ex:SupplyChain_mod_onlyRetailer,
         ex:SupplyChain_mod_shippedByDistributor,
         ex:SupplyChain_mod_verifyCaller ;
@@ -979,13 +1264,17 @@ ex:SupplyChain_receivedItemByRetailer_uint256 a ex:Function ;
     ex:hasParameter ex:SupplyChain_receivedItemByRetailer_uint256_param__upc ;
     ex:hasVisibility "public" ;
     ex:readsVariable ex:SupplyChain_items ;
-    ex:writesVariable ex:SupplyChain_items .
+    ex:writesVariable ex:SupplyChain_items ;
+    rdfs:comment "Function of contract SupplyChain" .
 
 ex:SupplyChain_receivedItemByRetailer_uint256_param__upc a ex:Parameter ;
+    rdfs:label "_upc" ;
     ex:hasName "_upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_receivedItemByRetailer_uint256" .
 
 ex:SupplyChain_sellItemByDistributor_uint256_uint256 a ex:Function ;
+    rdfs:label "sellItemByDistributor" ;
     ex:hasModifier ex:SupplyChain_mod_onlyDistributor,
         ex:SupplyChain_mod_packagedByDistributor,
         ex:SupplyChain_mod_verifyCaller ;
@@ -995,18 +1284,24 @@ ex:SupplyChain_sellItemByDistributor_uint256_uint256 a ex:Function ;
     ex:hasVisibility "public" ;
     ex:readsVariable ex:SupplyChain_items,
         ex:SupplyChain_upc ;
-    ex:writesVariable ex:SupplyChain_items .
+    ex:writesVariable ex:SupplyChain_items ;
+    rdfs:comment "Function of contract SupplyChain" .
 
 ex:SupplyChain_sellItemByDistributor_uint256_uint256_param__price a ex:Parameter ;
+    rdfs:label "_price" ;
     ex:hasName "_price" ;
     ex:hasType "uint256" ;
-    ex:isMonetaryValue true .
+    ex:isMonetaryValue true ;
+    rdfs:comment "Property of SupplyChain_sellItemByDistributor_uint256_uint256" .
 
 ex:SupplyChain_sellItemByDistributor_uint256_uint256_param__upc a ex:Parameter ;
+    rdfs:label "_upc" ;
     ex:hasName "_upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_sellItemByDistributor_uint256_uint256" .
 
 ex:SupplyChain_sellItemByFarmer_uint256_uint256 a ex:Function ;
+    rdfs:label "sellItemByFarmer" ;
     ex:hasModifier ex:SupplyChain_mod_onlyFarmer,
         ex:SupplyChain_mod_producedByFarmer,
         ex:SupplyChain_mod_verifyCaller ;
@@ -1015,18 +1310,24 @@ ex:SupplyChain_sellItemByFarmer_uint256_uint256 a ex:Function ;
         ex:SupplyChain_sellItemByFarmer_uint256_uint256_param__upc ;
     ex:hasVisibility "public" ;
     ex:readsVariable ex:SupplyChain_items ;
-    ex:writesVariable ex:SupplyChain_items .
+    ex:writesVariable ex:SupplyChain_items ;
+    rdfs:comment "Function of contract SupplyChain" .
 
 ex:SupplyChain_sellItemByFarmer_uint256_uint256_param__price a ex:Parameter ;
+    rdfs:label "_price" ;
     ex:hasName "_price" ;
     ex:hasType "uint256" ;
-    ex:isMonetaryValue true .
+    ex:isMonetaryValue true ;
+    rdfs:comment "Property of SupplyChain_sellItemByFarmer_uint256_uint256" .
 
 ex:SupplyChain_sellItemByFarmer_uint256_uint256_param__upc a ex:Parameter ;
+    rdfs:label "_upc" ;
     ex:hasName "_upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_sellItemByFarmer_uint256_uint256" .
 
 ex:SupplyChain_sellItemByRetailer_uint256_uint256 a ex:Function ;
+    rdfs:label "sellItemByRetailer" ;
     ex:hasModifier ex:SupplyChain_mod_onlyRetailer,
         ex:SupplyChain_mod_receivedByRetailer,
         ex:SupplyChain_mod_verifyCaller ;
@@ -1035,18 +1336,24 @@ ex:SupplyChain_sellItemByRetailer_uint256_uint256 a ex:Function ;
         ex:SupplyChain_sellItemByRetailer_uint256_uint256_param__upc ;
     ex:hasVisibility "public" ;
     ex:readsVariable ex:SupplyChain_items ;
-    ex:writesVariable ex:SupplyChain_items .
+    ex:writesVariable ex:SupplyChain_items ;
+    rdfs:comment "Function of contract SupplyChain" .
 
 ex:SupplyChain_sellItemByRetailer_uint256_uint256_param__price a ex:Parameter ;
+    rdfs:label "_price" ;
     ex:hasName "_price" ;
     ex:hasType "uint256" ;
-    ex:isMonetaryValue true .
+    ex:isMonetaryValue true ;
+    rdfs:comment "Property of SupplyChain_sellItemByRetailer_uint256_uint256" .
 
 ex:SupplyChain_sellItemByRetailer_uint256_uint256_param__upc a ex:Parameter ;
+    rdfs:label "_upc" ;
     ex:hasName "_upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_sellItemByRetailer_uint256_uint256" .
 
 ex:SupplyChain_shippedItemByDistributor_uint256 a ex:Function ;
+    rdfs:label "shippedItemByDistributor" ;
     ex:hasModifier ex:SupplyChain_mod_onlyDistributor,
         ex:SupplyChain_mod_purchasedByRetailer,
         ex:SupplyChain_mod_verifyCaller ;
@@ -1054,13 +1361,17 @@ ex:SupplyChain_shippedItemByDistributor_uint256 a ex:Function ;
     ex:hasParameter ex:SupplyChain_shippedItemByDistributor_uint256_param__upc ;
     ex:hasVisibility "public" ;
     ex:readsVariable ex:SupplyChain_items ;
-    ex:writesVariable ex:SupplyChain_items .
+    ex:writesVariable ex:SupplyChain_items ;
+    rdfs:comment "Function of contract SupplyChain" .
 
 ex:SupplyChain_shippedItemByDistributor_uint256_param__upc a ex:Parameter ;
+    rdfs:label "_upc" ;
     ex:hasName "_upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_shippedItemByDistributor_uint256" .
 
 ex:SupplyChain_shippedItemByFarmer_uint256 a ex:Function ;
+    rdfs:label "shippedItemByFarmer" ;
     ex:hasModifier ex:SupplyChain_mod_onlyFarmer,
         ex:SupplyChain_mod_purchasedByDistributor,
         ex:SupplyChain_mod_verifyCaller ;
@@ -1069,16 +1380,21 @@ ex:SupplyChain_shippedItemByFarmer_uint256 a ex:Function ;
     ex:hasVisibility "public" ;
     ex:isPayable true ;
     ex:readsVariable ex:SupplyChain_items ;
-    ex:writesVariable ex:SupplyChain_items .
+    ex:writesVariable ex:SupplyChain_items ;
+    rdfs:comment "Function of contract SupplyChain" .
 
 ex:SupplyChain_shippedItemByFarmer_uint256_param__upc a ex:Parameter ;
+    rdfs:label "_upc" ;
     ex:hasName "_upc" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_shippedItemByFarmer_uint256" .
 
 ex:SupplyChain_slitherConstructorConstantVariables_ a ex:Function ;
+    rdfs:label "slitherConstructorConstantVariables" ;
     ex:hasName "slitherConstructorConstantVariables" ;
     ex:hasVisibility "internal" ;
-    ex:writesVariable ex:SupplyChain_defaultState .
+    ex:writesVariable ex:SupplyChain_defaultState ;
+    rdfs:comment "Function of contract SupplyChain" .
 
 ex:SupplyChain_struct_Item a ex:Struct ;
     ex:hasMember ex:Item_member_consumerID,
@@ -1107,57 +1423,79 @@ ex:SupplyChain_struct_Txblocks a ex:Struct ;
     ex:hasName "Txblocks" .
 
 ex:Txblocks_member_DTR a ex:Member ;
+    rdfs:label "DTR" ;
     ex:hasName "DTR" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_struct_Txblocks" .
 
 ex:Txblocks_member_FTD a ex:Member ;
+    rdfs:label "FTD" ;
     ex:hasName "FTD" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_struct_Txblocks" .
 
 ex:Txblocks_member_RTC a ex:Member ;
+    rdfs:label "RTC" ;
     ex:hasName "RTC" ;
-    ex:hasType "uint256" .
+    ex:hasType "uint256" ;
+    rdfs:comment "Property of SupplyChain_struct_Txblocks" .
 
 ex:ConsumerAdded_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of ConsumerRole_event_ConsumerAdded" .
 
 ex:ConsumerRemoved_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of ConsumerRole_event_ConsumerRemoved" .
 
 ex:ConsumerRole_mod_onlyConsumer a ex:Modifier ;
     ex:hasName "onlyConsumer" .
 
 ex:DistributorAdded_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of DistributorRole_event_DistributorAdded" .
 
 ex:DistributorRemoved_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of DistributorRole_event_DistributorRemoved" .
 
 ex:DistributorRole_mod_onlyDistributor a ex:Modifier ;
     ex:hasName "onlyDistributor" .
 
 ex:FarmerAdded_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of FarmerRole_event_FarmerAdded" .
 
 ex:FarmerRemoved_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of FarmerRole_event_FarmerRemoved" .
 
 ex:FarmerRole_mod_onlyFarmer a ex:Modifier ;
     ex:hasName "onlyFarmer" .
 
 ex:RetailerAdded_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of RetailerRole_event_RetailerAdded" .
 
 ex:RetailerRemoved_param_account a ex:Parameter ;
+    rdfs:label "account" ;
     ex:hasName "account" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of RetailerRole_event_RetailerRemoved" .
 
 ex:RetailerRole_mod_onlyRetailer a ex:Modifier ;
     ex:hasName "onlyRetailer" .
@@ -1202,50 +1540,68 @@ ex:SupplyChain_mod_shippedByFarmer a ex:Modifier ;
     ex:hasName "shippedByFarmer" .
 
 ex:TransferOwnership_param_newOwner a ex:Parameter ;
+    rdfs:label "newOwner" ;
     ex:hasName "newOwner" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of SupplyChain_event_TransferOwnership" .
 
 ex:TransferOwnership_param_oldOwner a ex:Parameter ;
+    rdfs:label "oldOwner" ;
     ex:hasName "oldOwner" ;
-    ex:hasType "address" .
+    ex:hasType "address" ;
+    rdfs:comment "Property of Ownable_event_TransferOwnership" .
 
 ex:Ownable_mod_onlyOwner a ex:Modifier ;
     ex:hasName "onlyOwner" .
 
 ex:SupplyChain_defaultState a ex:StateVariable ;
+    rdfs:label "defaultState" ;
     ex:hasName "defaultState" ;
     ex:hasType "SupplyChain.State" ;
-    ex:hasVisibility "internal" .
+    ex:hasVisibility "internal" ;
+    rdfs:comment "Property of SupplyChain" .
 
 ex:SupplyChain_owner a ex:StateVariable ;
+    rdfs:label "owner" ;
     ex:hasName "owner" ;
     ex:hasType "address" ;
-    ex:hasVisibility "internal" .
+    ex:hasVisibility "internal" ;
+    rdfs:comment "Property of SupplyChain" .
 
 ex:SupplyChain_upc a ex:StateVariable ;
+    rdfs:label "upc" ;
     ex:hasName "upc" ;
     ex:hasType "uint256" ;
-    ex:hasVisibility "internal" .
+    ex:hasVisibility "internal" ;
+    rdfs:comment "Property of SupplyChain" .
 
 ex:ConsumerRole_consumers a ex:StateVariable ;
+    rdfs:label "consumers" ;
     ex:hasName "consumers" ;
     ex:hasType "Roles.Role" ;
-    ex:hasVisibility "private" .
+    ex:hasVisibility "private" ;
+    rdfs:comment "Property of ConsumerRole" .
 
 ex:DistributorRole_distributors a ex:StateVariable ;
+    rdfs:label "distributors" ;
     ex:hasName "distributors" ;
     ex:hasType "Roles.Role" ;
-    ex:hasVisibility "private" .
+    ex:hasVisibility "private" ;
+    rdfs:comment "Property of DistributorRole" .
 
 ex:FarmerRole_farmers a ex:StateVariable ;
+    rdfs:label "farmers" ;
     ex:hasName "farmers" ;
     ex:hasType "Roles.Role" ;
-    ex:hasVisibility "private" .
+    ex:hasVisibility "private" ;
+    rdfs:comment "Property of FarmerRole" .
 
 ex:RetailerRole_retailers a ex:StateVariable ;
+    rdfs:label "retailers" ;
     ex:hasName "retailers" ;
     ex:hasType "Roles.Role" ;
-    ex:hasVisibility "private" .
+    ex:hasVisibility "private" ;
+    rdfs:comment "Property of RetailerRole" .
 
 ex:SupplyChain_mod_checkValue a ex:Modifier ;
     ex:hasName "checkValue" .
@@ -1260,46 +1616,69 @@ ex:SupplyChain_mod_paidEnough a ex:Modifier ;
     ex:hasName "paidEnough" .
 
 ex:SupplyChain_sku a ex:StateVariable ;
+    rdfs:label "sku" ;
     ex:hasName "sku" ;
     ex:hasType "uint256" ;
-    ex:hasVisibility "internal" .
+    ex:hasVisibility "internal" ;
+    rdfs:comment "Property of SupplyChain" .
 
-ex:Struct a owl:Class .
+ex:Role a owl:Class ;
+    rdfs:label "Role" ;
+    rdfs:subClassOf ex:Role .
+
+ex:isPayable rdfs:domain ex:Function .
+
+ex:Struct a owl:Class ;
+    rdfs:label "Struct" .
 
 ex:SupplyChain_mod_onlyDistributor a ex:Modifier ;
     ex:hasName "onlyDistributor" .
 
 ex:Ownable_origOwner a ex:StateVariable ;
+    rdfs:label "origOwner" ;
     ex:hasName "origOwner" ;
     ex:hasType "address" ;
-    ex:hasVisibility "private" .
+    ex:hasVisibility "private" ;
+    rdfs:comment "Property of Ownable" .
 
 ex:SupplyChain_itemsHistory a ex:MappingVariable,
         ex:StateVariable ;
+    rdfs:label "itemsHistory" ;
     ex:hasName "itemsHistory" ;
     ex:hasType "mapping(uint256 => SupplyChain.Txblocks)" ;
-    ex:hasVisibility "internal" .
+    ex:hasVisibility "internal" ;
+    rdfs:comment "Property of SupplyChain" .
 
 ex:SupplyChain_mod_verifyCaller a ex:Modifier ;
     ex:hasName "verifyCaller" .
 
-ex:SmartContract a owl:Class .
+ex:SmartContract a owl:Class ;
+    rdfs:label "SmartContract" ;
+    rdfs:subClassOf <http://www.estrellaproject.org/lkif-core/legal-action.owl#Contract> .
 
-ex:StateVariable a owl:Class .
+ex:StateVariable a owl:Class ;
+    rdfs:label "StateVariable" .
 
-ex:Member a owl:Class .
+ex:Member a owl:Class ;
+    rdfs:label "Member" .
 
-ex:Modifier a owl:Class .
+ex:Modifier a owl:Class ;
+    rdfs:label "Modifier" .
 
 ex:SupplyChain_items a ex:MappingVariable,
         ex:StateVariable ;
+    rdfs:label "items" ;
     ex:hasName "items" ;
     ex:hasType "mapping(uint256 => SupplyChain.Item)" ;
-    ex:hasVisibility "internal" .
+    ex:hasVisibility "internal" ;
+    rdfs:comment "Property of SupplyChain" .
 
-ex:Event a owl:Class .
+ex:Event a owl:Class ;
+    rdfs:label "Event" .
 
-ex:Function a owl:Class .
+ex:Function a owl:Class ;
+    rdfs:label "Function" .
 
-ex:Parameter a owl:Class .
+ex:Parameter a owl:Class ;
+    rdfs:label "Parameter" .
 
