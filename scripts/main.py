@@ -259,18 +259,6 @@ def contract_to_triples(slith):
         if p == RDF.type and o == OWL.Class and isinstance(s, URIRef):
             discovered_classes.add(s)
 
-    for cls in discovered_classes:
-        cls_name = str(cls).split("#")[-1]
-        # Pattern-based mapping to LKIF
-        for pattern, lkif_uri in legal_patterns.items():
-            if pattern.lower() in cls_name.lower():
-                triples.add((cls, RDFS.subClassOf, lkif_uri))
-                triples.add((cls, RDFS.label, Literal(cls_name.replace('_', ' '))))
-                break
-        else:
-            # If not mapped, just add label
-            triples.add((cls, RDFS.label, Literal(cls_name.replace('_', ' '))))
-
     # 2. For every function, create a class for the function and link to its parent contract
     for s, p, o in triples:
         if p == RDF.type and o == EX.Function:

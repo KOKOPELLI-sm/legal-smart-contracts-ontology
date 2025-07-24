@@ -4,7 +4,6 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 ex:Landlord a owl:Class ;
-    rdfs:label "Landlord" ;
     rdfs:subClassOf ex:Role .
 
 ex:SmartLeaseContract a ex:SmartContract ;
@@ -47,7 +46,6 @@ ex:SmartLeaseRegistry a ex:SmartContract ;
     ex:hasVariable ex:SmartLeaseRegistry_contracts .
 
 ex:Tenant a owl:Class ;
-    rdfs:label "Tenant" ;
     rdfs:subClassOf ex:Role .
 
 ex:emitsEvent a owl:DatatypeProperty,
@@ -437,8 +435,7 @@ ex:WrittenContractProposed_param_timestamp a ex:Parameter ;
 
 ex:isPayable rdfs:domain ex:Function .
 
-ex:Role a owl:Class ;
-    rdfs:label "Role" .
+ex:Role a owl:Class .
 
 ex:SmartLeaseContract_mod_hasSigned a ex:Modifier ;
     ex:hasName "hasSigned" .
@@ -499,8 +496,7 @@ ex:SmartLeaseContract_tenantOccupancy a ex:StateVariable ;
     ex:hasVisibility "public" ;
     rdfs:comment "Property of SmartLeaseContract" .
 
-ex:Struct a owl:Class ;
-    rdfs:label "Struct" .
+ex:Struct a owl:Class .
 
 ex:SmartLeaseRegistry_contracts a ex:ArrayVariable,
         ex:StateVariable ;
@@ -510,8 +506,7 @@ ex:SmartLeaseRegistry_contracts a ex:ArrayVariable,
     ex:hasVisibility "internal" ;
     rdfs:comment "Property of SmartLeaseRegistry" .
 
-ex:Modifier a owl:Class ;
-    rdfs:label "Modifier" .
+ex:Modifier a owl:Class .
 
 ex:SmartLeaseContract_addressToTenant a ex:MappingVariable,
         ex:StateVariable ;
@@ -521,22 +516,15 @@ ex:SmartLeaseContract_addressToTenant a ex:MappingVariable,
     ex:hasVisibility "public" ;
     rdfs:comment "Property of SmartLeaseContract" .
 
-ex:Member a owl:Class ;
-    rdfs:label "Member" .
+ex:Member a owl:Class .
 
-ex:Event a owl:Class ;
-    rdfs:label "Event" .
+ex:Event a owl:Class .
 
-ex:SmartContract a owl:Class ;
-    rdfs:label "SmartContract" ;
-    rdfs:subClassOf <http://www.estrellaproject.org/lkif-core/legal-action.owl#Contract> .
+ex:SmartContract a owl:Class .
 
-ex:StateVariable a owl:Class ;
-    rdfs:label "StateVariable" .
+ex:StateVariable a owl:Class .
 
-ex:Function a owl:Class ;
-    rdfs:label "Function" .
+ex:Function a owl:Class .
 
-ex:Parameter a owl:Class ;
-    rdfs:label "Parameter" .
+ex:Parameter a owl:Class .
 
