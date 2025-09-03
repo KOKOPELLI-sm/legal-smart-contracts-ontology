@@ -1,359 +1,314 @@
-import click
-from pathlib import Path
-from slither.slither import Slither
-from rdflib import Graph, URIRef, Literal, Namespace
-from rdflib.namespace import RDF, RDFS, OWL, XSD
-from urllib.parse import quote
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
-# Define the namespace for the example ontology
+import argparse
+import re
+from pathlib import Path
+from typing import Tuple, Optional
+from rdflib import Graph, Namespace, Literal, RDF, RDFS, XSD, BNode
+from rdflib.namespace import OWL
+from slither.slither import Slither
+
 EX = Namespace("http://example.org/smartcontracts#")
 
+# ───────────────────────────── UI helpers ───────────────────────────── #
 
-def safe_uri(name):
+def make_ui(no_emoji: bool, quiet: bool):
+    ok_sym   = "OK" if no_emoji else "✅"
+    info_sym = "i"  if no_emoji else "ℹ️"
+    warn_sym = "!"  if no_emoji else "⚠️"
+
+    def _print(prefix: str, msg: str) -> None:
+        if not quiet:
+            print(f"{prefix} {msg}")
+
+    def ok(msg: str) -> None:   _print(ok_sym, msg)
+    def info(msg: str) -> None: _print(info_sym, msg)
+    def warn(msg: str) -> None: _print(warn_sym, msg)
+    return ok, info, warn
+
+# ───────────────────────────── Utils ───────────────────────────── #
+
+SAFE_RE = re.compile(r"[^A-Za-z0-9_]+")
+
+def safe_uri(s: str) -> str:
+    """Κάνει string ασφαλές για χρήση ως fragment IRI."""
+    s = s.replace("(", "_").replace(")", "")
+    s = s.replace(",", "_").replace(" ", "_")
+    s = SAFE_RE.sub("_", s)
+    s = re.sub(r"_+", "_", s).strip("_")
+    return s or "unnamed"
+
+MONETARY_KEYS = ("amount", "price", "value", "deposit", "rent", "fee", "cost")
+
+def is_monetary_var(name: Optional[str], typ: Optional[str]) -> bool:
     """
-    Create a safe URI by replacing spaces with underscores and quoting the name.
+    Heuristics για χρηματικές μεταβλητές κατάστασης:
+    - όνομα που περιέχει μία από τις MONETARY_KEYS,
+    - ή mapping(... => uint*) τύπος,
+    - ή int/uint με name-hint.
     """
-    return URIRef(EX[quote(name.replace(" ", "_"))])
+    n = (name or "").lower()
+    t = (typ or "").lower()
+    if any(k in n for k in MONETARY_KEYS):
+        return True
+    if "mapping" in t and "uint" in t:
+        return True
+    if re.search(r"\b(u?int(8|16|32|64|128|256)?)\b", t) and any(k in n for k in MONETARY_KEYS):
+        return True
+    return False
 
+# ───────────────────────────── Schema (optional) ───────────────────────────── #
 
-def contract_to_triples(slith):
-    name_to_uri = {}
-    def find_uri_by_name(name):
-        return name_to_uri.get(name)
+def _rdf_list(g: Graph, items: list) -> BNode:
+    """Φτιάχνει RDF collection (list) και επιστρέφει το head BNode."""
+    if not items:
+        return RDF.nil  # type: ignore
+    head = BNode()
+    cur = head
+    for i, it in enumerate(items):
+        g.add((cur, RDF.first, it))
+        if i == len(items) - 1:
+            g.add((cur, RDF.rest, RDF.nil))
+        else:
+            nxt = BNode()
+            g.add((cur, RDF.rest, nxt))
+            cur = nxt
+    return head
 
+def declare_schema(g: Graph) -> None:
     """
-    Convert a Slither contract to RDF triples with full semantic structure.
+    Δηλώνει ρητά κλάσεις/ιδιότητες με domains/ranges (ασφαλές να συνυπάρχει με το master TTL).
     """
-    triples = Graph()
-    triples.bind("ex", EX)
-    triples.bind("rdfs", RDFS)
-    triples.bind("owl", OWL)
-
-    # --- Ontology: Class and Property Declarations (not instances!) ---
     # Classes
-    for cls in [
-        "SmartContract",
-        "Function",
-        "StateVariable",
-        "Struct",
-        "Member",
-        "Parameter",
-        "Event",
-        "Modifier",
-        "Role"
-    ]:
-        triples.add((EX[cls], RDF.type, OWL.Class))
+    for cls in (
+        EX.ContractComponent, EX.SmartContract, EX.Function, EX.AccessControlledFunction,
+        EX.PayableFunction, EX.Event, EX.StateVariable, EX.Modifier,
+        EX.Struct, EX.StructMember, EX.Parameter
+    ):
+        g.add((cls, RDF.type, OWL.Class))
 
-    # Object Properties
-    object_properties = [
-        (EX.hasFunction, EX.SmartContract, EX.Function),
-        (EX.hasVariable, EX.SmartContract, EX.StateVariable),
-        (EX.hasEvent, EX.SmartContract, EX.Event),
-        (EX.hasModifier, EX.Function, EX.Modifier),
-        (EX.hasStruct, EX.SmartContract, EX.Struct),
-        (EX.hasMember, EX.Struct, EX.Member),
-        (EX.hasParameter, EX.Function, EX.Parameter),
-        (EX.hasParameter, EX.Event, EX.Parameter),
-        (EX.hasMember, EX.Struct, EX.Member),
-        (EX.readsVariable, EX.Function, EX.StateVariable),
-        (EX.writesVariable, EX.Function, EX.StateVariable),
-        (EX.inheritsFrom, EX.SmartContract, EX.SmartContract),
-        (EX.emitsEvent, EX.Function, EX.Event),
-    ]
-    for prop, dom, rng in object_properties:
-        triples.add((prop, RDF.type, OWL.ObjectProperty))
-        triples.add((prop, RDFS.domain, dom))
-        triples.add((prop, RDFS.range, rng))
+    # Named union: Function ∪ StateVariable (για hasVisibility)
+    g.add((EX.FunctionOrState, RDF.type, OWL.Class))
+    g.add((EX.FunctionOrState, OWL.unionOf, _rdf_list(g, [EX.Function, EX.StateVariable])))
 
-    # --- Dynamic ObjectProperty declaration for domain-specific or new predicates ---
-    # After all triples are created, scan for any EX predicates that are not already declared as OWL.ObjectProperty
-    declared_object_properties = set(prop for prop, _, _ in object_properties)
-    for s, p, o in list(triples):
-        if isinstance(p, URIRef) and str(p).startswith(str(EX)) and p not in declared_object_properties:
-            # Only declare as ObjectProperty if not already declared
-            triples.add((p, RDF.type, OWL.ObjectProperty))
-            # Heuristic: if subject is Function, set domain to Function, else SmartContract
-            if (s, RDF.type, EX.Function) in triples or "Function" in str(s):
-                triples.add((p, RDFS.domain, EX.Function))
-            else:
-                triples.add((p, RDFS.domain, EX.SmartContract))
-            triples.add((p, RDFS.range, OWL.Thing))
-            declared_object_properties.add(p)
-    # This enables main.py to dynamically extend the ontology with new properties from the contract, supporting open-world extensibility.
-        triples.add((prop, RDF.type, OWL.DatatypeProperty))
-        triples.add((prop, RDFS.domain, dom))
-        triples.add((prop, RDFS.range, rng))
+    # Object properties
+    def objprop(p, dom, ran, label: str):
+        g.add((p, RDF.type, OWL.ObjectProperty))
+        g.add((p, RDFS.domain, dom))
+        g.add((p, RDFS.range, ran))
+        g.add((p, RDFS.label, Literal(label)))
 
-    for contract in slith.contracts:
-        # --- SmartContract instance ---
-        contract_uri = safe_uri(contract.name)
-        triples.add((contract_uri, RDF.type, EX.SmartContract))
-        triples.add((contract_uri, EX.hasName, Literal(contract.name)))
+    objprop(EX.hasFunction, EX.SmartContract, EX.Function, "has function")
+    objprop(EX.hasEvent, EX.SmartContract, EX.Event, "has event")
+    objprop(EX.hasVariable, EX.SmartContract, EX.StateVariable, "has state variable")
+    objprop(EX.hasModifier, EX.SmartContract, EX.Modifier, "has modifier (declared in contract)")
+    objprop(EX.hasAccessControl, EX.Function, EX.Modifier, "has access control")
+    objprop(EX.hasStruct, EX.SmartContract, EX.Struct, "has struct")
+    objprop(EX.hasMember, EX.Struct, EX.StructMember, "has member")
+    objprop(EX.hasParameter, EX.Function, EX.Parameter, "has parameter")  # ΜΟΝΟ Function
+    objprop(EX.readsVariable, EX.Function, EX.StateVariable, "reads variable")
+    objprop(EX.writesVariable, EX.Function, EX.StateVariable, "writes variable")
+    objprop(EX.emitsEvent, EX.Function, EX.Event, "emits event")
 
-        # Inheritance
-        for base in contract.inheritance:
-            base_uri = safe_uri(base.name)
-            triples.add((contract_uri, EX.inheritsFrom, base_uri))
-            triples.add((base_uri, RDF.type, EX.SmartContract))
+    # Datatype properties
+    def datprop(p, dom, ran, label: str):
+        g.add((p, RDF.type, OWL.DatatypeProperty))
+        g.add((p, RDFS.domain, dom))
+        g.add((p, RDFS.range, ran))
+        g.add((p, RDFS.label, Literal(label)))
 
-        # --- State Variables ---
-        address_roles = set()
-        for var in contract.state_variables_declared:
-            var_uri = safe_uri(contract.name + "_" + var.name)
-            name_to_uri[var.name] = var_uri
-            name_to_uri[var.name] = var_uri
+    datprop(EX.hasName, EX.ContractComponent, XSD.string, "has name")
+    datprop(EX.hasType, EX.ContractComponent, XSD.string, "has type string")
+    datprop(EX.hasVisibility, EX.FunctionOrState, XSD.string, "has visibility")
 
-            triples.add((contract_uri, EX.hasVariable, var_uri))
-            triples.add((var_uri, RDF.type, EX.StateVariable))
-            triples.add((var_uri, EX.hasName, Literal(var.name)))
-            var_type_str = str(var.type)
-            triples.add((var_uri, EX.hasType, Literal(var_type_str)))
-            triples.add((var_uri, EX.hasVisibility, Literal(var.visibility)))
-            if any(
-                k in var.name.lower() for k in ("amount", "deposit", "price", "rent")
-            ):
-                triples.add((var_uri, EX.isMonetaryValue, Literal(True)))
-            if "mapping" in var_type_str.lower():
-                triples.add((var_uri, RDF.type, EX.MappingVariable))
-            elif var_type_str.endswith("[]"):
-                triples.add((var_uri, RDF.type, EX.ArrayVariable))
-            # if variable is of type address, treat as potential role ---
-            if var_type_str.strip().lower() == "address" or var_type_str.strip().lower() == "address payable":
-                role_name = var.name
-                # Remove common suffixes/prefixes
-                for suffix in ["Address", "address"]:
-                    if role_name.endswith(suffix):
-                        role_name = role_name[:-len(suffix)]
-                role_name = role_name[0].upper() + role_name[1:] if role_name else "Role"
-                if role_name:
-                    address_roles.add(role_name)
+    # isMonetaryValue domain = (Parameter ∪ StateVariable)
+    union_dom = BNode()
+    g.add((union_dom, RDF.type, OWL.Class))
+    g.add((union_dom, OWL.unionOf, _rdf_list(g, [EX.Parameter, EX.StateVariable])))
+    datprop(EX.isMonetaryValue, union_dom, XSD.boolean, "is monetary value")
 
-        # --- Functions ---
-        for function in contract.functions_declared:
-            fn_name = contract.name + "_" + function.name
-            function_uri = safe_uri(fn_name)
-            name_to_uri[function.name] = function_uri
+# ───────────────────────────── Extraction ───────────────────────────── #
 
-            fn_name = (
-                contract.name
-                + "_"
-                + function.full_name.replace("(", "_")
-                .replace(")", "")
-                .replace(",", "_")
-            )
-            function_uri = safe_uri(fn_name)
-            triples.add((contract_uri, EX.hasFunction, function_uri))
-            triples.add((function_uri, RDF.type, EX.Function))
-            triples.add((function_uri, EX.hasName, Literal(function.name)))
-            triples.add((function_uri, EX.hasVisibility, Literal(function.visibility)))
-            if hasattr(function, "payable") and function.payable:
-                triples.add((function_uri, EX.isPayable, Literal(True)))
-            if any(k in function.name.lower() for k in ("pay", "deposit", "rent")):
-                triples.add((function_uri, RDF.type, EX.MonetaryFunction))
-
-            # --- Function Preconditions ---
-            for node in getattr(function, 'nodes', []):
-                if hasattr(node, "expression") and hasattr(node.expression, "function_name") and node.expression.function_name == "require":
-                    # Υποθέτουμε ότι το πρώτο argument είναι το dependency
-                    if hasattr(node.expression, "arguments") and node.expression.arguments:
-                        dependency_name = str(node.expression.arguments[0])
-                        dependency_uri = find_uri_by_name(dependency_name)
-                        if dependency_uri:
-                            triples.add((function_uri, EX.hasPrecondition, dependency_uri))
-
-            # --- Function Parameters ---
-            for param in function.parameters:
-                param_uri = safe_uri(fn_name + "_param_" + param.name)
-                name_to_uri[param.name] = param_uri
-
-                param_uri = safe_uri(fn_name + "_param_" + param.name)
-                triples.add((function_uri, EX.hasParameter, param_uri))
-                triples.add((param_uri, RDF.type, EX.Parameter))
-                triples.add((param_uri, EX.hasName, Literal(param.name)))
-                triples.add((param_uri, EX.hasType, Literal(param.type)))
-                if any(
-                    key in param.name.lower() for key in ("amount", "price", "value")
-                ):
-                    triples.add((param_uri, EX.isMonetaryValue, Literal(True)))
-
-            # --- State variables read/written ---
-            for var in function.state_variables_read:
-                var_uri = safe_uri(contract.name + "_" + var.name)
-                triples.add((function_uri, EX.readsVariable, var_uri))
-            for var in function.state_variables_written:
-                var_uri = safe_uri(contract.name + "_" + var.name)
-                triples.add((function_uri, EX.writesVariable, var_uri))
-
-            # --- Modifiers ---
-            for mod in function.modifiers:
-                mod_uri = safe_uri(contract.name + "_mod_" + mod.name)
-                triples.add((function_uri, EX.hasModifier, mod_uri))
-
-            # --- Events emitted ---
-            if hasattr(function, "events_emitted"):
-                for event in function.events_emitted:
-                    event_uri = safe_uri(contract.name + "_event_" + event.name)
-                    triples.add((function_uri, EX.emitsEvent, event_uri))
-
-        # --- Events ---
-        for event in contract.events:
-            event_uri = safe_uri(contract.name + "_event_" + event.name)
-            triples.add((contract_uri, EX.hasEvent, event_uri))
-            triples.add((event_uri, RDF.type, EX.Event))
-            triples.add((event_uri, EX.hasName, Literal(event.name)))
-            for param in event.elems:
-                param_uri = safe_uri(event.name + "_param_" + param.name)
-                triples.add((event_uri, EX.hasParameter, param_uri))
-                triples.add((param_uri, RDF.type, EX.Parameter))
-                triples.add((param_uri, EX.hasName, Literal(param.name)))
-                triples.add((param_uri, EX.hasType, Literal(param.type)))
-
-        # --- Modifiers ---
-        for modifier in contract.modifiers:
-            modifier_uri = safe_uri(contract.name + "_mod_" + modifier.name)
-            triples.add((contract_uri, EX.hasModifier, modifier_uri))
-            triples.add((modifier_uri, RDF.type, EX.Modifier))
-            triples.add((modifier_uri, EX.hasName, Literal(modifier.name)))
-
-        # --- Structs ---
-        struct_roles = set()
-        for struct in contract.structures:
-            struct_uri = safe_uri(contract.name + "_struct_" + struct.name)
-            triples.add((contract_uri, EX.hasStruct, struct_uri))
-            triples.add((struct_uri, RDF.type, EX.Struct))
-            triples.add((struct_uri, EX.hasName, Literal(struct.name)))
-            struct_roles.add(struct.name)
-            for name, elem in struct.elems.items():
-                member_uri = safe_uri(struct.name + "_member_" + name)
-                triples.add((struct_uri, EX.hasMember, member_uri))
-                triples.add((member_uri, RDF.type, EX.Member))
-                triples.add((member_uri, EX.hasName, Literal(name)))
-                if hasattr(elem.type, "name"):
-                    triples.add((member_uri, EX.hasType, Literal(elem.type.name)))
-        # --- Emit all discovered roles as subclasses of ex:Role ---
-        for role in struct_roles.union(address_roles):
-            triples.add((EX[role], RDF.type, OWL.Class))
-            triples.add((EX[role], RDFS.subClassOf, EX.Role))
-
-    # --- Extract all classes, functions, and properties directly from the Solidity contract ---
-    # For each discovered class, function, or property, generate the corresponding OWL class/property dynamically.
-    # For classes whose names match legal concepts (Agreement, Certification, etc.), map to LKIF superclass using pattern matching.
-    # Link functions and properties to the classes they belong to.
-    # No hardcoded checks for class existence—everything is based on what is parsed from the Solidity contract.
-
-    # Mapping patterns for LKIF concepts
-    legal_patterns = {
-        'Agreement': URIRef("http://www.estrellaproject.org/lkif-core/legal-action.owl#Agreement"),
-        'Certification': URIRef("http://www.estrellaproject.org/lkif-core/legal-action.owl#Certification"),
-        'Assignment': URIRef("http://www.estrellaproject.org/lkif-core/legal-action.owl#Assignment"),
-        'Revocation': URIRef("http://www.estrellaproject.org/lkif-core/legal-action.owl#Revocation"),
-        'Payment': URIRef("http://www.estrellaproject.org/lkif-core/legal-action.owl#Payment"),
-        'Transfer': URIRef("http://www.estrellaproject.org/lkif-core/legal-action.owl#Transfer"),
-        'Contract': URIRef("http://www.estrellaproject.org/lkif-core/legal-action.owl#Contract"),
-        'Legal_Action': URIRef("http://www.estrellaproject.org/lkif-core/legal-action.owl#Legal_Action"),
-    }
-
-    # 1. For every class (contract, struct, address-typed variable as role):
-    discovered_classes = set()
-    for s, p, o in triples:
-        if p == RDF.type and o == OWL.Class and isinstance(s, URIRef):
-            discovered_classes.add(s)
-
-    # 2. For every function, create a class for the function and link to its parent contract
-    for s, p, o in triples:
-        if p == RDF.type and o == EX.Function:
-            fn_name = None
-            parent_contract = None
-            for f_s, f_p, f_o in triples.triples((s, EX.hasName, None)):
-                fn_name = str(f_o)
-            for f_s, f_p, f_o in triples.triples((None, EX.hasFunction, s)):
-                parent_contract = f_s
-            if fn_name:
-                triples.add((s, RDFS.label, Literal(fn_name)))
-            if parent_contract:
-                triples.add((s, RDFS.comment, Literal(f"Function of contract {parent_contract.split('#')[-1]}")))
-
-    # 3. For every property (state variable, parameter, struct member), add label and link to parent
-    for s, p, o in triples:
-        if p == RDF.type and o in [EX.StateVariable, EX.Parameter, EX.Member]:
-            prop_name = None
-            parent = None
-            for f_s, f_p, f_o in triples.triples((s, EX.hasName, None)):
-                prop_name = str(f_o)
-            # Find parent contract/function/struct
-            for f_s, f_p, f_o in triples:
-                if f_o == s and f_p in [EX.hasVariable, EX.hasParameter, EX.hasMember]:
-                    parent = f_s
-            if prop_name:
-                triples.add((s, RDFS.label, Literal(prop_name)))
-            if parent:
-                triples.add((s, RDFS.comment, Literal(f"Property of {parent.split('#')[-1]}")))
-
-    # 4. For payable functions, add equivalence axiom
-    for s, p, o in triples:
-        if p == RDF.type and o == EX.Function:
-            if (s, EX.isPayable, Literal(True)) in triples:
-                pf_class = URIRef(str(s) + "_PayableFunction")
-                triples.add((pf_class, RDF.type, OWL.Class))
-                triples.add((pf_class, OWL.equivalentClass, URIRef("_:PayableFunctionRestriction_" + s.split('#')[-1])))
-                triples.add((URIRef("_:PayableFunctionRestriction_" + s.split('#')[-1]), RDF.type, OWL.Restriction))
-                triples.add((URIRef("_:PayableFunctionRestriction_" + s.split('#')[-1]), OWL.onProperty, EX.isPayable))
-                triples.add((URIRef("_:PayableFunctionRestriction_" + s.split('#')[-1]), OWL.hasValue, Literal(True)))
-                triples.add((pf_class, RDFS.label, Literal(f"Payable Function for {s.split('#')[-1]}")))
-
-    # 5. SWRL-like rule comments for assignment/transfer/approval functions (pattern-based)
-
-    # --- [NEW] Αυτόματη παραγωγή domain/range για κάθε property χωρίς hardcoding ---
-    from collections import defaultdict
-    property_domains = defaultdict(set)
-    property_ranges = defaultdict(set)
-    # Συλλογή όλων των triples για properties που είναι URIRef και στο EX namespace
-    for s, p, o in triples:
-        if isinstance(p, URIRef) and str(p).startswith(str(EX)):
-            # Βρες το type του subject
-            subj_type = None
-            for s2, p2, o2 in triples.triples((s, RDF.type, None)):
-                subj_type = o2
-                break
-            # Βρες το type του object (αν είναι URIRef)
-            obj_type = None
-            if isinstance(o, URIRef):
-                for s2, p2, o2 in triples.triples((o, RDF.type, None)):
-                    obj_type = o2
-                    break
-            if subj_type:
-                property_domains[p].add(subj_type)
-            if obj_type:
-                property_ranges[p].add(obj_type)
-    # Για κάθε property, γράψε domain/range (χωρίς duplicates)
-    for prop in set(property_domains.keys()).union(property_ranges.keys()):
-        for dom in property_domains[prop]:
-            triples.add((prop, RDFS.domain, dom))
-        for rng in property_ranges[prop]:
-            triples.add((prop, RDFS.range, rng))
-
-    return triples
-
-
-@click.command()
-@click.argument("filename")
-@click.option("--verbose", "-v", count=True)
-def main(filename, verbose=False):
+def extract(sl: Slither, g: Graph, ok, info, warn) -> Tuple[int, int, int, int, int, int, int, int, int, int, int]:
     """
-    Convert a Solidity file to RDF triples.
+    Εξάγει τα στοιχεία στο RDF γράφο και επιστρέφει counters για summary.
     """
-    print(f"Converting {filename} to Turtle syntax...")
-    try:
-        slith = Slither(filename)
-        triples = contract_to_triples(slith)
-        out = Path(filename).with_suffix(".ttl")
-        triples.serialize(destination=out, format="turtle")
-        print(f"✅ Turtle file created: {out}")
-    except Exception as e:
-        if verbose:
-            raise
-        print(f"❌ Error processing {filename}: {e}")
+    n_contracts = n_functions = n_events = n_modifiers = 0
+    n_structs = n_members = n_statevars = n_params = 0
+    n_reads = n_writes = n_has_access = 0
 
+    for contract in sl.contracts:
+        n_contracts += 1
+        contract_uri = EX[safe_uri(contract.name)]
+        g.add((contract_uri, RDF.type, EX.SmartContract))
+        g.add((contract_uri, EX.hasName, Literal(contract.name)))
+
+        # Declared modifiers στο contract
+        declared_mods = {}
+        for m in getattr(contract, "modifiers", []):
+            n_modifiers += 1
+            mod_uri = EX[safe_uri(f"{contract.name}_Modifier_{m.name}")]
+            declared_mods[m.name] = mod_uri
+            g.add((mod_uri, RDF.type, EX.Modifier))
+            g.add((mod_uri, EX.hasName, Literal(m.name)))
+            g.add((contract_uri, EX.hasModifier, mod_uri))
+
+        # Events (χωρίς hasParameter για να μείνει domain=Function)
+        for ev in getattr(contract, "events", []):
+            n_events += 1
+            event_uri = EX[safe_uri(f"{contract.name}_Event_{ev.name}")]
+            g.add((event_uri, RDF.type, EX.Event))
+            g.add((event_uri, EX.hasName, Literal(ev.name)))
+            g.add((contract_uri, EX.hasEvent, event_uri))
+
+        # Structs & members
+        for st in getattr(contract, "structs", []):
+            n_structs += 1
+            struct_uri = EX[safe_uri(f"{contract.name}_Struct_{st.name}")]
+            g.add((struct_uri, RDF.type, EX.Struct))
+            g.add((struct_uri, EX.hasName, Literal(st.name)))
+            g.add((contract_uri, EX.hasStruct, struct_uri))
+
+            elems = getattr(st, "elems", []) or getattr(st, "elements", [])
+            for idx, mem in enumerate(elems):
+                n_members += 1
+                try:
+                    mname = getattr(mem, "name", f"m{idx}") or f"m{idx}"
+                    mtype = str(getattr(mem, "type", "") or "")
+                except Exception:
+                    mname, mtype = f"m{idx}", ""
+                member_uri = EX[safe_uri(f"{contract.name}_Struct_{st.name}_Member_{mname}")]
+                g.add((member_uri, RDF.type, EX.StructMember))
+                g.add((member_uri, EX.hasName, Literal(mname)))
+                if mtype:
+                    g.add((member_uri, EX.hasType, Literal(mtype)))
+                g.add((struct_uri, EX.hasMember, member_uri))
+
+        # State variables
+        for var in getattr(contract, "state_variables_declared", []):
+            n_statevars += 1
+            vname = getattr(var, "name", "") or ""
+            vtype = str(getattr(var, "type", "") or "")
+            var_uri = EX[safe_uri(f"{contract.name}_Var_{vname}")]
+            g.add((var_uri, RDF.type, EX.StateVariable))
+            g.add((var_uri, EX.hasName, Literal(vname)))
+            if vtype:
+                g.add((var_uri, EX.hasType, Literal(vtype)))
+            vis = getattr(var, "visibility", None)
+            if vis is not None:
+                g.add((var_uri, EX.hasVisibility, Literal(str(vis))))
+            if is_monetary_var(vname, vtype):
+                g.add((var_uri, EX.isMonetaryValue, Literal(True)))
+            g.add((contract_uri, EX.hasVariable, var_uri))
+
+        # Functions
+        for function in getattr(contract, "functions_declared", []):
+            n_functions += 1
+            fn_name = f"{contract.name}_{function.full_name.replace('(', '_').replace(')', '')}"
+            function_uri = EX[safe_uri(fn_name)]
+
+            g.add((contract_uri, EX.hasFunction, function_uri))
+            g.add((function_uri, RDF.type, EX.Function))
+            g.add((function_uri, EX.hasName, Literal(function.full_name)))
+
+            if getattr(function, "visibility", None):
+                g.add((function_uri, EX.hasVisibility, Literal(str(function.visibility))))
+
+            if getattr(function, "payable", False):
+                g.add((function_uri, RDF.type, EX.PayableFunction))
+
+            # Modifiers χρησιμοποιούμενα από τη function
+            for call in getattr(function, "modifiers", []):
+                mobj = getattr(call, "modifier", None) or call
+                mname = getattr(mobj, "name", None)
+                if not mname:
+                    continue
+                mod_uri = declared_mods.get(mname)
+                if mod_uri is None:
+                    # δηλώθηκε on-the-fly αν δεν ήταν στα declared
+                    n_modifiers += 1
+                    mod_uri = EX[safe_uri(f"{contract.name}_Modifier_{mname}")]
+                    declared_mods[mname] = mod_uri
+                    g.add((mod_uri, RDF.type, EX.Modifier))
+                    g.add((mod_uri, EX.hasName, Literal(mname)))
+                    g.add((contract_uri, EX.hasModifier, mod_uri))
+                g.add((function_uri, EX.hasAccessControl, mod_uri))
+                g.add((function_uri, RDF.type, EX.AccessControlledFunction))
+                n_has_access += 1
+
+            # Parameters (ΜΟΝΟ για Function)
+            for idx, p in enumerate(getattr(function, "parameters", [])):
+                n_params += 1
+                pname = getattr(p, "name", f"p{idx}") or f"p{idx}"
+                ptype = str(getattr(p, "type", "") or "")
+                param_uri = EX[safe_uri(f"{contract.name}_Func_{function.full_name}_Param_{pname}")]
+                g.add((param_uri, RDF.type, EX.Parameter))
+                g.add((param_uri, EX.hasName, Literal(pname)))
+                if ptype:
+                    g.add((param_uri, EX.hasType, Literal(ptype)))
+                if any(k in pname.lower() for k in MONETARY_KEYS):
+                    g.add((param_uri, EX.isMonetaryValue, Literal(True)))
+                g.add((function_uri, EX.hasParameter, param_uri))
+
+            # Reads / writes
+            for v in getattr(function, "state_variables_read", []) or []:
+                vuri = EX[safe_uri(f"{contract.name}_Var_{getattr(v, 'name', '')}")]
+                g.add((function_uri, EX.readsVariable, vuri))
+                n_reads += 1
+            for v in getattr(function, "state_variables_written", []) or []:
+                vuri = EX[safe_uri(f"{contract.name}_Var_{getattr(v, 'name', '')}")]
+                g.add((function_uri, EX.writesVariable, vuri))
+                n_writes += 1
+
+    return (n_contracts, n_functions, n_events, n_modifiers,
+            n_structs, n_members, n_statevars, n_params, n_reads, n_writes, n_has_access)
+
+# ───────────────────────────── CLI ───────────────────────────── #
+
+def run():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("target", help="Solidity file ή project directory για Slither")
+    parser.add_argument("-o", "--out", default="contracts.ttl", help="Μονοπάτι εξόδου TTL")
+    parser.add_argument("--declare-schema", action="store_true",
+                        help="Αν οριστεί, γράφει και το schema (classes/properties/domain/range).")
+    parser.add_argument("--no-emoji", action="store_true", help="Απενεργοποίηση emoji στα logs")
+    parser.add_argument("--quiet", action="store_true", help="Ελάχιστες εκτυπώσεις")
+    args = parser.parse_args()
+
+    ok, info, warn = make_ui(args.no_emoji, args.quiet)
+
+    info(f"Parsing Slither target: {args.target}")
+    sl = Slither(args.target)
+    ok("Loaded project with Slither")
+
+    g = Graph()
+    g.bind("ex", EX); g.bind("rdf", RDF); g.bind("rdfs", RDFS); g.bind("xsd", XSD); g.bind("owl", OWL)
+
+    if args.declare_schema:
+        info("Declaring schema (classes/properties/domains/ranges)")
+        declare_schema(g)
+
+    # Extract
+    (n_contracts, n_functions, n_events, n_modifiers,
+     n_structs, n_members, n_statevars, n_params, n_reads, n_writes, n_has_access) = extract(sl, g, ok, info, warn)
+
+    # Serialize
+    out_path = Path(args.out)
+    g.serialize(destination=str(out_path), format="turtle")
+    ok(f"Wrote RDF to: {out_path}")
+
+    # Summary
+    total_triples = len(g)
+    info("—" * 60)
+    info("Run summary")
+    info(f"Contracts: {n_contracts}")
+    info(f"Functions: {n_functions}  | Params: {n_params}")
+    info(f"StateVars: {n_statevars}  | Reads: {n_reads}  | Writes: {n_writes}")
+    info(f"Events:    {n_events}     | Emits (captured): 0 (placeholder)")
+    info(f"Modifiers: {n_modifiers}  | AccessControl links: {n_has_access}")
+    info(f"Structs:   {n_structs}    | Members: {n_members}")
+    ok(f"Triples written: {total_triples}")
 
 if __name__ == "__main__":
-    main()
+    run()

@@ -1,0 +1,943 @@
+@prefix ex: <http://example.org/smartcontracts#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:ConsumerRole a ex:SmartContract ;
+    ex:hasEvent ex:ConsumerRole_Event_ConsumerAdded,
+        ex:ConsumerRole_Event_ConsumerRemoved ;
+    ex:hasFunction ex:ConsumerRole_addConsumer_address,
+        ex:ConsumerRole_constructor,
+        ex:ConsumerRole_isConsumer_address,
+        ex:ConsumerRole_removeConsumer_address,
+        ex:ConsumerRole_renounceConsumer_address ;
+    ex:hasModifier ex:ConsumerRole_Modifier_onlyConsumer ;
+    ex:hasName "ConsumerRole" ;
+    ex:hasVariable ex:ConsumerRole_Var_consumers .
+
+ex:DistributorRole a ex:SmartContract ;
+    ex:hasEvent ex:DistributorRole_Event_DistributorAdded,
+        ex:DistributorRole_Event_DistributorRemoved ;
+    ex:hasFunction ex:DistributorRole_addDistributor_address,
+        ex:DistributorRole_constructor,
+        ex:DistributorRole_isDistributor_address,
+        ex:DistributorRole_removeDistributor_address,
+        ex:DistributorRole_renounceDistributor ;
+    ex:hasModifier ex:DistributorRole_Modifier_onlyDistributor ;
+    ex:hasName "DistributorRole" ;
+    ex:hasVariable ex:DistributorRole_Var_distributors .
+
+ex:FarmerRole a ex:SmartContract ;
+    ex:hasEvent ex:FarmerRole_Event_FarmerAdded,
+        ex:FarmerRole_Event_FarmerRemoved ;
+    ex:hasFunction ex:FarmerRole_addFarmer_address,
+        ex:FarmerRole_constructor,
+        ex:FarmerRole_isFarmer_address,
+        ex:FarmerRole_removeFarmer_address,
+        ex:FarmerRole_renounceFarmer ;
+    ex:hasModifier ex:FarmerRole_Modifier_onlyFarmer ;
+    ex:hasName "FarmerRole" ;
+    ex:hasVariable ex:FarmerRole_Var_farmers .
+
+ex:Ownable a ex:SmartContract ;
+    ex:hasEvent ex:Ownable_Event_TransferOwnership ;
+    ex:hasFunction ex:Ownable_constructor,
+        ex:Ownable_isOwner,
+        ex:Ownable_ownerLookup,
+        ex:Ownable_renounceOwnership,
+        ex:Ownable_transferOwnership_address ;
+    ex:hasModifier ex:Ownable_Modifier_onlyOwner ;
+    ex:hasName "Ownable" ;
+    ex:hasVariable ex:Ownable_Var_origOwner .
+
+ex:RetailerRole a ex:SmartContract ;
+    ex:hasEvent ex:RetailerRole_Event_RetailerAdded,
+        ex:RetailerRole_Event_RetailerRemoved ;
+    ex:hasFunction ex:RetailerRole_addRetailer_address,
+        ex:RetailerRole_constructor,
+        ex:RetailerRole_isRetailer_address,
+        ex:RetailerRole_removeRetailer_address,
+        ex:RetailerRole_renounceRetailer ;
+    ex:hasModifier ex:RetailerRole_Modifier_onlyRetailer ;
+    ex:hasName "RetailerRole" ;
+    ex:hasVariable ex:RetailerRole_Var_retailers .
+
+ex:Roles a ex:SmartContract ;
+    ex:hasFunction ex:Roles_add_Roles_Role_address,
+        ex:Roles_has_Roles_Role_address,
+        ex:Roles_remove_Roles_Role_address ;
+    ex:hasName "Roles" .
+
+ex:SupplyChain a ex:SmartContract ;
+    ex:hasEvent ex:SupplyChain_Event_ConsumerAdded,
+        ex:SupplyChain_Event_ConsumerRemoved,
+        ex:SupplyChain_Event_DistributorAdded,
+        ex:SupplyChain_Event_DistributorRemoved,
+        ex:SupplyChain_Event_FarmerAdded,
+        ex:SupplyChain_Event_FarmerRemoved,
+        ex:SupplyChain_Event_ForSaleByDistributor,
+        ex:SupplyChain_Event_ForSaleByFarmer,
+        ex:SupplyChain_Event_ForSaleByRetailer,
+        ex:SupplyChain_Event_PackagedByDistributor,
+        ex:SupplyChain_Event_ProcessedByDistributor,
+        ex:SupplyChain_Event_ProduceByFarmer,
+        ex:SupplyChain_Event_PurchasedByConsumer,
+        ex:SupplyChain_Event_PurchasedByDistributor,
+        ex:SupplyChain_Event_PurchasedByRetailer,
+        ex:SupplyChain_Event_ReceivedByDistributor,
+        ex:SupplyChain_Event_ReceivedByRetailer,
+        ex:SupplyChain_Event_RetailerAdded,
+        ex:SupplyChain_Event_RetailerRemoved,
+        ex:SupplyChain_Event_ShippedByDistributor,
+        ex:SupplyChain_Event_ShippedByFarmer,
+        ex:SupplyChain_Event_TransferOwnership ;
+    ex:hasFunction ex:SupplyChain_constructor,
+        ex:SupplyChain_fetchItemBufferOne_uint256,
+        ex:SupplyChain_fetchItemBufferTwo_uint256,
+        ex:SupplyChain_fetchitemHistory_uint256,
+        ex:SupplyChain_kill,
+        ex:SupplyChain_make_payable_address,
+        ex:SupplyChain_packageItemByDistributor_uint256,
+        ex:SupplyChain_processedItemByDistributor_uint256_uint256,
+        ex:SupplyChain_produceItemByFarmer_uint256_string_string_string_string_string_uint256,
+        ex:SupplyChain_purchaseItemByConsumer_uint256,
+        ex:SupplyChain_purchaseItemByDistributor_uint256,
+        ex:SupplyChain_purchaseItemByRetailer_uint256,
+        ex:SupplyChain_receivedItemByDistributor_uint256,
+        ex:SupplyChain_receivedItemByRetailer_uint256,
+        ex:SupplyChain_sellItemByDistributor_uint256_uint256,
+        ex:SupplyChain_sellItemByFarmer_uint256_uint256,
+        ex:SupplyChain_sellItemByRetailer_uint256_uint256,
+        ex:SupplyChain_shippedItemByDistributor_uint256,
+        ex:SupplyChain_shippedItemByFarmer_uint256,
+        ex:SupplyChain_slitherConstructorConstantVariables ;
+    ex:hasModifier ex:SupplyChain_Modifier_checkValue,
+        ex:SupplyChain_Modifier_forSaleByDistributor,
+        ex:SupplyChain_Modifier_forSaleByFarmer,
+        ex:SupplyChain_Modifier_forSaleByRetailer,
+        ex:SupplyChain_Modifier_onlyConsumer,
+        ex:SupplyChain_Modifier_onlyDistributor,
+        ex:SupplyChain_Modifier_onlyFarmer,
+        ex:SupplyChain_Modifier_onlyOwner,
+        ex:SupplyChain_Modifier_onlyRetailer,
+        ex:SupplyChain_Modifier_packagedByDistributor,
+        ex:SupplyChain_Modifier_paidEnough,
+        ex:SupplyChain_Modifier_processByDistributor,
+        ex:SupplyChain_Modifier_producedByFarmer,
+        ex:SupplyChain_Modifier_purchasedByConsumer,
+        ex:SupplyChain_Modifier_purchasedByDistributor,
+        ex:SupplyChain_Modifier_purchasedByRetailer,
+        ex:SupplyChain_Modifier_receivedByDistributor,
+        ex:SupplyChain_Modifier_receivedByRetailer,
+        ex:SupplyChain_Modifier_shippedByDistributor,
+        ex:SupplyChain_Modifier_shippedByFarmer,
+        ex:SupplyChain_Modifier_verifyCaller ;
+    ex:hasName "SupplyChain" ;
+    ex:hasVariable ex:SupplyChain_Var_defaultState,
+        ex:SupplyChain_Var_items,
+        ex:SupplyChain_Var_itemsHistory,
+        ex:SupplyChain_Var_owner,
+        ex:SupplyChain_Var_sku,
+        ex:SupplyChain_Var_upc .
+
+ex:ConsumerRole_Event_ConsumerAdded a ex:Event ;
+    ex:hasName "ConsumerAdded" .
+
+ex:ConsumerRole_Event_ConsumerRemoved a ex:Event ;
+    ex:hasName "ConsumerRemoved" .
+
+ex:ConsumerRole_Func_addConsumer_address_Param_account a ex:Parameter ;
+    ex:hasName "account" ;
+    ex:hasType "address" .
+
+ex:ConsumerRole_Func_isConsumer_address_Param_account a ex:Parameter ;
+    ex:hasName "account" ;
+    ex:hasType "address" .
+
+ex:ConsumerRole_Func_removeConsumer_address_Param_account a ex:Parameter ;
+    ex:hasName "account" ;
+    ex:hasType "address" .
+
+ex:ConsumerRole_Func_renounceConsumer_address_Param_account a ex:Parameter ;
+    ex:hasName "account" ;
+    ex:hasType "address" .
+
+ex:ConsumerRole_addConsumer_address a ex:AccessControlledFunction,
+        ex:Function ;
+    ex:hasAccessControl ex:ConsumerRole_Modifier_onlyConsumer ;
+    ex:hasName "_addConsumer(address)",
+        "addConsumer(address)" ;
+    ex:hasParameter ex:ConsumerRole_Func_addConsumer_address_Param_account ;
+    ex:hasVisibility "internal",
+        "public" ;
+    ex:readsVariable ex:ConsumerRole_Var_consumers .
+
+ex:ConsumerRole_constructor a ex:Function ;
+    ex:hasName "constructor()" ;
+    ex:hasVisibility "public" .
+
+ex:ConsumerRole_isConsumer_address a ex:Function ;
+    ex:hasName "isConsumer(address)" ;
+    ex:hasParameter ex:ConsumerRole_Func_isConsumer_address_Param_account ;
+    ex:hasVisibility "public" ;
+    ex:readsVariable ex:ConsumerRole_Var_consumers .
+
+ex:ConsumerRole_removeConsumer_address a ex:Function ;
+    ex:hasName "_removeConsumer(address)" ;
+    ex:hasParameter ex:ConsumerRole_Func_removeConsumer_address_Param_account ;
+    ex:hasVisibility "internal" ;
+    ex:readsVariable ex:ConsumerRole_Var_consumers .
+
+ex:ConsumerRole_renounceConsumer_address a ex:Function ;
+    ex:hasName "renounceConsumer(address)" ;
+    ex:hasParameter ex:ConsumerRole_Func_renounceConsumer_address_Param_account ;
+    ex:hasVisibility "public" .
+
+ex:DistributorRole_Event_DistributorAdded a ex:Event ;
+    ex:hasName "DistributorAdded" .
+
+ex:DistributorRole_Event_DistributorRemoved a ex:Event ;
+    ex:hasName "DistributorRemoved" .
+
+ex:DistributorRole_Func_addDistributor_address_Param_account a ex:Parameter ;
+    ex:hasName "account" ;
+    ex:hasType "address" .
+
+ex:DistributorRole_Func_isDistributor_address_Param_account a ex:Parameter ;
+    ex:hasName "account" ;
+    ex:hasType "address" .
+
+ex:DistributorRole_Func_removeDistributor_address_Param_account a ex:Parameter ;
+    ex:hasName "account" ;
+    ex:hasType "address" .
+
+ex:DistributorRole_addDistributor_address a ex:AccessControlledFunction,
+        ex:Function ;
+    ex:hasAccessControl ex:DistributorRole_Modifier_onlyDistributor ;
+    ex:hasName "_addDistributor(address)",
+        "addDistributor(address)" ;
+    ex:hasParameter ex:DistributorRole_Func_addDistributor_address_Param_account ;
+    ex:hasVisibility "internal",
+        "public" ;
+    ex:readsVariable ex:DistributorRole_Var_distributors .
+
+ex:DistributorRole_constructor a ex:Function ;
+    ex:hasName "constructor()" ;
+    ex:hasVisibility "public" .
+
+ex:DistributorRole_isDistributor_address a ex:Function ;
+    ex:hasName "isDistributor(address)" ;
+    ex:hasParameter ex:DistributorRole_Func_isDistributor_address_Param_account ;
+    ex:hasVisibility "public" ;
+    ex:readsVariable ex:DistributorRole_Var_distributors .
+
+ex:DistributorRole_removeDistributor_address a ex:Function ;
+    ex:hasName "_removeDistributor(address)" ;
+    ex:hasParameter ex:DistributorRole_Func_removeDistributor_address_Param_account ;
+    ex:hasVisibility "internal" ;
+    ex:readsVariable ex:DistributorRole_Var_distributors .
+
+ex:DistributorRole_renounceDistributor a ex:Function ;
+    ex:hasName "renounceDistributor()" ;
+    ex:hasVisibility "public" .
+
+ex:FarmerRole_Event_FarmerAdded a ex:Event ;
+    ex:hasName "FarmerAdded" .
+
+ex:FarmerRole_Event_FarmerRemoved a ex:Event ;
+    ex:hasName "FarmerRemoved" .
+
+ex:FarmerRole_Func_addFarmer_address_Param_account a ex:Parameter ;
+    ex:hasName "account" ;
+    ex:hasType "address" .
+
+ex:FarmerRole_Func_isFarmer_address_Param_account a ex:Parameter ;
+    ex:hasName "account" ;
+    ex:hasType "address" .
+
+ex:FarmerRole_Func_removeFarmer_address_Param_account a ex:Parameter ;
+    ex:hasName "account" ;
+    ex:hasType "address" .
+
+ex:FarmerRole_addFarmer_address a ex:AccessControlledFunction,
+        ex:Function ;
+    ex:hasAccessControl ex:FarmerRole_Modifier_onlyFarmer ;
+    ex:hasName "_addFarmer(address)",
+        "addFarmer(address)" ;
+    ex:hasParameter ex:FarmerRole_Func_addFarmer_address_Param_account ;
+    ex:hasVisibility "internal",
+        "public" ;
+    ex:readsVariable ex:FarmerRole_Var_farmers .
+
+ex:FarmerRole_constructor a ex:Function ;
+    ex:hasName "constructor()" ;
+    ex:hasVisibility "public" .
+
+ex:FarmerRole_isFarmer_address a ex:Function ;
+    ex:hasName "isFarmer(address)" ;
+    ex:hasParameter ex:FarmerRole_Func_isFarmer_address_Param_account ;
+    ex:hasVisibility "public" ;
+    ex:readsVariable ex:FarmerRole_Var_farmers .
+
+ex:FarmerRole_removeFarmer_address a ex:Function ;
+    ex:hasName "_removeFarmer(address)" ;
+    ex:hasParameter ex:FarmerRole_Func_removeFarmer_address_Param_account ;
+    ex:hasVisibility "internal" ;
+    ex:readsVariable ex:FarmerRole_Var_farmers .
+
+ex:FarmerRole_renounceFarmer a ex:Function ;
+    ex:hasName "renounceFarmer()" ;
+    ex:hasVisibility "public" .
+
+ex:Ownable_Event_TransferOwnership a ex:Event ;
+    ex:hasName "TransferOwnership" .
+
+ex:Ownable_Func_transferOwnership_address_Param_newOwner a ex:Parameter ;
+    ex:hasName "newOwner" ;
+    ex:hasType "address" .
+
+ex:Ownable_constructor a ex:Function ;
+    ex:hasName "constructor()" ;
+    ex:hasVisibility "internal" ;
+    ex:readsVariable ex:Ownable_Var_origOwner ;
+    ex:writesVariable ex:Ownable_Var_origOwner .
+
+ex:Ownable_isOwner a ex:Function ;
+    ex:hasName "isOwner()" ;
+    ex:hasVisibility "public" ;
+    ex:readsVariable ex:Ownable_Var_origOwner .
+
+ex:Ownable_ownerLookup a ex:Function ;
+    ex:hasName "ownerLookup()" ;
+    ex:hasVisibility "public" ;
+    ex:readsVariable ex:Ownable_Var_origOwner .
+
+ex:Ownable_renounceOwnership a ex:AccessControlledFunction,
+        ex:Function ;
+    ex:hasAccessControl ex:Ownable_Modifier_onlyOwner ;
+    ex:hasName "renounceOwnership()" ;
+    ex:hasVisibility "public" ;
+    ex:readsVariable ex:Ownable_Var_origOwner ;
+    ex:writesVariable ex:Ownable_Var_origOwner .
+
+ex:Ownable_transferOwnership_address a ex:AccessControlledFunction,
+        ex:Function ;
+    ex:hasAccessControl ex:Ownable_Modifier_onlyOwner ;
+    ex:hasName "_transferOwnership(address)",
+        "transferOwnership(address)" ;
+    ex:hasParameter ex:Ownable_Func_transferOwnership_address_Param_newOwner ;
+    ex:hasVisibility "internal",
+        "public" ;
+    ex:readsVariable ex:Ownable_Var_origOwner ;
+    ex:writesVariable ex:Ownable_Var_origOwner .
+
+ex:RetailerRole_Event_RetailerAdded a ex:Event ;
+    ex:hasName "RetailerAdded" .
+
+ex:RetailerRole_Event_RetailerRemoved a ex:Event ;
+    ex:hasName "RetailerRemoved" .
+
+ex:RetailerRole_Func_addRetailer_address_Param_account a ex:Parameter ;
+    ex:hasName "account" ;
+    ex:hasType "address" .
+
+ex:RetailerRole_Func_isRetailer_address_Param_account a ex:Parameter ;
+    ex:hasName "account" ;
+    ex:hasType "address" .
+
+ex:RetailerRole_Func_removeRetailer_address_Param_account a ex:Parameter ;
+    ex:hasName "account" ;
+    ex:hasType "address" .
+
+ex:RetailerRole_addRetailer_address a ex:AccessControlledFunction,
+        ex:Function ;
+    ex:hasAccessControl ex:RetailerRole_Modifier_onlyRetailer ;
+    ex:hasName "_addRetailer(address)",
+        "addRetailer(address)" ;
+    ex:hasParameter ex:RetailerRole_Func_addRetailer_address_Param_account ;
+    ex:hasVisibility "internal",
+        "public" ;
+    ex:readsVariable ex:RetailerRole_Var_retailers .
+
+ex:RetailerRole_constructor a ex:Function ;
+    ex:hasName "constructor()" ;
+    ex:hasVisibility "public" .
+
+ex:RetailerRole_isRetailer_address a ex:Function ;
+    ex:hasName "isRetailer(address)" ;
+    ex:hasParameter ex:RetailerRole_Func_isRetailer_address_Param_account ;
+    ex:hasVisibility "public" ;
+    ex:readsVariable ex:RetailerRole_Var_retailers .
+
+ex:RetailerRole_removeRetailer_address a ex:Function ;
+    ex:hasName "_removeRetailer(address)" ;
+    ex:hasParameter ex:RetailerRole_Func_removeRetailer_address_Param_account ;
+    ex:hasVisibility "internal" ;
+    ex:readsVariable ex:RetailerRole_Var_retailers .
+
+ex:RetailerRole_renounceRetailer a ex:Function ;
+    ex:hasName "renounceRetailer()" ;
+    ex:hasVisibility "public" .
+
+ex:Roles_Func_add_Roles_Role_address_Param_account a ex:Parameter ;
+    ex:hasName "account" ;
+    ex:hasType "address" .
+
+ex:Roles_Func_add_Roles_Role_address_Param_role a ex:Parameter ;
+    ex:hasName "role" ;
+    ex:hasType "Roles.Role" .
+
+ex:Roles_Func_has_Roles_Role_address_Param_account a ex:Parameter ;
+    ex:hasName "account" ;
+    ex:hasType "address" .
+
+ex:Roles_Func_has_Roles_Role_address_Param_role a ex:Parameter ;
+    ex:hasName "role" ;
+    ex:hasType "Roles.Role" .
+
+ex:Roles_Func_remove_Roles_Role_address_Param_account a ex:Parameter ;
+    ex:hasName "account" ;
+    ex:hasType "address" .
+
+ex:Roles_Func_remove_Roles_Role_address_Param_role a ex:Parameter ;
+    ex:hasName "role" ;
+    ex:hasType "Roles.Role" .
+
+ex:Roles_add_Roles_Role_address a ex:Function ;
+    ex:hasName "add(Roles.Role,address)" ;
+    ex:hasParameter ex:Roles_Func_add_Roles_Role_address_Param_account,
+        ex:Roles_Func_add_Roles_Role_address_Param_role ;
+    ex:hasVisibility "internal" .
+
+ex:Roles_has_Roles_Role_address a ex:Function ;
+    ex:hasName "has(Roles.Role,address)" ;
+    ex:hasParameter ex:Roles_Func_has_Roles_Role_address_Param_account,
+        ex:Roles_Func_has_Roles_Role_address_Param_role ;
+    ex:hasVisibility "internal" .
+
+ex:Roles_remove_Roles_Role_address a ex:Function ;
+    ex:hasName "remove(Roles.Role,address)" ;
+    ex:hasParameter ex:Roles_Func_remove_Roles_Role_address_Param_account,
+        ex:Roles_Func_remove_Roles_Role_address_Param_role ;
+    ex:hasVisibility "internal" .
+
+ex:SupplyChain_Event_ConsumerAdded a ex:Event ;
+    ex:hasName "ConsumerAdded" .
+
+ex:SupplyChain_Event_ConsumerRemoved a ex:Event ;
+    ex:hasName "ConsumerRemoved" .
+
+ex:SupplyChain_Event_DistributorAdded a ex:Event ;
+    ex:hasName "DistributorAdded" .
+
+ex:SupplyChain_Event_DistributorRemoved a ex:Event ;
+    ex:hasName "DistributorRemoved" .
+
+ex:SupplyChain_Event_FarmerAdded a ex:Event ;
+    ex:hasName "FarmerAdded" .
+
+ex:SupplyChain_Event_FarmerRemoved a ex:Event ;
+    ex:hasName "FarmerRemoved" .
+
+ex:SupplyChain_Event_ForSaleByDistributor a ex:Event ;
+    ex:hasName "ForSaleByDistributor" .
+
+ex:SupplyChain_Event_ForSaleByFarmer a ex:Event ;
+    ex:hasName "ForSaleByFarmer" .
+
+ex:SupplyChain_Event_ForSaleByRetailer a ex:Event ;
+    ex:hasName "ForSaleByRetailer" .
+
+ex:SupplyChain_Event_PackagedByDistributor a ex:Event ;
+    ex:hasName "PackagedByDistributor" .
+
+ex:SupplyChain_Event_ProcessedByDistributor a ex:Event ;
+    ex:hasName "ProcessedByDistributor" .
+
+ex:SupplyChain_Event_ProduceByFarmer a ex:Event ;
+    ex:hasName "ProduceByFarmer" .
+
+ex:SupplyChain_Event_PurchasedByConsumer a ex:Event ;
+    ex:hasName "PurchasedByConsumer" .
+
+ex:SupplyChain_Event_PurchasedByDistributor a ex:Event ;
+    ex:hasName "PurchasedByDistributor" .
+
+ex:SupplyChain_Event_PurchasedByRetailer a ex:Event ;
+    ex:hasName "PurchasedByRetailer" .
+
+ex:SupplyChain_Event_ReceivedByDistributor a ex:Event ;
+    ex:hasName "ReceivedByDistributor" .
+
+ex:SupplyChain_Event_ReceivedByRetailer a ex:Event ;
+    ex:hasName "ReceivedByRetailer" .
+
+ex:SupplyChain_Event_RetailerAdded a ex:Event ;
+    ex:hasName "RetailerAdded" .
+
+ex:SupplyChain_Event_RetailerRemoved a ex:Event ;
+    ex:hasName "RetailerRemoved" .
+
+ex:SupplyChain_Event_ShippedByDistributor a ex:Event ;
+    ex:hasName "ShippedByDistributor" .
+
+ex:SupplyChain_Event_ShippedByFarmer a ex:Event ;
+    ex:hasName "ShippedByFarmer" .
+
+ex:SupplyChain_Event_TransferOwnership a ex:Event ;
+    ex:hasName "TransferOwnership" .
+
+ex:SupplyChain_Func_fetchItemBufferOne_uint256_Param_upc a ex:Parameter ;
+    ex:hasName "_upc" ;
+    ex:hasType "uint256" .
+
+ex:SupplyChain_Func_fetchItemBufferTwo_uint256_Param_upc a ex:Parameter ;
+    ex:hasName "_upc" ;
+    ex:hasType "uint256" .
+
+ex:SupplyChain_Func_fetchitemHistory_uint256_Param_upc a ex:Parameter ;
+    ex:hasName "_upc" ;
+    ex:hasType "uint256" .
+
+ex:SupplyChain_Func_make_payable_address_Param_x a ex:Parameter ;
+    ex:hasName "x" ;
+    ex:hasType "address" .
+
+ex:SupplyChain_Func_packageItemByDistributor_uint256_Param_upc a ex:Parameter ;
+    ex:hasName "_upc" ;
+    ex:hasType "uint256" .
+
+ex:SupplyChain_Func_processedItemByDistributor_uint256_uint256_Param_slices a ex:Parameter ;
+    ex:hasName "slices" ;
+    ex:hasType "uint256" .
+
+ex:SupplyChain_Func_processedItemByDistributor_uint256_uint256_Param_upc a ex:Parameter ;
+    ex:hasName "_upc" ;
+    ex:hasType "uint256" .
+
+ex:SupplyChain_Func_produceItemByFarmer_uint256_string_string_string_string_string_uint256_Param_originFarmInformation a ex:Parameter ;
+    ex:hasName "_originFarmInformation" ;
+    ex:hasType "string" .
+
+ex:SupplyChain_Func_produceItemByFarmer_uint256_string_string_string_string_string_uint256_Param_originFarmLatitude a ex:Parameter ;
+    ex:hasName "_originFarmLatitude" ;
+    ex:hasType "string" .
+
+ex:SupplyChain_Func_produceItemByFarmer_uint256_string_string_string_string_string_uint256_Param_originFarmLongitude a ex:Parameter ;
+    ex:hasName "_originFarmLongitude" ;
+    ex:hasType "string" .
+
+ex:SupplyChain_Func_produceItemByFarmer_uint256_string_string_string_string_string_uint256_Param_originFarmName a ex:Parameter ;
+    ex:hasName "_originFarmName" ;
+    ex:hasType "string" .
+
+ex:SupplyChain_Func_produceItemByFarmer_uint256_string_string_string_string_string_uint256_Param_price a ex:Parameter ;
+    ex:hasName "_price" ;
+    ex:hasType "uint256" ;
+    ex:isMonetaryValue true .
+
+ex:SupplyChain_Func_produceItemByFarmer_uint256_string_string_string_string_string_uint256_Param_productNotes a ex:Parameter ;
+    ex:hasName "_productNotes" ;
+    ex:hasType "string" .
+
+ex:SupplyChain_Func_produceItemByFarmer_uint256_string_string_string_string_string_uint256_Param_upc a ex:Parameter ;
+    ex:hasName "_upc" ;
+    ex:hasType "uint256" .
+
+ex:SupplyChain_Func_purchaseItemByConsumer_uint256_Param_upc a ex:Parameter ;
+    ex:hasName "_upc" ;
+    ex:hasType "uint256" .
+
+ex:SupplyChain_Func_purchaseItemByDistributor_uint256_Param_upc a ex:Parameter ;
+    ex:hasName "_upc" ;
+    ex:hasType "uint256" .
+
+ex:SupplyChain_Func_purchaseItemByRetailer_uint256_Param_upc a ex:Parameter ;
+    ex:hasName "_upc" ;
+    ex:hasType "uint256" .
+
+ex:SupplyChain_Func_receivedItemByDistributor_uint256_Param_upc a ex:Parameter ;
+    ex:hasName "_upc" ;
+    ex:hasType "uint256" .
+
+ex:SupplyChain_Func_receivedItemByRetailer_uint256_Param_upc a ex:Parameter ;
+    ex:hasName "_upc" ;
+    ex:hasType "uint256" .
+
+ex:SupplyChain_Func_sellItemByDistributor_uint256_uint256_Param_price a ex:Parameter ;
+    ex:hasName "_price" ;
+    ex:hasType "uint256" ;
+    ex:isMonetaryValue true .
+
+ex:SupplyChain_Func_sellItemByDistributor_uint256_uint256_Param_upc a ex:Parameter ;
+    ex:hasName "_upc" ;
+    ex:hasType "uint256" .
+
+ex:SupplyChain_Func_sellItemByFarmer_uint256_uint256_Param_price a ex:Parameter ;
+    ex:hasName "_price" ;
+    ex:hasType "uint256" ;
+    ex:isMonetaryValue true .
+
+ex:SupplyChain_Func_sellItemByFarmer_uint256_uint256_Param_upc a ex:Parameter ;
+    ex:hasName "_upc" ;
+    ex:hasType "uint256" .
+
+ex:SupplyChain_Func_sellItemByRetailer_uint256_uint256_Param_price a ex:Parameter ;
+    ex:hasName "_price" ;
+    ex:hasType "uint256" ;
+    ex:isMonetaryValue true .
+
+ex:SupplyChain_Func_sellItemByRetailer_uint256_uint256_Param_upc a ex:Parameter ;
+    ex:hasName "_upc" ;
+    ex:hasType "uint256" .
+
+ex:SupplyChain_Func_shippedItemByDistributor_uint256_Param_upc a ex:Parameter ;
+    ex:hasName "_upc" ;
+    ex:hasType "uint256" .
+
+ex:SupplyChain_Func_shippedItemByFarmer_uint256_Param_upc a ex:Parameter ;
+    ex:hasName "_upc" ;
+    ex:hasType "uint256" .
+
+ex:SupplyChain_Modifier_onlyOwner a ex:Modifier ;
+    ex:hasName "onlyOwner" .
+
+ex:SupplyChain_Modifier_purchasedByConsumer a ex:Modifier ;
+    ex:hasName "purchasedByConsumer" .
+
+ex:SupplyChain_constructor a ex:Function,
+        ex:PayableFunction ;
+    ex:hasName "constructor()" ;
+    ex:hasVisibility "public" ;
+    ex:writesVariable ex:SupplyChain_Var_owner,
+        ex:SupplyChain_Var_sku,
+        ex:SupplyChain_Var_upc .
+
+ex:SupplyChain_fetchItemBufferOne_uint256 a ex:Function ;
+    ex:hasName "fetchItemBufferOne(uint256)" ;
+    ex:hasParameter ex:SupplyChain_Func_fetchItemBufferOne_uint256_Param_upc ;
+    ex:hasVisibility "public" ;
+    ex:readsVariable ex:SupplyChain_Var_items .
+
+ex:SupplyChain_fetchItemBufferTwo_uint256 a ex:Function ;
+    ex:hasName "fetchItemBufferTwo(uint256)" ;
+    ex:hasParameter ex:SupplyChain_Func_fetchItemBufferTwo_uint256_Param_upc ;
+    ex:hasVisibility "public" ;
+    ex:readsVariable ex:SupplyChain_Var_items .
+
+ex:SupplyChain_fetchitemHistory_uint256 a ex:Function ;
+    ex:hasName "fetchitemHistory(uint256)" ;
+    ex:hasParameter ex:SupplyChain_Func_fetchitemHistory_uint256_Param_upc ;
+    ex:hasVisibility "public" ;
+    ex:readsVariable ex:SupplyChain_Var_itemsHistory .
+
+ex:SupplyChain_kill a ex:Function ;
+    ex:hasName "kill()" ;
+    ex:hasVisibility "public" ;
+    ex:readsVariable ex:SupplyChain_Var_owner .
+
+ex:SupplyChain_make_payable_address a ex:Function ;
+    ex:hasName "_make_payable(address)" ;
+    ex:hasParameter ex:SupplyChain_Func_make_payable_address_Param_x ;
+    ex:hasVisibility "internal" .
+
+ex:SupplyChain_packageItemByDistributor_uint256 a ex:AccessControlledFunction,
+        ex:Function ;
+    ex:hasAccessControl ex:SupplyChain_Modifier_onlyDistributor,
+        ex:SupplyChain_Modifier_processByDistributor,
+        ex:SupplyChain_Modifier_verifyCaller ;
+    ex:hasName "packageItemByDistributor(uint256)" ;
+    ex:hasParameter ex:SupplyChain_Func_packageItemByDistributor_uint256_Param_upc ;
+    ex:hasVisibility "public" ;
+    ex:readsVariable ex:SupplyChain_Var_items ;
+    ex:writesVariable ex:SupplyChain_Var_items .
+
+ex:SupplyChain_processedItemByDistributor_uint256_uint256 a ex:AccessControlledFunction,
+        ex:Function ;
+    ex:hasAccessControl ex:SupplyChain_Modifier_onlyDistributor,
+        ex:SupplyChain_Modifier_receivedByDistributor,
+        ex:SupplyChain_Modifier_verifyCaller ;
+    ex:hasName "processedItemByDistributor(uint256,uint256)" ;
+    ex:hasParameter ex:SupplyChain_Func_processedItemByDistributor_uint256_uint256_Param_slices,
+        ex:SupplyChain_Func_processedItemByDistributor_uint256_uint256_Param_upc ;
+    ex:hasVisibility "public" ;
+    ex:readsVariable ex:SupplyChain_Var_items ;
+    ex:writesVariable ex:SupplyChain_Var_items .
+
+ex:SupplyChain_produceItemByFarmer_uint256_string_string_string_string_string_uint256 a ex:AccessControlledFunction,
+        ex:Function ;
+    ex:hasAccessControl ex:SupplyChain_Modifier_onlyFarmer ;
+    ex:hasName "produceItemByFarmer(uint256,string,string,string,string,string,uint256)" ;
+    ex:hasParameter ex:SupplyChain_Func_produceItemByFarmer_uint256_string_string_string_string_string_uint256_Param_originFarmInformation,
+        ex:SupplyChain_Func_produceItemByFarmer_uint256_string_string_string_string_string_uint256_Param_originFarmLatitude,
+        ex:SupplyChain_Func_produceItemByFarmer_uint256_string_string_string_string_string_uint256_Param_originFarmLongitude,
+        ex:SupplyChain_Func_produceItemByFarmer_uint256_string_string_string_string_string_uint256_Param_originFarmName,
+        ex:SupplyChain_Func_produceItemByFarmer_uint256_string_string_string_string_string_uint256_Param_price,
+        ex:SupplyChain_Func_produceItemByFarmer_uint256_string_string_string_string_string_uint256_Param_productNotes,
+        ex:SupplyChain_Func_produceItemByFarmer_uint256_string_string_string_string_string_uint256_Param_upc ;
+    ex:hasVisibility "public" ;
+    ex:readsVariable ex:SupplyChain_Var_defaultState,
+        ex:SupplyChain_Var_sku ;
+    ex:writesVariable ex:SupplyChain_Var_items,
+        ex:SupplyChain_Var_itemsHistory,
+        ex:SupplyChain_Var_sku .
+
+ex:SupplyChain_purchaseItemByConsumer_uint256 a ex:AccessControlledFunction,
+        ex:Function,
+        ex:PayableFunction ;
+    ex:hasAccessControl ex:SupplyChain_Modifier_checkValue,
+        ex:SupplyChain_Modifier_forSaleByRetailer,
+        ex:SupplyChain_Modifier_onlyConsumer,
+        ex:SupplyChain_Modifier_paidEnough ;
+    ex:hasName "purchaseItemByConsumer(uint256)" ;
+    ex:hasParameter ex:SupplyChain_Func_purchaseItemByConsumer_uint256_Param_upc ;
+    ex:hasVisibility "public" ;
+    ex:readsVariable ex:SupplyChain_Var_items,
+        ex:SupplyChain_Var_itemsHistory ;
+    ex:writesVariable ex:SupplyChain_Var_items,
+        ex:SupplyChain_Var_itemsHistory .
+
+ex:SupplyChain_purchaseItemByDistributor_uint256 a ex:AccessControlledFunction,
+        ex:Function,
+        ex:PayableFunction ;
+    ex:hasAccessControl ex:SupplyChain_Modifier_checkValue,
+        ex:SupplyChain_Modifier_forSaleByFarmer,
+        ex:SupplyChain_Modifier_onlyDistributor,
+        ex:SupplyChain_Modifier_paidEnough ;
+    ex:hasName "purchaseItemByDistributor(uint256)" ;
+    ex:hasParameter ex:SupplyChain_Func_purchaseItemByDistributor_uint256_Param_upc ;
+    ex:hasVisibility "public" ;
+    ex:readsVariable ex:SupplyChain_Var_items,
+        ex:SupplyChain_Var_itemsHistory ;
+    ex:writesVariable ex:SupplyChain_Var_items,
+        ex:SupplyChain_Var_itemsHistory .
+
+ex:SupplyChain_purchaseItemByRetailer_uint256 a ex:AccessControlledFunction,
+        ex:Function,
+        ex:PayableFunction ;
+    ex:hasAccessControl ex:SupplyChain_Modifier_checkValue,
+        ex:SupplyChain_Modifier_forSaleByDistributor,
+        ex:SupplyChain_Modifier_onlyRetailer,
+        ex:SupplyChain_Modifier_paidEnough ;
+    ex:hasName "purchaseItemByRetailer(uint256)" ;
+    ex:hasParameter ex:SupplyChain_Func_purchaseItemByRetailer_uint256_Param_upc ;
+    ex:hasVisibility "public" ;
+    ex:readsVariable ex:SupplyChain_Var_items,
+        ex:SupplyChain_Var_itemsHistory ;
+    ex:writesVariable ex:SupplyChain_Var_items,
+        ex:SupplyChain_Var_itemsHistory .
+
+ex:SupplyChain_receivedItemByDistributor_uint256 a ex:AccessControlledFunction,
+        ex:Function ;
+    ex:hasAccessControl ex:SupplyChain_Modifier_onlyDistributor,
+        ex:SupplyChain_Modifier_shippedByFarmer,
+        ex:SupplyChain_Modifier_verifyCaller ;
+    ex:hasName "receivedItemByDistributor(uint256)" ;
+    ex:hasParameter ex:SupplyChain_Func_receivedItemByDistributor_uint256_Param_upc ;
+    ex:hasVisibility "public" ;
+    ex:readsVariable ex:SupplyChain_Var_items ;
+    ex:writesVariable ex:SupplyChain_Var_items .
+
+ex:SupplyChain_receivedItemByRetailer_uint256 a ex:AccessControlledFunction,
+        ex:Function ;
+    ex:hasAccessControl ex:SupplyChain_Modifier_onlyRetailer,
+        ex:SupplyChain_Modifier_shippedByDistributor,
+        ex:SupplyChain_Modifier_verifyCaller ;
+    ex:hasName "receivedItemByRetailer(uint256)" ;
+    ex:hasParameter ex:SupplyChain_Func_receivedItemByRetailer_uint256_Param_upc ;
+    ex:hasVisibility "public" ;
+    ex:readsVariable ex:SupplyChain_Var_items ;
+    ex:writesVariable ex:SupplyChain_Var_items .
+
+ex:SupplyChain_sellItemByDistributor_uint256_uint256 a ex:AccessControlledFunction,
+        ex:Function ;
+    ex:hasAccessControl ex:SupplyChain_Modifier_onlyDistributor,
+        ex:SupplyChain_Modifier_packagedByDistributor,
+        ex:SupplyChain_Modifier_verifyCaller ;
+    ex:hasName "sellItemByDistributor(uint256,uint256)" ;
+    ex:hasParameter ex:SupplyChain_Func_sellItemByDistributor_uint256_uint256_Param_price,
+        ex:SupplyChain_Func_sellItemByDistributor_uint256_uint256_Param_upc ;
+    ex:hasVisibility "public" ;
+    ex:readsVariable ex:SupplyChain_Var_items,
+        ex:SupplyChain_Var_upc ;
+    ex:writesVariable ex:SupplyChain_Var_items .
+
+ex:SupplyChain_sellItemByFarmer_uint256_uint256 a ex:AccessControlledFunction,
+        ex:Function ;
+    ex:hasAccessControl ex:SupplyChain_Modifier_onlyFarmer,
+        ex:SupplyChain_Modifier_producedByFarmer,
+        ex:SupplyChain_Modifier_verifyCaller ;
+    ex:hasName "sellItemByFarmer(uint256,uint256)" ;
+    ex:hasParameter ex:SupplyChain_Func_sellItemByFarmer_uint256_uint256_Param_price,
+        ex:SupplyChain_Func_sellItemByFarmer_uint256_uint256_Param_upc ;
+    ex:hasVisibility "public" ;
+    ex:readsVariable ex:SupplyChain_Var_items ;
+    ex:writesVariable ex:SupplyChain_Var_items .
+
+ex:SupplyChain_sellItemByRetailer_uint256_uint256 a ex:AccessControlledFunction,
+        ex:Function ;
+    ex:hasAccessControl ex:SupplyChain_Modifier_onlyRetailer,
+        ex:SupplyChain_Modifier_receivedByRetailer,
+        ex:SupplyChain_Modifier_verifyCaller ;
+    ex:hasName "sellItemByRetailer(uint256,uint256)" ;
+    ex:hasParameter ex:SupplyChain_Func_sellItemByRetailer_uint256_uint256_Param_price,
+        ex:SupplyChain_Func_sellItemByRetailer_uint256_uint256_Param_upc ;
+    ex:hasVisibility "public" ;
+    ex:readsVariable ex:SupplyChain_Var_items ;
+    ex:writesVariable ex:SupplyChain_Var_items .
+
+ex:SupplyChain_shippedItemByDistributor_uint256 a ex:AccessControlledFunction,
+        ex:Function ;
+    ex:hasAccessControl ex:SupplyChain_Modifier_onlyDistributor,
+        ex:SupplyChain_Modifier_purchasedByRetailer,
+        ex:SupplyChain_Modifier_verifyCaller ;
+    ex:hasName "shippedItemByDistributor(uint256)" ;
+    ex:hasParameter ex:SupplyChain_Func_shippedItemByDistributor_uint256_Param_upc ;
+    ex:hasVisibility "public" ;
+    ex:readsVariable ex:SupplyChain_Var_items ;
+    ex:writesVariable ex:SupplyChain_Var_items .
+
+ex:SupplyChain_shippedItemByFarmer_uint256 a ex:AccessControlledFunction,
+        ex:Function,
+        ex:PayableFunction ;
+    ex:hasAccessControl ex:SupplyChain_Modifier_onlyFarmer,
+        ex:SupplyChain_Modifier_purchasedByDistributor,
+        ex:SupplyChain_Modifier_verifyCaller ;
+    ex:hasName "shippedItemByFarmer(uint256)" ;
+    ex:hasParameter ex:SupplyChain_Func_shippedItemByFarmer_uint256_Param_upc ;
+    ex:hasVisibility "public" ;
+    ex:readsVariable ex:SupplyChain_Var_items ;
+    ex:writesVariable ex:SupplyChain_Var_items .
+
+ex:SupplyChain_slitherConstructorConstantVariables a ex:Function ;
+    ex:hasName "slitherConstructorConstantVariables()" ;
+    ex:hasVisibility "internal" ;
+    ex:writesVariable ex:SupplyChain_Var_defaultState .
+
+ex:ConsumerRole_Modifier_onlyConsumer a ex:Modifier ;
+    ex:hasName "onlyConsumer" .
+
+ex:DistributorRole_Modifier_onlyDistributor a ex:Modifier ;
+    ex:hasName "onlyDistributor" .
+
+ex:FarmerRole_Modifier_onlyFarmer a ex:Modifier ;
+    ex:hasName "onlyFarmer" .
+
+ex:RetailerRole_Modifier_onlyRetailer a ex:Modifier ;
+    ex:hasName "onlyRetailer" .
+
+ex:SupplyChain_Modifier_forSaleByDistributor a ex:Modifier ;
+    ex:hasName "forSaleByDistributor" .
+
+ex:SupplyChain_Modifier_forSaleByFarmer a ex:Modifier ;
+    ex:hasName "forSaleByFarmer" .
+
+ex:SupplyChain_Modifier_forSaleByRetailer a ex:Modifier ;
+    ex:hasName "forSaleByRetailer" .
+
+ex:SupplyChain_Modifier_onlyConsumer a ex:Modifier ;
+    ex:hasName "onlyConsumer" .
+
+ex:SupplyChain_Modifier_packagedByDistributor a ex:Modifier ;
+    ex:hasName "packagedByDistributor" .
+
+ex:SupplyChain_Modifier_processByDistributor a ex:Modifier ;
+    ex:hasName "processByDistributor" .
+
+ex:SupplyChain_Modifier_producedByFarmer a ex:Modifier ;
+    ex:hasName "producedByFarmer" .
+
+ex:SupplyChain_Modifier_purchasedByDistributor a ex:Modifier ;
+    ex:hasName "purchasedByDistributor" .
+
+ex:SupplyChain_Modifier_purchasedByRetailer a ex:Modifier ;
+    ex:hasName "purchasedByRetailer" .
+
+ex:SupplyChain_Modifier_receivedByDistributor a ex:Modifier ;
+    ex:hasName "receivedByDistributor" .
+
+ex:SupplyChain_Modifier_receivedByRetailer a ex:Modifier ;
+    ex:hasName "receivedByRetailer" .
+
+ex:SupplyChain_Modifier_shippedByDistributor a ex:Modifier ;
+    ex:hasName "shippedByDistributor" .
+
+ex:SupplyChain_Modifier_shippedByFarmer a ex:Modifier ;
+    ex:hasName "shippedByFarmer" .
+
+ex:Ownable_Modifier_onlyOwner a ex:Modifier ;
+    ex:hasName "onlyOwner" .
+
+ex:SupplyChain_Var_defaultState a ex:StateVariable ;
+    ex:hasName "defaultState" ;
+    ex:hasType "SupplyChain.State" ;
+    ex:hasVisibility "internal" .
+
+ex:SupplyChain_Var_owner a ex:StateVariable ;
+    ex:hasName "owner" ;
+    ex:hasType "address" ;
+    ex:hasVisibility "internal" .
+
+ex:SupplyChain_Var_upc a ex:StateVariable ;
+    ex:hasName "upc" ;
+    ex:hasType "uint256" ;
+    ex:hasVisibility "internal" .
+
+ex:ConsumerRole_Var_consumers a ex:StateVariable ;
+    ex:hasName "consumers" ;
+    ex:hasType "Roles.Role" ;
+    ex:hasVisibility "private" .
+
+ex:DistributorRole_Var_distributors a ex:StateVariable ;
+    ex:hasName "distributors" ;
+    ex:hasType "Roles.Role" ;
+    ex:hasVisibility "private" .
+
+ex:FarmerRole_Var_farmers a ex:StateVariable ;
+    ex:hasName "farmers" ;
+    ex:hasType "Roles.Role" ;
+    ex:hasVisibility "private" .
+
+ex:RetailerRole_Var_retailers a ex:StateVariable ;
+    ex:hasName "retailers" ;
+    ex:hasType "Roles.Role" ;
+    ex:hasVisibility "private" .
+
+ex:SupplyChain_Modifier_checkValue a ex:Modifier ;
+    ex:hasName "checkValue" .
+
+ex:SupplyChain_Modifier_onlyFarmer a ex:Modifier ;
+    ex:hasName "onlyFarmer" .
+
+ex:SupplyChain_Modifier_onlyRetailer a ex:Modifier ;
+    ex:hasName "onlyRetailer" .
+
+ex:SupplyChain_Modifier_paidEnough a ex:Modifier ;
+    ex:hasName "paidEnough" .
+
+ex:SupplyChain_Var_sku a ex:StateVariable ;
+    ex:hasName "sku" ;
+    ex:hasType "uint256" ;
+    ex:hasVisibility "internal" .
+
+ex:SupplyChain_Modifier_onlyDistributor a ex:Modifier ;
+    ex:hasName "onlyDistributor" .
+
+ex:Ownable_Var_origOwner a ex:StateVariable ;
+    ex:hasName "origOwner" ;
+    ex:hasType "address" ;
+    ex:hasVisibility "private" .
+
+ex:SupplyChain_Var_itemsHistory a ex:StateVariable ;
+    ex:hasName "itemsHistory" ;
+    ex:hasType "mapping(uint256 => SupplyChain.Txblocks)" ;
+    ex:hasVisibility "internal" ;
+    ex:isMonetaryValue true .
+
+ex:SupplyChain_Modifier_verifyCaller a ex:Modifier ;
+    ex:hasName "verifyCaller" .
+
+ex:SupplyChain_Var_items a ex:StateVariable ;
+    ex:hasName "items" ;
+    ex:hasType "mapping(uint256 => SupplyChain.Item)" ;
+    ex:hasVisibility "internal" ;
+    ex:isMonetaryValue true .
+
