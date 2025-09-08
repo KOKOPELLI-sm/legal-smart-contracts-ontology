@@ -1,160 +1,227 @@
-@prefix ex:   <http://example.org/smartcontracts#> .
-@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix : <file:/C:/Users/user/Documents/SmartContracts%20Slither%20Telst/ontologies/master_ontology.ttl#> .
+@prefix ex: <http://example.org/smartcontracts#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
-@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-
-# LKIF module prefixes (resolved locally via your catalog)
-@prefix lkif-core:         <http://www.estrellaproject.org/lkif-core/lkif-core.owl#> .
-@prefix lkif-action:       <http://www.estrellaproject.org/lkif-core/action.owl#> .
-@prefix lkif-expr:         <http://www.estrellaproject.org/lkif-core/expression.owl#> .
+@prefix lkif-core: <http://www.estrellaproject.org/lkif-core/lkif-core.owl#> .
+@prefix lkif-expr: <http://www.estrellaproject.org/lkif-core/expression.owl#> .
+@prefix lkif-norm: <http://www.estrellaproject.org/lkif-core/norm.owl#> .
+@prefix lkif-proc: <http://www.estrellaproject.org/lkif-core/process.owl#> .
+@prefix lkif-role: <http://www.estrellaproject.org/lkif-core/role.owl#> .
+@prefix lkif-action: <http://www.estrellaproject.org/lkif-core/action.owl#> .
+@prefix lkif-legal-role: <http://www.estrellaproject.org/lkif-core/legal-role.owl#> .
 @prefix lkif-legal-action: <http://www.estrellaproject.org/lkif-core/legal-action.owl#> .
-@prefix lkif-legal-role:   <http://www.estrellaproject.org/lkif-core/legal-role.owl#> .
-@prefix lkif-role:         <http://www.estrellaproject.org/lkif-core/role.owl#> .
-@prefix lkif-proc:         <http://www.estrellaproject.org/lkif-core/process.owl#> .
-@prefix lkif-norm:         <http://www.estrellaproject.org/lkif-core/norm.owl#> .
+@base <file:/C:/Users/user/Documents/SmartContracts%20Slither%20Telst/ontologies/master_ontology.ttl> .
+
+<file:/C:/Users/user/Documents/SmartContracts%20Slither%20Telst/ontologies/master_ontology.ttl> rdf:type owl:Ontology ;
+                                                                                                 owl:imports <http://www.estrellaproject.org/lkif-core/action.owl> ,
+                                                                                                             <http://www.estrellaproject.org/lkif-core/expression.owl> ,
+                                                                                                             <http://www.estrellaproject.org/lkif-core/legal-action.owl> ,
+                                                                                                             <http://www.estrellaproject.org/lkif-core/legal-role.owl> ,
+                                                                                                             <http://www.estrellaproject.org/lkif-core/lkif-core.owl> ,
+                                                                                                             <http://www.estrellaproject.org/lkif-core/norm.owl> ,
+                                                                                                             <http://www.estrellaproject.org/lkif-core/process.owl> ,
+                                                                                                             <http://www.estrellaproject.org/lkif-core/role.owl> ;
+                                                                                                 rdfs:label "Smart Contracts master ontology"@en .
 
 #################################################################
-# Ontology header + imports (LKIF modules)
+#    Object Properties
 #################################################################
 
-<> a owl:Ontology ;
-   rdfs:label "Smart Contracts master ontology"@en ;
-   owl:imports
-       <http://www.estrellaproject.org/lkif-core/lkif-core.owl> ,
-       <http://www.estrellaproject.org/lkif-core/action.owl> ,
-       <http://www.estrellaproject.org/lkif-core/expression.owl> ,
-       <http://www.estrellaproject.org/lkif-core/legal-action.owl> ,
-       <http://www.estrellaproject.org/lkif-core/legal-role.owl> ,
-       <http://www.estrellaproject.org/lkif-core/role.owl> ,
-       <http://www.estrellaproject.org/lkif-core/process.owl> ,
-       <http://www.estrellaproject.org/lkif-core/norm.owl>
-   .
+###  http://example.org/smartcontracts#emitsEvent
+ex:emitsEvent rdf:type owl:ObjectProperty ;
+              rdfs:domain ex:Function ;
+              rdfs:range ex:Event ;
+              rdfs:label "emits event"@en .
+
+
+###  http://example.org/smartcontracts#hasAccessControl
+ex:hasAccessControl rdf:type owl:ObjectProperty ;
+                    rdfs:domain ex:Function ;
+                    rdfs:range ex:Modifier ;
+                    rdfs:label "has access control"@en .
+
+
+###  http://example.org/smartcontracts#hasEvent
+ex:hasEvent rdf:type owl:ObjectProperty ;
+            rdfs:domain ex:SmartContract ;
+            rdfs:range ex:Event ;
+            rdfs:label "has event"@en .
+
+
+###  http://example.org/smartcontracts#hasFunction
+ex:hasFunction rdf:type owl:ObjectProperty ;
+               rdfs:domain ex:SmartContract ;
+               rdfs:range ex:Function ;
+               rdfs:label "has function"@en .
+
+
+###  http://example.org/smartcontracts#hasMember
+ex:hasMember rdf:type owl:ObjectProperty ;
+             rdfs:domain ex:Struct ;
+             rdfs:range ex:StructMember ;
+             rdfs:label "has member"@en .
+
+
+###  http://example.org/smartcontracts#hasModifier
+ex:hasModifier rdf:type owl:ObjectProperty ;
+               rdfs:domain ex:SmartContract ;
+               rdfs:range ex:Modifier ;
+               rdfs:label "has modifier (declared in contract)"@en .
+
+
+###  http://example.org/smartcontracts#hasParameter
+ex:hasParameter rdf:type owl:ObjectProperty ;
+                rdfs:domain ex:Function ;
+                rdfs:range ex:Parameter ;
+                rdfs:label "has parameter"@en .
+
+
+###  http://example.org/smartcontracts#hasStruct
+ex:hasStruct rdf:type owl:ObjectProperty ;
+             rdfs:domain ex:SmartContract ;
+             rdfs:range ex:Struct ;
+             rdfs:label "has struct"@en .
+
+
+###  http://example.org/smartcontracts#hasVariable
+ex:hasVariable rdf:type owl:ObjectProperty ;
+               rdfs:domain ex:SmartContract ;
+               rdfs:range ex:StateVariable ;
+               rdfs:label "has state variable"@en .
+
+
+###  http://example.org/smartcontracts#readsVariable
+ex:readsVariable rdf:type owl:ObjectProperty ;
+                 rdfs:domain ex:Function ;
+                 rdfs:range ex:StateVariable ;
+                 rdfs:label "reads variable"@en .
+
+
+###  http://example.org/smartcontracts#writesVariable
+ex:writesVariable rdf:type owl:ObjectProperty ;
+                  rdfs:domain ex:Function ;
+                  rdfs:range ex:StateVariable ;
+                  rdfs:label "writes variable"@en .
+
 
 #################################################################
-# Classes (core)
+#    Data properties
 #################################################################
 
-ex:ContractComponent a owl:Class ;
-  rdfs:label "ContractComponent"@en ;
-  rdfs:comment "Abstract super-class for extracted smart-contract elements."@en .
+###  http://example.org/smartcontracts#hasName
+ex:hasName rdf:type owl:DatatypeProperty ;
+           rdfs:domain ex:ContractComponent ;
+           rdfs:range xsd:string ;
+           rdfs:label "has name"@en .
 
-ex:SmartContract a owl:Class ; rdfs:subClassOf ex:ContractComponent .
-ex:Function      a owl:Class ; rdfs:subClassOf ex:ContractComponent .
-ex:AccessControlledFunction a owl:Class ; rdfs:subClassOf ex:Function .
-ex:PayableFunction a owl:Class ; rdfs:subClassOf ex:Function .
-ex:Event         a owl:Class ; rdfs:subClassOf ex:ContractComponent .
-ex:StateVariable a owl:Class ; rdfs:subClassOf ex:ContractComponent .
-ex:Modifier      a owl:Class ; rdfs:subClassOf ex:ContractComponent .
-ex:Struct        a owl:Class ; rdfs:subClassOf ex:ContractComponent .
-ex:StructMember  a owl:Class ; rdfs:subClassOf ex:ContractComponent .
-ex:Parameter     a owl:Class ; rdfs:subClassOf ex:ContractComponent .
 
-# Named union for hasVisibility domain: Function ⊔ StateVariable
-ex:FunctionOrState a owl:Class ;
-  owl:unionOf ( ex:Function ex:StateVariable ) ;
-  rdfs:label "FunctionOrState"@en ;
-  rdfs:comment "Union of Function and StateVariable for shared properties like visibility."@en .
+###  http://example.org/smartcontracts#hasType
+ex:hasType rdf:type owl:DatatypeProperty ;
+           rdfs:domain ex:ContractComponent ;
+           rdfs:range xsd:string ;
+           rdfs:label "has type string"@en .
 
-#################################################################
-# Object Properties (explicit domain/range)
-#################################################################
 
-ex:hasFunction a owl:ObjectProperty ;
-  rdfs:domain ex:SmartContract ;
-  rdfs:range  ex:Function ;
-  rdfs:label "has function"@en .
+###  http://example.org/smartcontracts#hasVisibility
+ex:hasVisibility rdf:type owl:DatatypeProperty ;
+                 rdfs:domain ex:FunctionOrState ;
+                 rdfs:range xsd:string ;
+                 rdfs:comment "Visibility for functions and state variables (e.g., public/private/internal)."@en ;
+                 rdfs:label "has visibility"@en .
 
-ex:hasEvent a owl:ObjectProperty ;
-  rdfs:domain ex:SmartContract ;
-  rdfs:range  ex:Event ;
-  rdfs:label "has event"@en .
 
-ex:hasVariable a owl:ObjectProperty ;
-  rdfs:domain ex:SmartContract ;
-  rdfs:range  ex:StateVariable ;
-  rdfs:label "has state variable"@en .
+###  http://example.org/smartcontracts#isMonetaryValue
+ex:isMonetaryValue rdf:type owl:DatatypeProperty ;
+                   rdfs:domain [ rdf:type owl:Class ;
+                                 owl:unionOf ( ex:Parameter
+                                               ex:StateVariable
+                                             )
+                               ] ;
+                   rdfs:range xsd:boolean ;
+                   rdfs:comment "Heuristic flag (amount|price|value|deposit|rent|fee|cost, etc.)."@en ;
+                   rdfs:label "is monetary value"@en .
 
-# Declared modifiers on the contract
-ex:hasModifier a owl:ObjectProperty ;
-  rdfs:domain ex:SmartContract ;
-  rdfs:range  ex:Modifier ;
-  rdfs:label "has modifier (declared in contract)"@en .
-
-# Function-level access control via modifier
-ex:hasAccessControl a owl:ObjectProperty ;
-  rdfs:domain ex:Function ;
-  rdfs:range  ex:Modifier ;
-  rdfs:label "has access control"@en .
-
-ex:hasStruct a owl:ObjectProperty ;
-  rdfs:domain ex:SmartContract ;
-  rdfs:range  ex:Struct ;
-  rdfs:label "has struct"@en .
-
-ex:hasMember a owl:ObjectProperty ;
-  rdfs:domain ex:Struct ;
-  rdfs:range  ex:StructMember ;
-  rdfs:label "has member"@en .
-
-# ONLY Function → Parameter (no Event parameters in the core)
-ex:hasParameter a owl:ObjectProperty ;
-  rdfs:domain ex:Function ;
-  rdfs:range  ex:Parameter ;
-  rdfs:label "has parameter"@en .
-
-ex:readsVariable a owl:ObjectProperty ;
-  rdfs:domain ex:Function ;
-  rdfs:range  ex:StateVariable ;
-  rdfs:label "reads variable"@en .
-
-ex:writesVariable a owl:ObjectProperty ;
-  rdfs:domain ex:Function ;
-  rdfs:range  ex:StateVariable ;
-  rdfs:label "writes variable"@en .
-
-# STRICT: Function → Event
-ex:emitsEvent a owl:ObjectProperty ;
-  rdfs:domain ex:Function ;
-  rdfs:range  ex:Event ;
-  rdfs:label "emits event"@en .
 
 #################################################################
-# Datatype Properties
+#    Classes
 #################################################################
 
-ex:hasName a owl:DatatypeProperty ;
-  rdfs:domain ex:ContractComponent ;
-  rdfs:range  xsd:string ;
-  rdfs:label "has name"@en .
+###  http://example.org/smartcontracts#AccessControlledFunction
+ex:AccessControlledFunction rdf:type owl:Class ;
+                            rdfs:subClassOf ex:Function ,
+                                            lkif-action:Action .
 
-ex:hasType a owl:DatatypeProperty ;
-  rdfs:domain ex:ContractComponent ;
-  rdfs:range  xsd:string ;
-  rdfs:label "has type string"@en .
 
-# Reuse the canonical name with the CORRECT domain
-ex:hasVisibility a owl:DatatypeProperty ;
-  rdfs:domain ex:FunctionOrState ;   # Function ⊔ StateVariable
-  rdfs:range  xsd:string ;
-  rdfs:label "has visibility"@en ;
-  rdfs:comment "Visibility for functions and state variables (e.g., public/private/internal)."@en .
+###  http://example.org/smartcontracts#ContractComponent
+ex:ContractComponent rdf:type owl:Class ;
+                     rdfs:comment "Abstract super-class for extracted smart-contract elements."@en ;
+                     rdfs:label "ContractComponent"@en .
 
-# Monetary flag for Parameters AND StateVariables (technical/heuristic)
-ex:isMonetaryValue a owl:DatatypeProperty ;
-  rdfs:domain [ a owl:Class ; owl:unionOf ( ex:Parameter ex:StateVariable ) ] ;
-  rdfs:range  xsd:boolean ;
-  rdfs:label "is monetary value"@en ;
-  rdfs:comment "Heuristic flag (amount|price|value|deposit|rent|fee|cost, etc.)."@en .
 
-#################################################################
-# LKIF BRIDGING (embedded in the master)
-#################################################################
+###  http://example.org/smartcontracts#Event
+ex:Event rdf:type owl:Class ;
+         rdfs:subClassOf ex:ContractComponent .
 
-# Conservative subclassing for automatic alignment with LKIF
-ex:Function                 rdfs:subClassOf lkif-action:Action .
-ex:AccessControlledFunction rdfs:subClassOf lkif-action:Action .
-ex:PayableFunction          rdfs:subClassOf lkif-action:Action .
 
-# Smart contract as a legal contract (LKIF legal-action)
-ex:SmartContract            rdfs:subClassOf lkif-legal-action:Contract .
+###  http://example.org/smartcontracts#Function
+ex:Function rdf:type owl:Class ;
+            rdfs:subClassOf ex:ContractComponent ,
+                            lkif-action:Action .
+
+
+###  http://example.org/smartcontracts#FunctionOrState
+ex:FunctionOrState rdf:type owl:Class ;
+                   owl:equivalentClass [ rdf:type owl:Class ;
+                                         owl:unionOf ( ex:Function
+                                                       ex:StateVariable
+                                                     )
+                                       ] ;
+                   rdfs:comment "Union of Function and StateVariable for shared properties like visibility."@en ;
+                   rdfs:label "FunctionOrState"@en .
+
+
+###  http://example.org/smartcontracts#Modifier
+ex:Modifier rdf:type owl:Class ;
+            rdfs:subClassOf ex:ContractComponent .
+
+
+###  http://example.org/smartcontracts#Parameter
+ex:Parameter rdf:type owl:Class ;
+             rdfs:subClassOf ex:ContractComponent .
+
+
+###  http://example.org/smartcontracts#PayableFunction
+ex:PayableFunction rdf:type owl:Class ;
+                   rdfs:subClassOf ex:Function ,
+                                   lkif-action:Action .
+
+
+###  http://example.org/smartcontracts#SmartContract
+ex:SmartContract rdf:type owl:Class ;
+                 rdfs:subClassOf ex:ContractComponent ,
+                                 lkif-legal-action:Contract .
+
+
+###  http://example.org/smartcontracts#StateVariable
+ex:StateVariable rdf:type owl:Class ;
+                 rdfs:subClassOf ex:ContractComponent .
+
+
+###  http://example.org/smartcontracts#Struct
+ex:Struct rdf:type owl:Class ;
+          rdfs:subClassOf ex:ContractComponent .
+
+
+###  http://example.org/smartcontracts#StructMember
+ex:StructMember rdf:type owl:Class ;
+                rdfs:subClassOf ex:ContractComponent .
+
+
+###  http://www.estrellaproject.org/lkif-core/legal-action.owl#Contract
+lkif-legal-action:Contract rdf:type owl:Class .
+
+
+###  Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi
