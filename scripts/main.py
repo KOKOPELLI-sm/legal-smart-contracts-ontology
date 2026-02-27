@@ -32,7 +32,7 @@ def make_ui(no_emoji: bool, quiet: bool):
 SAFE_RE = re.compile(r"[^A-Za-z0-9_]+")
 
 def safe_uri(s: str) -> str:
-    """Κάνει string ασφαλές για χρήση ως fragment IRI."""
+    """Makes string safe for use as fragment IRI."""
     s = s.replace("(", "_").replace(")", "")
     s = s.replace(",", "_").replace(" ", "_")
     s = SAFE_RE.sub("_", s)
@@ -43,10 +43,10 @@ MONETARY_KEYS = ("amount", "price", "value", "deposit", "rent", "fee", "cost")
 
 def is_monetary_var(name: Optional[str], typ: Optional[str]) -> bool:
     """
-    Heuristics για χρηματικές μεταβλητές κατάστασης:
-    - όνομα που περιέχει μία από τις MONETARY_KEYS,
-    - ή mapping(... => uint*) τύπος,
-    - ή int/uint με name-hint.
+    Heuristics for monetary state variables:
+    - name containing one of MONETARY_KEYS,
+    - or mapping(... => uint*) type,
+    - or int/uint with name-hint.
     """
     n = (name or "").lower()
     t = (typ or "").lower()
@@ -61,7 +61,7 @@ def is_monetary_var(name: Optional[str], typ: Optional[str]) -> bool:
 # ───────────────────────────── Schema (optional) ───────────────────────────── #
 
 def _rdf_list(g: Graph, items: list) -> BNode:
-    """Φτιάχνει RDF collection (list) και επιστρέφει το head BNode."""
+    """Creates RDF collection (list) and returns head BNode."""
     if not items:
         return RDF.nil  # type: ignore
     head = BNode()
@@ -78,7 +78,7 @@ def _rdf_list(g: Graph, items: list) -> BNode:
 
 def declare_schema(g: Graph) -> None:
     """
-    Δηλώνει ρητά κλάσεις/ιδιότητες με domains/ranges (ασφαλές να συνυπάρχει με το master TTL).
+    Explicitly declares classes/properties with domains/ranges (safe to coexist with master TTL).
     """
     # Classes
     for cls in (
@@ -132,7 +132,7 @@ def declare_schema(g: Graph) -> None:
 
 def extract(sl: Slither, g: Graph, ok, info, warn) -> Tuple[int, int, int, int, int, int, int, int, int, int, int]:
     """
-    Εξάγει τα στοιχεία στο RDF γράφο και επιστρέφει counters για summary.
+    Extracts elements to RDF graph and returns counters for summary.
     """
     n_contracts = n_functions = n_events = n_modifiers = 0
     n_structs = n_members = n_statevars = n_params = 0
@@ -268,12 +268,12 @@ def extract(sl: Slither, g: Graph, ok, info, warn) -> Tuple[int, int, int, int, 
 
 def run():
     parser = argparse.ArgumentParser()
-    parser.add_argument("target", help="Solidity file ή project directory για Slither")
-    parser.add_argument("-o", "--out", default="contracts.ttl", help="Μονοπάτι εξόδου TTL")
+    parser.add_argument("target", help="Solidity file or project directory for Slither")
+    parser.add_argument("-o", "--out", default="contracts.ttl", help="Output TTL path")
     parser.add_argument("--declare-schema", action="store_true",
-                        help="Αν οριστεί, γράφει και το schema (classes/properties/domain/range).")
-    parser.add_argument("--no-emoji", action="store_true", help="Απενεργοποίηση emoji στα logs")
-    parser.add_argument("--quiet", action="store_true", help="Ελάχιστες εκτυπώσεις")
+                        help="If set, also writes schema (classes/properties/domain/range).")
+    parser.add_argument("--no-emoji", action="store_true", help="Disable emoji in logs")
+    parser.add_argument("--quiet", action="store_true", help="Minimal output")
     args = parser.parse_args()
 
     ok, info, warn = make_ui(args.no_emoji, args.quiet)
