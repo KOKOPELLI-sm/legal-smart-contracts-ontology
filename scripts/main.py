@@ -88,7 +88,7 @@ def declare_schema(g: Graph) -> None:
     ):
         g.add((cls, RDF.type, OWL.Class))
 
-    # Named union: Function ∪ StateVariable (για hasVisibility)
+    # Named union: Function ∪ StateVariable (for hasVisibility)
     g.add((EX.FunctionOrState, RDF.type, OWL.Class))
     g.add((EX.FunctionOrState, OWL.unionOf, _rdf_list(g, [EX.Function, EX.StateVariable])))
 
@@ -106,7 +106,7 @@ def declare_schema(g: Graph) -> None:
     objprop(EX.hasAccessControl, EX.Function, EX.Modifier, "has access control")
     objprop(EX.hasStruct, EX.SmartContract, EX.Struct, "has struct")
     objprop(EX.hasMember, EX.Struct, EX.StructMember, "has member")
-    objprop(EX.hasParameter, EX.Function, EX.Parameter, "has parameter")  # ΜΟΝΟ Function
+    objprop(EX.hasParameter, EX.Function, EX.Parameter, "has parameter")  # ONLY Function
     objprop(EX.readsVariable, EX.Function, EX.StateVariable, "reads variable")
     objprop(EX.writesVariable, EX.Function, EX.StateVariable, "writes variable")
     objprop(EX.emitsEvent, EX.Function, EX.Event, "emits event")
@@ -144,7 +144,7 @@ def extract(sl: Slither, g: Graph, ok, info, warn) -> Tuple[int, int, int, int, 
         g.add((contract_uri, RDF.type, EX.SmartContract))
         g.add((contract_uri, EX.hasName, Literal(contract.name)))
 
-        # Declared modifiers στο contract
+        # Declared modifiers in the contract
         declared_mods = {}
         for m in getattr(contract, "modifiers", []):
             n_modifiers += 1
@@ -154,7 +154,7 @@ def extract(sl: Slither, g: Graph, ok, info, warn) -> Tuple[int, int, int, int, 
             g.add((mod_uri, EX.hasName, Literal(m.name)))
             g.add((contract_uri, EX.hasModifier, mod_uri))
 
-        # Events (χωρίς hasParameter για να μείνει domain=Function)
+        # Events (without hasParameter to keep domain=Function)
         for ev in getattr(contract, "events", []):
             n_events += 1
             event_uri = EX[safe_uri(f"{contract.name}_Event_{ev.name}")]
@@ -218,7 +218,7 @@ def extract(sl: Slither, g: Graph, ok, info, warn) -> Tuple[int, int, int, int, 
             if getattr(function, "payable", False):
                 g.add((function_uri, RDF.type, EX.PayableFunction))
 
-            # Modifiers χρησιμοποιούμενα από τη function
+            # Modifiers used by the function
             for call in getattr(function, "modifiers", []):
                 mobj = getattr(call, "modifier", None) or call
                 mname = getattr(mobj, "name", None)
@@ -226,7 +226,7 @@ def extract(sl: Slither, g: Graph, ok, info, warn) -> Tuple[int, int, int, int, 
                     continue
                 mod_uri = declared_mods.get(mname)
                 if mod_uri is None:
-                    # δηλώθηκε on-the-fly αν δεν ήταν στα declared
+                    # declared on-the-fly if not in declared
                     n_modifiers += 1
                     mod_uri = EX[safe_uri(f"{contract.name}_Modifier_{mname}")]
                     declared_mods[mname] = mod_uri
@@ -237,7 +237,7 @@ def extract(sl: Slither, g: Graph, ok, info, warn) -> Tuple[int, int, int, int, 
                 g.add((function_uri, RDF.type, EX.AccessControlledFunction))
                 n_has_access += 1
 
-            # Parameters (ΜΟΝΟ για Function)
+            # Parameters (ONLY for Function)
             for idx, p in enumerate(getattr(function, "parameters", [])):
                 n_params += 1
                 pname = getattr(p, "name", f"p{idx}") or f"p{idx}"

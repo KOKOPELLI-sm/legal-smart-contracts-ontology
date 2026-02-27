@@ -1,9 +1,9 @@
 from rdflib import Graph, Namespace, RDF, RDFS, OWL, URIRef, Literal
 
 g = Graph()
-g.parse("triples_output.ttl", format="turtle")  # Ενημέρωσε διαδρομή αν άλλαξε
+g.parse("triples_output.ttl", format="turtle")  # Update path if changed
 
-# Ορισμός βασικών namespaces
+# Define basic namespaces
 EX = Namespace("http://example.org/smartlease#")
 EX1 = Namespace("http://example.org/ontology#")
 g.bind("ex", EX)
@@ -12,7 +12,7 @@ g.bind("rdf", RDF)
 g.bind("rdfs", RDFS)
 g.bind("owl", OWL)
 
-# Οντολογικές κλάσεις
+# Ontology classes
 g.add((EX1.SmartContract, RDF.type, OWL.Class))
 g.add((EX1.Function, RDF.type, OWL.Class))
 g.add((EX1.Variable, RDF.type, OWL.Class))
@@ -29,7 +29,7 @@ g.add((EX.IPFSDocument, RDF.type, OWL.Class))
 
 
 
-# Ιδιότητες
+# Properties
 g.add((EX1.hasFunction, RDF.type, OWL.ObjectProperty))
 g.add((EX1.hasFunction, RDFS.domain, EX1.SmartContract))
 g.add((EX1.hasFunction, RDFS.range, EX1.Function))
@@ -67,7 +67,7 @@ g.add((EX.hasWrittenAgreement, RDFS.domain, EX.LeaseAgreement))
 g.add((EX.hasWrittenAgreement, RDFS.range, EX.IPFSDocument))
 
 
-# Περιγραφές (με άρθρα ΑΚ)
+# Descriptions (with articles)
 g.add((EX1.LegalInstrument, RDFS.comment, Literal("Νομικό μέσο με δεσμευτική ισχύ, όπως ένα smart contract. Βλ. άρθρο 361 ΑΚ για τη σύμβαση ως συμφωνία.")))
 g.add((EX1.LeaseAgreement, RDFS.comment, Literal("Σύμβαση μίσθωσης σύμφωνα με τα άρθρα 574 επ. ΑΚ.")))
 g.add((EX1.SecurityDeposit, RDFS.comment, Literal("Εγγύηση από τον μισθωτή για την εξασφάλιση υποχρεώσεων. Βλ. άρθρα 361, 625 ΑΚ.")))
@@ -75,6 +75,6 @@ g.add((EX1.Signature, RDFS.comment, Literal("Δήλωση αποδοχής σύ�
 g.add((EX1.Assignment, RDFS.comment, Literal("Ανάθεση σύμβασης μίσθωσης. Βλ. άρθρο 593 ΑΚ.")))
 g.add((EX.IPFSDocument, RDFS.comment, Literal("Ψηφιακό έγγραφο συμβολαίου αποθηκευμένο στο IPFS. Χρησιμοποιείται ως το πλήρες κείμενο της συμφωνίας. Συνδέεται με το άρθρο 361 ΑΚ (σύμβαση) και άρθρο 159 ΑΚ (έγγραφη μορφή).")))
 
-# Αποθήκευση
+# Save
 g.serialize("annotated_triples.ttl", format="turtle")
 print("✅ RDF εμπλουτισμένο αρχείο αποθηκεύτηκε ως annotated_triples.ttl")
